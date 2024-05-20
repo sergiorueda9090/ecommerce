@@ -1,6 +1,3 @@
-<?php  echo $this->extend('template/layout'); ?>
-
-<?php  echo $this->section("content"); ?>
 
     <!--=====================================
     Home Content
@@ -14,22 +11,57 @@
 
     	<div class="ps-home-banner">
             <div class="ps-carousel--nav-inside owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on" data-owl-animate-in="fadeIn" data-owl-animate-out="fadeOut">
-            <?php
-                foreach ($bannerAll as $key => $banner) {
-                    echo '<div class="ps-banner--market-4" data-background="' . base_url() . $banner->image . '">
-                                <img src="' . base_url() . $banner->image . '" alt="">
-                                <div class="ps-banner__content">
-                                    <h4>'.$banner->title.'</h4>
-                                    <h3>'.$banner->description.'<br/> 
-                                    '.$banner->discount.'<br/> 
-                                    <p>'.$banner->discount.' <strong> 40%</strong></p>
-                                    </h3>
-                                    <a class="ps-btn" href="#">Shop Now</a>
-                                </div>
-                    </div>';
-                }
-            ?>
+
+                <div class="ps-banner--market-4" data-background="<?php echo base_url().'/assets/img/slider/horizontal/1.jpg'?>">
+                	<img src="<?php echo base_url().'/assets/img/slider/horizontal/1.jpg'?>" alt="">
+                    <div class="ps-banner__content">
+                        <h4>Limit Edition</h4>
+                        <h3>HAPPY SUMMER <br/> 
+                        	COMBO SUPER COOL <br/> 
+                        	<p>UP TO <strong> 40%</strong></p>
+                        </h3>
+                        <a class="ps-btn" href="#">Shop Now</a>
+                    </div>
+                </div>
+
+                <div class="ps-banner--market-4" data-background="<?php echo base_url().'/assets/img/slider/horizontal/2.jpg'?>">
+                	<img src="<?php echo base_url().'/assets/img/slider/horizontal/2.jpg'?>" alt="">
+                    <div class="ps-banner__content">
+                        <h4>Version 2018</h4>
+                        <h3>EXPERIENCE FEEL <br/> 
+                        	GREATEST WITH VITURAL <br/> 
+                        	<p>REALITY JUST <strong> $599</strong></p>
+                        </h3>
+                        <a class="ps-btn" href="#">Shop Now</a>
+                    </div>
+                </div>
+
+                <div class="ps-banner--market-4" data-background="<?php echo base_url().'/assets/img/slider/horizontal/3.jpg'?>">
+                	<img src="<?php echo base_url().'/assets/img/slider/horizontal/3.jpg'?>" alt="">
+                    <div class="ps-banner__content">
+                        <h4>Mega Sale Nov 2019</h4>
+                        <h3>DOUBLE COMBO WITH <br/> 
+                        	THE BODY SHOP <br/> 
+                        	<p>Sale up to <strong> 50%</strong></p>
+                        </h3>
+                        <a class="ps-btn" href="#">Shop Now</a>
+                    </div>
+                </div>
+
+                <div class="ps-banner--market-4" data-background="<?php echo base_url().'/assets/img/slider/horizontal/4.jpg'?>">
+                	<img src="<?php echo base_url().'/assets/img/slider/horizontal/4.jpg'?>" alt="">
+                    <div class="ps-banner__content">
+                        <h4>Mega Sale Nov 2017</h4>
+                        <h3>IKEA MINIMALIST <br/> 
+                        	OTOMAN <br/>
+                        	<p>Discount <strong> 50% OFF</strong></p>
+                        </h3>
+                        <a class="ps-btn" href="#">Shop Now</a>
+                    </div>
+                </div>
+             
             </div>
+
         </div><!-- End Home Banner-->
 
         <!--=====================================
@@ -764,17 +796,55 @@
                 <h3>Top categories of the month</h3>
 
                 <div class="row">
-                    <?php
-                        foreach($categoriesAll as $key => $categories){
-                            echo ' <div class="col-xl-2 col-lg-3 col-sm-4 col-6 ">
-                            <div class="ps-block--category">
-                                <a class="ps-block__overlay" href="' . base_url() .'category/'. $categories->slug. '"></a>
-                                <img src="' . base_url() . $categories->image. '" alt='.$categories->keywords.'>
-                                <p>'.$categories->name.'</p>
-                            </div>
-                        </div>';
-                        }
-                    ?>
+
+                    <div class="col-xl-2 col-lg-3 col-sm-4 col-6 ">
+                        <div class="ps-block--category">
+                        	<a class="ps-block__overlay" href="shop-default.html"></a>
+                        	<img src="<?php echo base_url().'/assets/img/categories/1.jpg'?>" alt="">
+                            <p>Electronics</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-lg-3 col-sm-4 col-6 ">
+                        <div class="ps-block--category">
+                        	<a class="ps-block__overlay" href="shop-default.html"></a>
+                        	<img src="<?php echo base_url().'/assets/img/categories/2.jpg'?>" alt="">
+                            <p>Clothings</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-lg-3 col-sm-4 col-6 ">
+                        <div class="ps-block--category">
+                        	<a class="ps-block__overlay" href="shop-default.html"></a>
+                        	<img src="<?php echo base_url().'/assets/img/categories/3.jpg'?>" alt="">
+                            <p>Computers</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-lg-3 col-sm-4 col-6 ">
+                        <div class="ps-block--category">
+                        	<a class="ps-block__overlay" href="shop-default.html"></a>
+                        	<img src="<?php echo base_url().'/assets/img/categories/4.jpg'?>" alt="">
+                            <p>Home &amp; Kitchen</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-lg-3 col-sm-4 col-6 ">
+                        <div class="ps-block--category">
+                        	<a class="ps-block__overlay" href="shop-default.html"></a>
+                        	<img src="<?php echo base_url().'/assets/img/categories/5.jpg'?>" alt="">
+                            <p>Health &amp; Beauty</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-lg-3 col-sm-4 col-6 ">
+                        <div class="ps-block--category">
+                        	<a class="ps-block__overlay" href="shop-default.html"></a>
+                        	<img src="<?php echo base_url().'/assets/img/categories/6.jpg'?>" alt="">
+                            <p>Health &amp; Beauty</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -789,135 +859,10 @@
 	<div class="ps-section--gray">
 
         <div class="container">
+
         	<!--=====================================
 			Products of category
 			======================================-->  
-            <?php
-            foreach ($subcategoriesAll as $key => $subcategories) {
-                echo '<div class="ps-block--products-of-category">
-            
-                <!--=====================================
-                Menu subcategory
-                ======================================-->  
-            
-                <div class="ps-block__categories">
-            
-                    <h3>' . $subcategories->name . '</h3>
-            
-                        <ul>';
-                        
-                        // Obtener las subcategorías como un array y recorrerlas
-                        $subcategoriesArray = explode(",", $subcategories->subcategories);
-                        $subcategorySlugsArray = explode(",", $subcategories->subcategory_slugs);
-                        $subcategoriesWithSlugs = array_combine($subcategoriesArray, $subcategorySlugsArray);
-                    
-                        foreach ($subcategoriesWithSlugs as $subcategory => $slug) {
-                            echo '<li><a href="'.base_url().'subcategory/' . $slug . '">' . $subcategory . '</a></li>';
-                        }
-            
-                echo '</ul>
-            
-                        <a class="ps-block__more-link" href="#">View All</a>
-            
-                </div>
-            
-                <!--=====================================
-                Vertical Slider Category
-                ======================================-->  
-            
-                <div class="ps-block__slider">
-            
-                    <div class="ps-carousel--product-box owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="7000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="500" data-owl-mousedrag="off">';
-            
-                    // Obtener las imágenes de las subcategorías como un array y recorrerlas
-                    $imagesArray = explode(",", $subcategories->imgsubcategories);
-                    //var_dump($imagesArray);
-                    foreach ($imagesArray as $image) {
-                        echo '<a href="#">
-                            <img src="'.base_url().trim($image).'" alt="">
-                        </a>';
-                    }
-            
-                echo '</div>
-            
-                </div>
-            
-                <!--=====================================
-                Block Product Box
-                ======================================-->  
-            
-                <div class="ps-block__product-box">
-					
-                <!--=====================================
-                Product Simple
-                ======================================-->';
-
-                foreach($productImages as $key => $productImage){
-
-                    if($subcategories->id == $productImage->id){
-
-                        echo '<div class="ps-product ps-product--simple">
-
-                        <div class="ps-product__thumbnail">
-    
-                            <a href="product-default.html">
-    
-                            <img src="'.base_url().'/assets/img/products/clothing/1.jpg'.'" alt='.$productImage->keywords.'>
-    
-                            </a>
-    
-                            <div class="ps-product__badge">-16%</div>
-    
-                        </div>
-    
-                        <div class="ps-product__container">
-    
-                            <div class="ps-product__content" data-mh="clothing">
-    
-                                <a class="ps-product__title" href='.base_url().'product/'.$productImage->slug.'>
-                                    '.$productImage->name.'
-                                </a>
-    
-                                <div class="ps-product__rating">
-    
-                                    <select class="ps-rating" data-read-only="true">
-    
-                                        <option value="1">1</option>
-                                        <option value="1">2</option>
-                                        <option value="1">3</option>
-                                        <option value="1">4</option>
-                                        <option value="2">5</option>
-    
-                                    </select>
-    
-                                    <span>01</span>
-    
-                                </div>
-    
-                                <p class="ps-product__price sale">$'.number_format($productImage->sale_price).' <del>$670.00 </del></p>
-    
-                            </div>
-    
-                        </div>
-    
-                    </div> <!-- End Product Simple -->';
-
-                    }
-
-                };
-                
-                // Aquí puedes continuar el código para mostrar los productos relacionados a cada subcategoría.
-            
-            echo '</div><!-- End Block Product Box -->
-            
-            </div><!-- End Products of category -->';
-            }
-            
-            ?>
-
-
-            <h1>START OLD</h1>
-
 
             <div class="ps-block--products-of-category">
 
@@ -2513,7 +2458,7 @@
 
         <div class="container">
 
-            <form class="ps-form--newsletter" method="post">
+            <form class="ps-form--newsletter" action="do_action" method="post">
 
                 <div class="row">
 
@@ -2530,15 +2475,10 @@
 
                             <div class="form-group--nest">
 
-                                <input class="form-control email" id="email" type="email" placeholder="Email address">
-                                <button type="button" class="ps-btn subscribe"  onClick="subscribe()">
-                                    Subscribe
-                                </button>                            
-                                
-                            </div>
+                                <input class="form-control" type="email" placeholder="Email address">
+                                <button class="ps-btn">Subscribe</button>
 
-                            <div class="alert alert-success mt-2 alert_ok" role="alert" style="display:none"></div>
-                            <div class="alert alert-warning mt-2 alert_error" role="alert" style="display:none"></div>
+                            </div>
 
                         </div>
 
@@ -2551,6 +2491,5 @@
         </div>
 
     </div>
-    
-<script src="<?php echo base_url().'/assets/js/customers.js';?>"></script>
-<?php  echo $this->endSection("content"); ?>
+
+ 

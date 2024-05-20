@@ -11508,12 +11508,12 @@ textarea.form-control {
   padding: 12px 25px;
 }
 
-.ps-cart--mini:hover .ps-cart__content {
+/*.ps-cart--mini:hover .ps-cart__content {
   -webkit-transform: translate(0, 0px);
   transform: translate(0, 0px);
   visibility: visible;
   opacity: 1;
-}
+}*/
 
 .ps-cart--mobile .ps-cart__content {
   padding: 20px 10px 0;
