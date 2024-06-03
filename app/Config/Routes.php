@@ -32,3 +32,10 @@ $routes->post('/city',                    'CityController::city');
 
 #PAYU
 $routes->get('/payuconfirmation',          'PayuController::index');
+
+#TOKEN
+$routes->get('client', 'ClientController::index');
+$routes->post('auth',   'AuthController::login');
+
+#API's
+$routes->post('api/login', 'Api\AuthController::login');

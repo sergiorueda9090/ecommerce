@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\JWTAuthenticationFilter;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -19,11 +20,13 @@ class Filters extends BaseConfig
      *                                                     or [filter_name => [classname1, classname2, ...]]
      */
     public array $aliases = [
+        'cors'          => \App\Filters\Cors::class,
         'csrf'          => CSRF::class,
         'toolbar'       => DebugToolbar::class,
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
+        'auth'          => JWTAuthenticationFilter::class,
     ];
 
     /**
@@ -34,6 +37,7 @@ class Filters extends BaseConfig
      */
     public array $globals = [
         'before' => [
+            'cors',
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
@@ -65,5 +69,14 @@ class Filters extends BaseConfig
      * Example:
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
-    public array $filters = [];
+    public array $filters = [
+        'auth' => [
+            'before' => [
+                'client/*',
+                'client',
+                'api/*',
+                'api',
+            ]
+        ]
+    ];
 }
