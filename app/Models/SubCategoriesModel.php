@@ -1,13 +1,11 @@
 <?php
-
 namespace App\Models;
-
 use CodeIgniter\Model;
 
 
-Class CategoriesModel extends Model{
+class SubCategoriesModel extends Model{
 
-    protected $table = "categories";
+    protected $table = "subcategories";
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = true;
@@ -15,7 +13,7 @@ Class CategoriesModel extends Model{
     protected $returnType     = 'object';//array;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = ['id_user','name', 'slug', 'description', 'keywords', 'icon'];
+    protected $allowedFields = ['id_categories','id_user', 'name', 'slug', 'description', 'keywords', 'icon'];
 
     protected bool $allowEmptyInserts = false;
 
@@ -42,5 +40,6 @@ Class CategoriesModel extends Model{
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
 
 }

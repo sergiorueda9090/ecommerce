@@ -5,9 +5,9 @@ namespace App\Models;
 use CodeIgniter\Model;
 
 
-Class CategoriesModel extends Model{
+Class CategoriesImageModel extends Model{
 
-    protected $table = "categories";
+    protected $table = "categoriesimages";
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = true;
@@ -15,7 +15,7 @@ Class CategoriesModel extends Model{
     protected $returnType     = 'object';//array;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = ['id_user','name', 'slug', 'description', 'keywords', 'icon'];
+    protected $allowedFields = ['id_categories', 'image', 'keywords'];
 
     protected bool $allowEmptyInserts = false;
 

@@ -38,4 +38,36 @@ $routes->get('client', 'ClientController::index');
 $routes->post('auth',   'AuthController::login');
 
 #API's
-$routes->post('api/login', 'Api\AuthController::login');
+/* ============================================
+    START APIS USERS
+=============================================== */
+$routes->post('api/login',              'Api\AuthController::login');
+$routes->post('api/createUser',         'Api\UsersController::createUser');
+$routes->get('api/listAllUsers',        'Api\UsersController::listAllUsers');
+$routes->get('api/showUser/(:num)',     'Api\UsersController::showUser/$1');
+$routes->post('api/updateUser/(:num)',  'Api\UsersController::updateUser/$1');
+$routes->delete('api/deleteUser/(:num)','Api\UsersController::deleteUser/$1');
+/* ============================================
+    END APIS USERS
+=============================================== */
+
+
+/* ============================================
+    START APIS CATEGORIES
+=============================================== */
+$routes->get('api/listAllCategories',       'Api\CategoriesController::listAllCategories');
+$routes->get('api/showCategory/(:num)',     'Api\CategoriesController::showCategory/$1');
+$routes->post('api/createCategory',         'Api\CategoriesController::createCategory');
+$routes->post('api/createCategoryMany',     'Api\CategoriesController::createCategoryMany');
+$routes->post('api/updateCategory/(:num)',  'Api\CategoriesController::updateCategory/$1');
+$routes->delete('api/deleteCategory/(:num)','Api\CategoriesController::deleteCategory/$1');
+$routes->post('api/saveCategoryImage',      'Api\CategoriesController::saveCategoryImage');
+
+
+
+/* ============================================
+    START APIS SUBCATEGORIES
+=============================================== */
+$routes->get('api/listAllSubCategories',        'Api\SubCategoriesController::listAll');
+$routes->get('api/showSubCategories/(:num)',    'Api\SubCategoriesController::show/$1');
+$routes->post('api/createSubCategory',          'Api\SubCategoriesController::create');
