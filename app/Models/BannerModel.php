@@ -13,7 +13,7 @@ class BannerModel extends Model{
     protected $returnType     = 'object';//array;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = ['image', 'title', 'description', 'discount', 'keywords'];
+    protected $allowedFields = ['image', 'title', 'description', 'discount', 'keywords', 'position'];
 
     protected bool $allowEmptyInserts = false;
 

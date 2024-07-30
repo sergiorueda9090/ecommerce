@@ -56,7 +56,7 @@
                         	<!--=====================================
     						Gallery
     						======================================--> 
-
+                           
                             <div class="ps-product__thumbnail" data-vertical="true">
 
                                 <figure>
@@ -64,31 +64,17 @@
                                     <div class="ps-wrapper">
 
                                         <div class="ps-product__gallery" data-arrow="true">
+                                            <?php
 
-                                            <div class="item">
-                                            	<a href="<?php echo base_url().'assets/img/products/detail/countdown/1.jpg';?>">
-                                            		<img src="<?php echo base_url().'assets/img/products/detail/countdown/1.jpg';?>" alt="">
-                                            	</a>
-                                            </div>
+                                                foreach ($productImage as $key => $image) {
+                                                    echo '<div class="item">';
+                                                    echo '<a href="' . base_url() . $image->image. '">';
+                                                    echo '<img src="' . base_url() . $image->image. '" alt="">';
+                                                    echo '</a>';
+                                                    echo '</div>';
+                                                }
 
-                                            <div class="item">
-                                            	<a href="<?php echo base_url().'assets/img/products/detail/countdown/2.jpg';?>">
-                                            		<img src="<?php echo base_url().'assets/img/products/detail/countdown/2.jpg';?>" alt="">
-                                            	</a>
-                                            </div>
-
-                                            <div class="item">
-                                            	<a href="<?php echo base_url().'assets/img/products/detail/countdown/3.jpg';?>">
-                                            		<img src="<?php echo base_url().'assets/img/products/detail/countdown/3.jpg';?>" alt="">
-                                            	</a>
-                                            </div>
-
-                                            <div class="item">
-                                            	<a href="<?php echo base_url().'assets/img/products/detail/countdown/4.jpg';?>">
-                                            		<img src="<?php echo base_url().'assets/img/products/detail/countdown/4.jpg';?>" alt="">
-                                            	</a>
-                                            </div>
-
+                                            ?>
                                         </div>
 
                                     </div>
@@ -97,21 +83,18 @@
 
                                 <div class="ps-product__variants" data-item="4" data-md="4" data-sm="4" data-arrow="false">
 
-                                    <div class="item">
-                                    	<img src="<?php echo base_url().'assets/img/products/detail/countdown/1.jpg';?>" alt="">
-                                    </div>
+                                    <?php
 
-                                    <div class="item">
-                                    	<img src="<?php echo base_url().'assets/img/products/detail/countdown/2.jpg';?>" alt="">
-                                    </div>
+                                        foreach ($productImage as $key => $image) {
+                                            echo '<div class="item">';
+                                       
+                                            echo '<img src="' . base_url() . $image->image. '" alt="">';
+                                        
+                                            echo '</div>';
+                                        }
 
-                                    <div class="item">
-                                    	<img src="<?php echo base_url().'assets/img/products/detail/countdown/3.jpg';?>" alt="">
-                                    </div>
-
-                                    <div class="item">
-                                    	<img src="<?php echo base_url().'assets/img/products/detail/countdown/4.jpg';?>" alt="">
-                                    </div>
+                                    ?>
+                                  
 
                                 </div>
 
@@ -146,11 +129,18 @@
 
                                 </div>
 
-                                <h4 class="ps-product__price sale">$93.59
-                                    <del class="priceToPay"> $<?php echo number_format($product->sale_price); ?></del><small> (-25%)</small>
+                                <h4 class="ps-product__price sale">$<?php echo number_format($product->purchase_price); ?>
+                                    <del class="priceToPay"> $<?php echo number_format($product->sale_price); ?></del>
+                                    
+                                    <?php
+                                        if($product->discount != NULL && $product->discount != ""){
+                                            echo '<small> (-'.$product->discount.'%)</small>';
+                                        }
+                                    ?>
+                                   
                                 </h4>
 
-                                <h4 class="ps-product__price">$679.80</h4>
+                                <h4 class="ps-product__price">$<?php echo number_format($product->sale_price); ?></h4>
 
                                 <div class="ps-product__desc">
 
@@ -166,18 +156,14 @@
 
                                     <figure>
                                         <figcaption>Size <strong> Choose an option</strong></figcaption>
-                                        <?php 
-                                            $size        =  explode("," ,$product->size);
-                                            $idsize      = explode(","  ,$product->idsize);
-                                            $productSize = array_combine($size, $idsize);
-                                        ?>
+                                       
                                         <?php
                                             foreach($productSize as $key => $value){
                                                 echo '<div class="ps-variant ps-variant--size" 
-                                                            onClick="callColor('.$value.');"
-                                                            id="checkbox_'.trim($value).'">
-                                                            <span class="ps-variant__tooltip">'.$key.'</span>
-                                                            <span class="ps-variant__size">'.$key.'</span>
+                                                            onClick="callColor('.$value->id.');"
+                                                            id="checkbox_'.trim($value->id).'">
+                                                            <span class="ps-variant__tooltip">'.$value->size.'</span>
+                                                            <span class="ps-variant__size">'.$value->size.'</span>
                                                     </div>';
                                             }
                                         ?>

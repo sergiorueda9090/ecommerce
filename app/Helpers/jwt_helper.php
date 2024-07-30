@@ -25,7 +25,7 @@ function getJWTFromRequest($authenticationHeader): string
 function getSignedJWTForUser(string $email): string
 {
     $issuedAtTime = time();
-    $tokenTimeToLive = getenv('JWT_TIME_TO_LIVE');
+    $tokenTimeToLive = 86400;//getenv('JWT_TIME_TO_LIVE');
     $tokenExpiration = $issuedAtTime + $tokenTimeToLive;
     $payload = [
         'email' => $email,

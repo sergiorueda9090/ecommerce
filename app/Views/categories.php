@@ -355,11 +355,15 @@
     
                                                     <div class="ps-product__thumbnail">
     
-                                                        <a href="product-default.html">
+                                                        <a href='.base_url().'product/'.$product->slug.'>
                                                             <img src='.base_url().$product->image.' alt='.$product->keywords.'>
-                                                        </a>
-    
-                                                        <ul class="ps-product__actions">
+                                                        </a>';
+
+                                                        if($product->discount != NULL && $product->discount != ""){
+                                                            echo '<div class="ps-product__badge">'.$product->discount.'% OFF</div>';
+                                                        }
+                                                     
+                                                        echo'<ul class="ps-product__actions">
     
                                                             <li>
                                                                 <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Cart">
@@ -391,7 +395,7 @@
     
                                                         <div class="ps-product__content">
     
-                                                            <a class="ps-product__title" href='.base_url().$product->slug.'>
+                                                            <a class="ps-product__title" href='.base_url().'product/'.$product->slug.'>
                                                             '.$product->name.'
                                                             </a>
     
@@ -401,7 +405,7 @@
     
                                                         <div class="ps-product__content hover">
     
-                                                            <a class="ps-product__title" href='.base_url().$product->slug.'>
+                                                            <a class="ps-product__title" href='.base_url().'product/'.$product->slug.'>
                                                             '.$product->name.'</a>
     
                                                             <p class="ps-product__price">$'.number_format($product->sale_price).'</p>

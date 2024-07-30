@@ -3,20 +3,26 @@
 namespace App\Controllers;
 
 use App\Models\BannerModel;
+use App\Models\SliderModel;
 use App\Models\CategoriesModel;
 use App\Models\PageInfoModel;
+use App\Models\ProductsModel;
 
 class Home extends BaseController
 {   
 
     private $bannerModel;
+    private $sliderModel;
     private $categoriesModel;
     private $pageInfoModel;
+    private $ProductsModel;
 
     public function __construct(){
         $this->bannerModel      = new BannerModel();
+        $this->sliderModel      = new SliderModel();
         $this->CategoriesModel  = new CategoriesModel();
         $this->pageInfoModel    = new PageInfoModel();
+        $this->ProductsModel    = new ProductsModel();
     }
 
     /*
@@ -30,10 +36,11 @@ class Home extends BaseController
     */
     public function index(){
 
-        $bannerAll      = $this->bannerModel->findAll();
+        $sliderAll      = $this->sliderModel->findAll();
 
         $categoriesAll  = $this->CategoriesModel->select('categories.*, categoriesimages.image')
                                                 ->join('categoriesimages', 'categories.id = categoriesimages.id_categories', 'inner')
+                                                ->where('categories.deleted_at',NULL)
                                                 ->get()
                                                 ->getResult();
 
@@ -44,10 +51,12 @@ class Home extends BaseController
                                                            ->join('subcategories s'         , 'categories.id        = s.id_categories', 'inner')
                                                            ->join('subcategoriesimages sci' , 'sci.id_subcategories = s.id',            'inner')
                                                            ->groupBy('categories.id')
+                                                           ->where('categories.deleted_at',NULL)
+                                                           ->where('s.deleted_at',NULL)
                                                            ->get()
                                                            ->getResult();
 
-        $productImages = $this->CategoriesModel->select('categories.id, 
+        /*$productImages = $this->CategoriesModel->select('categories.id, 
                                                          p.name,
                                                          p.slug,
                                                          p.keywords,
@@ -58,10 +67,20 @@ class Home extends BaseController
                                                ->join('products      p' , 'p.id_subcategories   = s.id', 'inner')
                                                ->join('productimages pi', 'pi.id_product        = p.id', 'inner')
                                                ->groupBy('s.id')
+                                               ->where('categories.deleted_at',NULL)
                                                ->get()
-                                               ->getResult();
+                                               ->getResult();*/
 
-        $data = array('bannerAll'           => $bannerAll,
+
+            $productImages = $this->ProductsModel->select('products.id, products.id_subcategories, products.id_categories, products.name, products.slug, products.keywords, 
+                                                            products.sale_price, products.description, productimages.image')
+                                                    ->join('productimages' , 'productimages.id_product = products.id', 'inner')
+                                                    ->groupBy('products.id_subcategories')
+                                                    ->where('products.deleted_at',NULL)
+                                                    ->get()
+                                                    ->getResult();
+
+        $data = array('sliderAll'           => $sliderAll,
                       'categoriesAll'       => $categoriesAll,
                       'subcategoriesAll'    => $subcategoriesAll,
                       'productImages'       => $productImages,

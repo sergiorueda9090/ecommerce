@@ -523,4 +523,14 @@ class CategoriesController extends ResourceController{
 
     }
 
+    public function options(){
+
+        $responseQuery = $this->categoriesModel->select('id as value, name as label')->where('categories.deleted_at',NULL)->get()->getResult();
+        
+        $response = array("status" => true, "message" => "Category list", "data" => $responseQuery, "code" => 200);
+        
+        return $this->respond($response);
+
+    }
+
 }

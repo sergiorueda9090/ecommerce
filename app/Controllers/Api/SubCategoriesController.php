@@ -40,8 +40,6 @@ class SubCategoriesController extends ResourceController{
         }
 
         return $errors;
-
-
     }
 
     public function listAll(){
@@ -51,7 +49,7 @@ class SubCategoriesController extends ResourceController{
      if($method == 'GET'){
 
         // Establece el tamaño de la página
-        $size = $this->request->getVar('size') ?: 3;
+        $size = $this->request->getVar('size') ?: 20;
 
         // Obtiene el número de la página actual desde la solicitud (GET parameter)
         $page = $this->request->getVar('page') ?: 1;
@@ -83,7 +81,6 @@ class SubCategoriesController extends ResourceController{
             ]
         ];
 
-        // Retorna la respuesta en formato JSON
         return $this->respond($response);
 
      }
@@ -147,7 +144,7 @@ class SubCategoriesController extends ResourceController{
 
         $this->message = "The fields are required. ";
         
-        $data = array("id_categories" => 1,
+        $data = array("id_categories" => $this->request->getPost("id_categories"),
                       "id_user"       => 1,
                       "name"          => $this->request->getPost("name"),
                       "slug"          => $this->request->getPost("slug"),
@@ -210,70 +207,26 @@ class SubCategoriesController extends ResourceController{
         }
 
     }
-      
-    public function createMany(){
+
+    
+    public function update($id = null){
         
-        $image    = $this->request->getFile('image');
-        $data     = $this->request->getPost("data");
-        $dataJson = json_decode($data);
+        if( in_array($id, $this->validateArray, true) ){
 
+            $this->message = 'El ID no es válido.';
 
-        foreach($dataJson as $key => $value){
+            $response = [
+                'status' => 400,
+                'error' => $this->message,
+                'data' => null,
+                'message' => $this->message
+                ];
             
-            $dataCategory = array("id_user"     => $value->id_user,
-                                  "name"        => $value->name,
-                                  "slug"        => $value->slug,
-                                  "description" => $value->description,
-                                  "keywords"    => $value->keywords,
-                                  "icon"        => $value->icon);
-            
-            $queryCategory = $this->subCategoriesModel->insert($dataCategory);
-
-                if($queryCategory){
-        
-                    $newId = $this->subCategoriesModel->insertID();
-        
-                    $queryCategoryImage = $this->saveCategoryImage($newId, $image, $value->keywords);
-        
-                    if($queryCategoryImage){
-        
-                        $response = [
-                            'status'    => $queryCategoryImage['status'],
-                            'message'   => 'Category create successfull',
-                            'data'      => $queryCategoryImage['newId']
-                        ];
-        
-                        return $this->respond($response); 
-        
-                    }else{
-        
-                        $response = array('status'  => 404,
-                                        'message'  => 'Category Image not was create successfull',
-                                        'data'     => "");
-        
-                        return $this->respond($response);
-        
-                    }
-        
-                }else{
-        
-                    $response = array('status'  => 404,
-                                    'message'  => 'Category not was create successfull',
-                                    'data'     => "");
-        
-                    return $this->respond($response);
-        
-                }
+            return $this->respond($response);
 
         }
 
-
-    }
-
-
-    public function update($id = null){
-        
-        $image    = $this->request->getFile('image');
+        $image = $this->request->getFile('image');
 
         if($image == null){
 
@@ -283,29 +236,30 @@ class SubCategoriesController extends ResourceController{
 
         $keywords = $this->request->getPost("keywords");
 
-        $dataCategory = array("id_user"     => $this->request->getPost("id_user"),
+        $dataCategory = array("id_user"     => 1,
+                            "id_categories" => $this->request->getPost("id_categories"),
                               "name"        => $this->request->getPost("name"),
                               "slug"        => $this->request->getPost("slug"),
                               "description" => $this->request->getPost("description"),
                               "keywords"    => $keywords,
                               "icon"        => $this->request->getPost("icon"));
         
-        $validate = $this->validateCategory($id);
+        $validate = $this->validateRegister($id);
 
         if($validate){
 
-            $queryCategory = $this->subCategoriesModel->set($dataCategory)
+            $responseQuery = $this->subCategoriesModel->set($dataCategory)
                                    ->where('id', $id)
                                    ->update();
 
-            if($queryCategory){
+            if($responseQuery){
     
-                $queryCategoryImage = $this->updateCategoryImage($id, $image, $keywords);
+                $responseQueryImage = $this->updateImage($id, $image, $keywords);
     
-                if($queryCategoryImage){
+                if($responseQueryImage){
     
                     $response = [
-                        'status'    => $queryCategoryImage['status'],
+                        'status'    => $responseQueryImage['status'],
                         'message'   => 'Category update successfull',
                         'data'      => ""
                     ];
@@ -338,6 +292,67 @@ class SubCategoriesController extends ResourceController{
     }
 
 
+    public function createMany(){
+
+        $data = $this->request->getPost("data");
+  
+        foreach($data as $key => $value){
+        
+            $dataCategory = array("id_user"     => 1,
+                                "id_categories" => $value["id_categories"],
+                                  "name"        => $value["name"],
+                                  "slug"        => $value["slug"],
+                                  "description" => $value["description"],
+                                  "keywords"    => $value["keywords"],
+                                  "icon"        => "icon");
+
+
+            if ($this->request->getFile('data.' . $key . '.image')) {
+                $image = $this->request->getFile('data.' . $key . '.image');
+            }
+            
+            $responseQuery = $this->subCategoriesModel->insert($dataCategory);
+
+                if($responseQuery){
+        
+                    $newId = $this->subCategoriesModel->insertID();
+        
+                    $responseQueryImage = $this->saveImage($newId, $image, $value["keywords"]);
+        
+                    if($responseQueryImage){
+        
+                        $response = [
+                            'status'    => $responseQueryImage['status'],
+                            'message'   => 'SubCategory create successfull',
+                            'data'      => $responseQueryImage['newId']
+                        ];
+        
+                        
+                    }else{
+        
+                        $response = array('status'  => 404,
+                                        'message'  => 'SubCategory Image not was create successfull',
+                                        'data'     => "");
+        
+        
+                    }
+        
+                }else{
+        
+                    $response = array('status'  => 404,
+                                    'message'  => 'SubCategory not was create successfull',
+                                    'data'     => "");
+        
+        
+                }
+
+        }
+
+        return $this->respond($response); 
+
+    }
+
+
     public function saveImage($id_categories = null, $image = null, $keywords = ""){
         // Obtener el archivo
         $image = $image;
@@ -345,26 +360,30 @@ class SubCategoriesController extends ResourceController{
         // Validar si es una imagen y si fue subida correctamente
         if ($image->isValid() && !$image->hasMoved()) {
             // Validar el tipo de archivo
-            $validated = $this->validate([
+            
+            /*$validated = $this->validate([
                 'image' => [
                     'uploaded[image]',
                     'mime_in[image,image/jpg,image/jpeg,image/gif,image/png]',
                     'max_size[image,2048]', // Tamaño máximo de 2MB
                 ],
-            ]);
-    
+            ]);*/
+
+            $validated = true;
+
             if ($validated) {
+            
                 // Generar un nombre único para la imagen
                 $originalName = pathinfo($image->getName(), PATHINFO_FILENAME);
                 $newName = $originalName.'_'.$image->getRandomName();
     
                 // Mover la imagen a la carpeta 'asset/image'
-                $image->move(ROOTPATH . 'public/assets/img/categories/', $newName);
+                $image->move(ROOTPATH . 'public/assets/img/subcategories/', $newName);
     
                 // Preparar los datos para guardar en la base de datos
                 $dataImage = [
                     'id_subcategories' => $id_categories,
-                    'image'             => '/assets/img/categories/'.$newName,
+                    'image'             => '/assets/img/subcategories/'.$newName,
                     'keywords'          => $keywords,
                 ];
     
@@ -425,17 +444,17 @@ class SubCategoriesController extends ResourceController{
                     $newName = $originalName.'_'.$image->getRandomName();
         
                     // Mover la imagen a la carpeta 'asset/image'
-                    $image->move(ROOTPATH . 'public/assets/img/categories/', $newName);
+                    $image->move(ROOTPATH . 'public/assets/img/subcategories/', $newName);
         
                     // Preparar los datos para guardar en la base de datos
-                    $dataCategoryImage = [
-                        'id_categories' => $id_categories,
-                        'image'         => '/assets/img/categories/'.$newName,
-                        'keywords'      => $keywords,
+                    $dataImage = [
+                        'id_subcategories' => $id_categories,
+                        'image'            => '/assets/img/subcategories/'.$newName,
+                        'keywords'         => $keywords,
                     ];
         
                     // Insertar los datos en la base de datos
-                    $queryUpdate = $this->CategoriesImageModel->set($dataCategoryImage)->where("id", $validate["id"])->update();
+                    $queryUpdate = $this->subCategoriesImageModel->set($dataImage)->where("id", $validate["id"])->update();
                     
                     if($queryUpdate){
                     
@@ -460,14 +479,14 @@ class SubCategoriesController extends ResourceController{
             }else if((!empty($image) && is_string($image))){
 
                 // Preparar los datos para guardar en la base de datos
-                $dataCategoryImage = [
+                $dataImage = [
                     'id_categories' => $id_categories,
                     'image'         => $image,
                     'keywords'      => $keywords,
                 ];
 
                 // Insertar los datos en la base de datos
-                $queryUpdate = $this->CategoriesImageModel->set($dataCategoryImage)->where("id", $validate["id"])->update();
+                $queryUpdate = $this->subCategoriesImageModel->set($dataImage)->where("id", $validate["id"])->update();
                 
                 if($queryUpdate){
                 
@@ -494,7 +513,7 @@ class SubCategoriesController extends ResourceController{
     }
 
 
-    public function validateCategory($id = null){
+    public function validateRegister($id = null){
 
         if($id){
 
@@ -514,11 +533,11 @@ class SubCategoriesController extends ResourceController{
 
     }
 
-    public function validateCategoryImage($id = null){
+    public function validateImage($id = null){
 
         if($id){
 
-            $queryValidate = $this->CategoriesImageModel->where("id_categories", $id)->first();
+            $queryValidate = $this->subCategoriesImageModel->where("id_subcategories", $id)->first();
 
             if($queryValidate){
 
@@ -536,54 +555,79 @@ class SubCategoriesController extends ResourceController{
 
     }
 
-    public function deleteCategory($id = null){
+    public function delete($id = null){
+        
+        if( in_array($id, $this->validateArray, true) ){
 
-        $queryCategory = $this->validateCategory($id);
+            $this->message = 'El id de la categoría no es válido.';
 
-        if($queryCategory){
+            $response = [
+                'status' => 400,
+                'error' => $this->message,
+                'data' => null,
+                'message' => $this->message
+                ];
+            
+            return $this->respond($response);
 
-            $queryCategoryImage = $this->validateCategoryImage($id);
+        }
 
-            if($queryCategoryImage["status"]){
+        $responseQuery = $this->validateRegister($id);
 
-                $queryDeleteCategoryImage = $this->CategoriesImageModel->where("id", $queryCategoryImage["id"])->delete();
+        if($responseQuery){
 
-                if($queryDeleteCategoryImage){
+            $responseQueryImage = $this->validateImage($id);
 
-                    $queryDeleteCategory = $this->subCategoriesModel->where("id",$id)->delete();
+            if($responseQueryImage["status"]){
 
-                    if($queryDeleteCategory){
+                $responseQueryDeleteImage = $this->subCategoriesImageModel->where("id", $responseQueryImage["id"])->delete();
 
-                        $response = array("status" => true, "message" => "Category and Category Image delete successfull", "data" => "", "code" => 200);
+                if($responseQueryDeleteImage){
+
+                    $responseQueryDelete = $this->subCategoriesModel->where("id",$id)->delete();
+
+                    if($responseQueryDelete){
+
+                        $response = array("status" => true, "message" => "SubCategory and Image delete successfull", "data" => "", "code" => 200);
                         return $this->respond($response);
 
                     }else{
 
-                        $response = array("status" => true, "message" => "Error Category not delete", "data" => "", "code" => 404);
+                        $response = array("status" => true, "message" => "Error SubCategory not delete", "data" => "", "code" => 404);
                         return $this->respond($response); 
 
                     }
 
                 }else{
 
-                    $response = array("status" => true, "message" => "Error Category Image not delete", "data" => "", "code" => 404);
+                    $response = array("status" => true, "message" => "Error SubCategory Image not delete", "data" => "", "code" => 404);
                     return $this->respond($response); 
 
                 }
 
             }else{
 
-                $response = array("status" => true, "message" => "Category Image not found", "data" => "", "code" => 404);
+                $response = array("status" => true, "message" => "SubCategory Image not found", "data" => "", "code" => 404);
                 return $this->respond($response);
 
             }
 
         }else{
 
-            $response = array("status" => true, "message" => "Category not found", "data" => "","code" => 404);
+            $response = array("status" => true, "message" => "SubCategory not found", "data" => "","code" => 404);
             return $this->respond($response);
 
         }
+
+    }
+
+    public function options($id = null){
+
+        $responseQuery = $this->subCategoriesModel->select('id as value, name as label')->where("id_categories",$id)->where('subcategories.deleted_at',NULL)->get()->getResult();
+        
+        $response = array("status" => true, "message" => "SubCategory list", "data" => $responseQuery, "code" => 200);
+        
+        return $this->respond($response);
 
     }
 

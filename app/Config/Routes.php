@@ -62,7 +62,7 @@ $routes->post('api/createCategoryMany',     'Api\CategoriesController::createCat
 $routes->post('api/updateCategory/(:num)',  'Api\CategoriesController::updateCategory/$1');
 $routes->delete('api/deleteCategory/(:num)','Api\CategoriesController::deleteCategory/$1');
 $routes->post('api/saveCategoryImage',      'Api\CategoriesController::saveCategoryImage');
-
+$routes->get('api/listAllOptionsCategories','Api\CategoriesController::options');
 
 
 /* ============================================
@@ -71,3 +71,43 @@ $routes->post('api/saveCategoryImage',      'Api\CategoriesController::saveCateg
 $routes->get('api/listAllSubCategories',        'Api\SubCategoriesController::listAll');
 $routes->get('api/showSubCategories/(:num)',    'Api\SubCategoriesController::show/$1');
 $routes->post('api/createSubCategory',          'Api\SubCategoriesController::create');
+$routes->post('api/createManySubCategory',      'Api\SubCategoriesController::createMany');
+$routes->post('api/updateSubCategory/(:num)',   'Api\SubCategoriesController::update/$1');
+$routes->delete('api/deleteSubCategory/(:num)', 'Api\SubCategoriesController::delete/$1');
+$routes->get('api/listAllOptionsSubCategories/(:num)', 'Api\SubCategoriesController::options/$1');
+
+/* ============================================
+    START APIS PRODUCTS
+=============================================== */
+$routes->post('api/createProduct',          'Api\ProductsController::create');
+$routes->post('api/updateProduct/(:num)',   'Api\ProductsController::updateProduct/$1');
+$routes->get('api/listAllProduct',          'Api\ProductsController::listAll');
+$routes->get('api/showProduct/(:num)',      'Api\ProductsController::show/$1');
+$routes->get('api/showColor/(:num)',        'Api\ProductsController::showColor/$1');
+$routes->get('api/showQuantity/(:num)',     'Api\ProductsController::showQuantity/$1');
+$routes->delete('api/deletesizeproduct/(:num)/(:num)/(:num)', 'Api\ProductsController::deleteSize/$1/$2/$3');
+$routes->delete('api/deleteimageproduct/(:num)', 'Api\ProductsController::deleteImage/$1');
+$routes->delete('api/deleteproduct/(:num)',        'Api\ProductsController::deleteProduct/$1');
+
+
+/* ============================================
+    SLIDER APIS PRODUCTS
+=============================================== */
+$routes->get('api/listAllSlider',          'Api\SliderController::listAll');
+$routes->get('api/showSlider/(:num)',      'Api\SliderController::show/$1');
+$routes->post('api/createSlider',          'Api\SliderController::create');
+$routes->post('api/updateSlider/(:num)',   'Api\SliderController::update/$1');
+$routes->delete('api/deleteslider/(:num)', 'Api\SliderController::delete/$1');
+
+
+/* ============================================
+    BANNER APIS PRODUCTS
+=============================================== */
+$routes->get('api/listAllBanner',          'Api\BannerController::listAll');
+$routes->get('api/showBanner/(:num)',      'Api\BannerController::show/$1');
+$routes->post('api/createBanner',          'Api\BannerController::create');
+$routes->post('api/updateBanner/(:num)',   'Api\BannerController::update/$1');
+$routes->delete('api/deletebanner/(:num)', 'Api\BannerController::delete/$1');
+
+
+$routes->post('api/email', 'Api\EnqueueEmailController::enqueueEmail');
