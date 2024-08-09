@@ -72,9 +72,7 @@ class Home extends BaseController
                                                ->getResult();*/
 
 
-            $productImages = $this->ProductsModel->select('products.id, products.id_subcategories, products.id_categories, products.name, products.slug, products.keywords, 
-                                                            products.sale_price, products.description, productimages.image')
-                                                    ->join('productimages' , 'productimages.id_product = products.id', 'inner')
+            $productImages = $this->ProductsModel->join('productimages' , 'productimages.id_product = products.id', 'inner')
                                                     ->groupBy('products.id_subcategories')
                                                     ->where('products.deleted_at',NULL)
                                                     ->get()

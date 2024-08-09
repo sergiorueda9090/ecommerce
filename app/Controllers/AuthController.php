@@ -62,7 +62,8 @@ class AuthController extends BaseController
             return $this->getResponse([
                 'message' => 'User authenticated successfully',
                 'user' => $user,
-                'access_token' => getSignedJWTForUser($email)
+                'access_token' => getSignedJWTForUser($email),
+                'islogin' => "ok"
             ]);
         } catch (\Exception $e) {
             return $this->getResponse([
