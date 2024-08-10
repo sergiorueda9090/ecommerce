@@ -38,7 +38,7 @@ class CategoriesController extends BaseController{
         $categories     = $homeController->listCategories();
         $footer         = $homeController->footer();
 
-        $products = 
+        //$products = 
 
         $data = [
            'pageInfo'      => $pageInfo,
@@ -60,6 +60,7 @@ class CategoriesController extends BaseController{
                                                             p.keywords,
                                                             p.sale_price,
                                                             p.description,
+                                                            p.discount,
                                                             pi.image')
                                                     ->join('subcategories s' , 's.id_categories      = categories.id', 'inner')
                                                     ->join('products      p' , 'p.id_subcategories   = s.id', 'inner')
@@ -75,6 +76,7 @@ class CategoriesController extends BaseController{
                                                             p.keywords,
                                                             p.sale_price,
                                                             p.description,
+                                                            p.discount,
                                                             pi.image')
                                                     ->join('subcategories s' , 's.id_categories      = categories.id', 'inner')
                                                     ->join('products      p' , 'p.id_subcategories   = s.id', 'inner')
