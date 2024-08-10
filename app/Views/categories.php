@@ -1360,6 +1360,9 @@
     <!--=====================================
 	Footer
 	======================================-->  
+<script type="text/javascript">
+    const BASE_URL = "<?= base_url(); ?>";
+</script>
 
 <script src="<?php echo base_url().'/assets/js/customers.js';?>"></script>
 <?php  echo $this->endSection("content"); ?>

@@ -62,7 +62,7 @@ $(document).ready(function(){
     function validateEmail(email){
         
         if(email){
-            let url = 'http://ecommerce/public/validateEmail';
+            let url = `${BASE_URL}validateEmail`;
             let data = { email: email };
             fetch(url, {
                 method: "POST",
@@ -119,7 +119,7 @@ $(document).ready(function(){
     function sendRequest(email){
     
         //let domain = window.location.hostname;
-        let url = 'http://ecommerce/public/validateEmail';
+        let url = `${BASE_URL}validateEmail`;
     
         let data = { email: email };
     
@@ -151,7 +151,7 @@ $(document).ready(function(){
         if (validateEmail(email)) {
             
             //let domain = window.location.hostname;
-            let url = 'http://ecommerce/public/authenticationCustomer';
+            let url = `${BASE_URL}authenticationCustomer`;
         
             let data = { email: email, password:password };
         
@@ -242,7 +242,7 @@ $(document).ready(function(){
 
         let idDepartment = $(".deparments").val();
 
-        let url = 'http://ecommerce/public/city';
+        let url = `${BASE_URL}city`;
         
         let data = { idDepartment };
     
@@ -317,7 +317,7 @@ $(document).ready(function(){
             alert(mensaje);
         } else {
 
-            let url = 'http://ecommerce/public/createCustomer';
+            let url = `${BASE_URL}createCustomer`;
                 
             fetch(url, {
                 method: "POST",
@@ -358,7 +358,7 @@ $(document).ready(function(){
     }
     
     function responseURLPAYU(){
-    let encodedURLIE  = 'https://sergioruedaweb.com/470ecommerce/myaccount';
+    let encodedURLIE  = `${BASE_URL}myaccount`;
     return encodedURLIE;
     }
     
@@ -379,7 +379,7 @@ $(document).ready(function(){
                 
                 console.log("dataSendUrl ",dataSendUrl);
 
-                let WEBSITE_URL_CLIENTE = 'https://sergioruedaweb.com/470ecommerce/compra/realizar?idProducto';
+                let WEBSITE_URL_CLIENTE = `${BASE_URL}compra/realizar?idProducto`;
 
                 let apiKey        = "4Vj8eK4rloUd272L48hsrarnUA"; //comercioData[0].apiKeyPayu;
                 let url           = 'https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/'; //comercioData[0].url;
@@ -394,7 +394,7 @@ $(document).ready(function(){
 
 
                 //let urlPageRespon = WEBSITE_URL_CLIENTE+'compra/pageRespuesta/';
-                let urlPageConfir =`http://ecommerce/public/payuconfirmation?&payu=true&productos=${dataSendUrl.ids}`;
+                let urlPageConfir =`${BASE_URL}payuconfirmation?&payu=true&productos=${dataSendUrl.ids}`;
                 let urlPageRespon ="url";
                 let urlPageDelicl = WEBSITE_URL_CLIENTE+'cliente/validar';
                 

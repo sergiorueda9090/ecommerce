@@ -1,3 +1,4 @@
+
 function subscribe(){
     
     let email = $('#email').val();  
@@ -31,7 +32,7 @@ function validateEmail(email) {
 function sendRequest(email){
 
     //let domain = window.location.hostname;
-    let url = 'http://ecommerce/public/register';
+    let url = BASE_URL;
 
     let data = { email: email };
 

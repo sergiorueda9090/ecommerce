@@ -63,7 +63,7 @@ function callColor(idSize) {
 function sendRequest(idSize){
     id_size = idSize;
     //let domain = window.location.hostname;
-    let url = 'http://ecommerce/public/colors';
+    let url = `${BASE_URL}colors`;
 
     let data = { idSize: idSize };
 
@@ -116,7 +116,7 @@ function showColors(colors){
         // Crea un nuevo elemento img
         const img = document.createElement('img');
         // Establece el atributo src de la imagen (aquí asumo una ruta estática)
-        img.setAttribute('src', 'http://ecommerce/public/assets/img/products/detail/variants/small-1.jpg');
+        img.setAttribute('src', `${BASE_URL}assets/img/products/detail/variants/small-1.jpg`);
         
         // Establece el atributo alt de la imagen
         img.setAttribute('alt', '');
@@ -148,7 +148,7 @@ function callQuantity(idquantity){
 
 function sendRequestQuantity(idquantity){
 
-    let url = 'http://ecommerce/public/quantity';
+    let url = `${BASE_URL}quantity`;
 
     let data = { idquantity: idquantity };
 

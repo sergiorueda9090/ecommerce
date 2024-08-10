@@ -340,6 +340,11 @@
 	======================================-->
 
     <hr>
+
+<script type="text/javascript">
+    const BASE_URL = "<?= base_url(); ?>";
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
 <script src="<?php echo base_url().'/assets/js/checkout.js';?>"></script>
 <?php  echo $this->endSection("content"); ?>
