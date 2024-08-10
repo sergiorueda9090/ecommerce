@@ -7,6 +7,7 @@ use App\Models\SliderModel;
 use App\Models\CategoriesModel;
 use App\Models\PageInfoModel;
 use App\Models\ProductsModel;
+use App\Models\SubCategoriesModel;
 
 class Home extends BaseController
 {   
@@ -16,6 +17,7 @@ class Home extends BaseController
     private $categoriesModel;
     private $pageInfoModel;
     private $ProductsModel;
+    private $SubCategoriesModel;
 
     public function __construct(){
         $this->bannerModel      = new BannerModel();
@@ -23,6 +25,7 @@ class Home extends BaseController
         $this->CategoriesModel  = new CategoriesModel();
         $this->pageInfoModel    = new PageInfoModel();
         $this->ProductsModel    = new ProductsModel();
+        $this->SubCategoriesModel = new SubCategoriesModel();
     }
 
     /*
@@ -44,7 +47,7 @@ class Home extends BaseController
                                                 ->get()
                                                 ->getResult();
 
-        $subcategoriesAll = $this->CategoriesModel->select('categories.id,categories.name,
+        /*$subcategoriesAll = $this->CategoriesModel->select('categories.id,categories.name,
                                                             GROUP_CONCAT(s.slug     SEPARATOR ",")      as subcategory_slugs,
                                                             GROUP_CONCAT(s.name     SEPARATOR ",")      as subcategories,
                                                             GROUP_CONCAT(sci.image  SEPARATOR ",")      as imgsubcategories')
@@ -54,7 +57,14 @@ class Home extends BaseController
                                                            ->where('categories.deleted_at',NULL)
                                                            ->where('s.deleted_at',NULL)
                                                            ->get()
-                                                           ->getResult();
+                                                           ->getResult();*/
+
+            $subcategoriesAll = $this->SubCategoriesModel->select('subcategories.id, subcategories.id_categories, subcategories.name, subcategories.slug, 
+                                                                  subcategoriesimages.image')
+                                                         ->join('subcategoriesimages', 'subcategories.id = subcategoriesimages.id_subcategories', 'inner')
+                                                         ->where('subcategories.deleted_at',NULL)
+                                                         ->get()
+                                                         ->getResult();
 
         /*$productImages = $this->CategoriesModel->select('categories.id, 
                                                          p.name,
@@ -72,12 +82,12 @@ class Home extends BaseController
                                                ->getResult();*/
 
 
-            $productImages = $this->ProductsModel->join('productimages' , 'productimages.id_product = products.id', 'inner')
-                                                    ->groupBy('products.id_subcategories')
-                                                    ->where('products.deleted_at',NULL)
-                                                    ->get()
-                                                    ->getResult();
-
+        $productImages = $this->ProductsModel->join('productimages' , 'productimages.id_product = products.id', 'inner')
+                                                 ->groupBy('products.id_subcategories')
+                                                 ->where('products.deleted_at',NULL)
+                                                 ->get()
+                                                 ->getResult();
+        
         $data = array('sliderAll'           => $sliderAll,
                       'categoriesAll'       => $categoriesAll,
                       'subcategoriesAll'    => $subcategoriesAll,

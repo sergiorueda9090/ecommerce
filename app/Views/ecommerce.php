@@ -792,130 +792,138 @@
         	<!--=====================================
 			Products of category
 			======================================-->  
-            <?php
-            foreach ($subcategoriesAll as $key => $subcategories) {
-                echo '<div class="ps-block--products-of-category">
-            
-                <!--=====================================
-                Menu subcategory
-                ======================================-->  
-            
-                <div class="ps-block__categories">
-            
-                    <h3>' . $subcategories->name . '</h3>
-            
-                        <ul>';
-                        
-                        // Obtener las subcategorías como un array y recorrerlas
-                        $subcategoriesArray = explode(",", $subcategories->subcategories);
-                        $subcategorySlugsArray = explode(",", $subcategories->subcategory_slugs);
-                        $subcategoriesWithSlugs = array_combine($subcategoriesArray, $subcategorySlugsArray);
+            <h1>NEW</h1>
                     
-                        foreach ($subcategoriesWithSlugs as $subcategory => $slug) {
-                            echo '<li><a href="'.base_url().'subcategory/' . $slug . '">' . $subcategory . '</a></li>';
-                        }
-            
-                echo '</ul>
-            
+
+            <?php
+                foreach($categoriesAll as $key => $categories){
+
+                echo '<div class="ps-block--products-of-category">
+
+            	<!--=====================================
+				Menu subcategory
+				======================================-->';
+                
+      
+                echo '<div class="ps-block__categories">
+
+                    <h3>'.$categories->name.'</h3>
+
+                        <ul>';
+                            foreach($subcategoriesAll as $key => $subcategories){
+                                
+                                if($categories->id == $subcategories->id_categories){
+                                   echo '<li><a href="' . base_url() .'category/'. $subcategories->slug.'">'. $subcategories->name.'</a></li>';
+                                 
+                                }
+                            }
+                            
+                        echo'</ul>
+
                         <a class="ps-block__more-link" href="#">View All</a>
-            
+
                 </div>
-            
+
                 <!--=====================================
-                Vertical Slider Category
-                ======================================-->  
-            
+				Vertical Slider Category
+				======================================-->  
+
                 <div class="ps-block__slider">
-            
-                    <div class="ps-carousel--product-box owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="7000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="500" data-owl-mousedrag="off">';
-            
-                    // Obtener las imágenes de las subcategorías como un array y recorrerlas
-                    $imagesArray = explode(",", $subcategories->imgsubcategories);
-                    //var_dump($imagesArray);
-                    foreach ($imagesArray as $image) {
-                        echo '<a href="#">
-                            <img src="'.base_url().trim($image).'" alt="">
-                        </a>';
-                    }
-            
-                echo '</div>
-            
+
+                    <div class="ps-carousel--product-box owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="7000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="500" data-owl-mousedrag="off">
+                        ';
+                        
+                        foreach($subcategoriesAll as $key => $subcategories){
+                                
+                            if($categories->id == $subcategories->id_categories){
+                               echo '<a href="#"><img src='. base_url().$subcategories->image.' alt=""></a>';
+                             
+                            }
+                        }
+                    	echo '
+
+                    </div>
+
                 </div>
-            
+                        
                 <!--=====================================
-                Block Product Box
-                ======================================-->  
-            
+				Block Product Box
+				======================================-->  
+
                 <div class="ps-block__product-box">
 					
-                <!--=====================================
-                Product Simple
-                ======================================-->';
+					<!--=====================================
+					Product Simple
+					======================================--> ';
+                    $count = 0;
 
-                foreach($productImages as $key => $productImage){
+                    foreach($productImages as $key => $productImage){
+                        
+                      
+                        
+                        if($categories->id == $productImage->id_categories && $count <= 6){
+                            
+                            
 
-                    if($subcategories->id == $productImage->id_categories){
+                            echo'<div class="ps-product ps-product--simple">
 
-                        echo '<div class="ps-product ps-product--simple">
-
-                        <div class="ps-product__thumbnail">
+                            <div class="ps-product__thumbnail">
     
-                            <a href="product-default.html">
+                                <a href="'. base_url().$productImage->slug.'">
     
-                            <img src="'.base_url().'/assets/img/products/clothing/1.jpg'.'" alt='.$productImage->keywords.'>
+                                    <img src='. base_url().$productImage->image.' alt="">
     
-                            </a>
-    
-                            <div class="ps-product__badge">-16%</div>
-    
-                        </div>
-    
-                        <div class="ps-product__container">
-    
-                            <div class="ps-product__content" data-mh="clothing">
-    
-                                <a class="ps-product__title" href='.base_url().'product/'.$productImage->slug.'>
-                                    '.$productImage->name.'
                                 </a>
     
-                                <div class="ps-product__rating">
-    
-                                    <select class="ps-rating" data-read-only="true">
-    
-                                        <option value="1">1</option>
-                                        <option value="1">2</option>
-                                        <option value="1">3</option>
-                                        <option value="1">4</option>
-                                        <option value="2">5</option>
-    
-                                    </select>
-    
-                                    <span>01</span>
-    
-                                </div>
-    
-                                <p class="ps-product__price sale">$'.number_format($productImage->sale_price).' <del>$670.00 </del></p>
+                                <div class="ps-product__badge">-16%</div>
     
                             </div>
     
-                        </div>
+                            <div class="ps-product__container">
     
-                    </div> <!-- End Product Simple -->';
+                                <div class="ps-product__content" data-mh="clothing">
+    
+                                    <a class="ps-product__title" href="'. base_url().$productImage->slug.'">'.$productImage->name.'</a>
+    
+                                    <div class="ps-product__rating">
+    
+                                        <select class="ps-rating" data-read-only="true">
+    
+                                            <option value="1">1</option>
+                                            <option value="1">2</option>
+                                            <option value="1">3</option>
+                                            <option value="1">4</option>
+                                            <option value="2">5</option>
+    
+                                        </select>
+    
+                                        <span>01</span>
+    
+                                    </div>
+    
+                                    <p class="ps-product__price sale">$'.$productImage->purchase_price.' <del>$'.$productImage->sale_price.' </del></p>
+    
+                                </div>
+    
+                            </div>
+    
+                        </div> <!-- End Product Simple -->';
 
+                            $count++;
+                        }
                     }
 
-                };
-                
-                // Aquí puedes continuar el código para mostrar los productos relacionados a cada subcategoría.
-            
-            echo '</div><!-- End Block Product Box -->
-            
+
+
+                    echo ' </div><!-- End Block Product Box -->
+              
             </div><!-- End Products of category -->';
-            }
-            
+                }
+                        
             ?>
 
 
+            
             <h1>START OLD</h1>
 
 
