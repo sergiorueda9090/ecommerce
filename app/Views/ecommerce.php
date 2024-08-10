@@ -861,7 +861,7 @@
                         
                       
                         
-                        if($categories->id == $productImage->id_categories && $count <= 6){
+                        if($categories->id == $productImage->id_categories && $count <= 5){
                             
                             
 
