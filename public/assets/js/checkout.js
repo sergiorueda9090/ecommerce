@@ -429,7 +429,7 @@ $(document).ready(function(){
                 $('.formPayu input[name="signature"]').attr("value", signatureEnviar);
                 alert("")
                 $('.formPayu input[name="Submit"]').attr("type", "submit").click(function() {
-                    $('.formPayu').submit();
+                    //$('.formPayu').submit();
                 });
         
 

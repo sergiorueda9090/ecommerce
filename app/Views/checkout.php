@@ -317,7 +317,7 @@
                                         
                                     
 
-                                    <button name="Submit" class="ps-btn ps-btn--fullwidth proceedToCheckout" type="submit">Proceed to checkout</button>
+                                    <button name="button" class="ps-btn ps-btn--fullwidth proceedToCheckout" type="button">Proceed to checkout</button>
                  
                                 </div>
 
