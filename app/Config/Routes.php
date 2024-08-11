@@ -32,7 +32,7 @@ $routes->post('/city',                    'CityController::city');
 
 #PAYU
 $routes->get('/response',        'PayuController::response');
-$routes->post('/confirmation',  'PayuController::index');
+$routes->post('/confirmation',   'PayuController::confirmation');
 
 #TOKEN
 $routes->get('client', 'ClientController::index');
