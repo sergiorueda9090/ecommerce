@@ -395,8 +395,8 @@ $(document).ready(function(){
 
                 //let urlPageRespon = WEBSITE_URL_CLIENTE+'compra/pageRespuesta/';
                 //let urlPageConfir =`${BASE_URL}payuconfirmation?&payu=true&productos=${dataSendUrl.ids}&`;
-                let urlPageConfirmationPayu = `${BASE_URL}confirmation`;
-                let urlPageresponsePayu     = `${BASE_URL}response`;
+                let urlPageConfirmationPayu = `${BASE_URL}confirmation?&payu=true&productos=${dataSendUrl.ids}`;
+                let urlPageresponsePayu     = `${BASE_URL}response?&payu=true&productos=${dataSendUrl.ids}`;
                 
                 let urlPageDelicl = WEBSITE_URL_CLIENTE+'cliente/validar';
                 

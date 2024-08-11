@@ -10,6 +10,13 @@ class PayuController extends BaseController{
         file_put_contents(WRITEPATH . 'logs/payu_response_log.log', "Start of index method" . PHP_EOL, FILE_APPEND);
     
         $params = $this->request->getGet();
+
+        
+        $postData = $this->request->getPost();
+
+        $logData = "Received POST data: " . print_r($postData, true) . PHP_EOL;
+
+        file_put_contents(WRITEPATH . 'logs/payu_response_log.log', $logData);
         
         file_put_contents(WRITEPATH . 'logs/payu_response_log.log', "Captured params: " . print_r($params, true) . PHP_EOL, FILE_APPEND);
     
