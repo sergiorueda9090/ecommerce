@@ -422,7 +422,7 @@ $(document).ready(function(){
             
                 //$('.formPayu input[name="confirmationUrl"]').attr("value", urlPageConfir);    
                 $('.formPayu input[name="confirmationUrl"]').attr("value", urlPageConfirmationPayu);//http://www.test.com/response
-                $(".formPayu input[name='responseUrl']").attr("value", urlPageresponsePayu);
+                //$(".formPayu input[name='responseUrl']").attr("value", urlPageresponsePayu);
                 //$('.formPayu input[name="declinedResponseUrl"]').attr("value", `${BASE_URL}`); //"http://www.test.com/confirmation"
                
                 $('.formPayu input[name="displayShippingInformation"]').attr("value", tipoEnvio);
