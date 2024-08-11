@@ -31,7 +31,7 @@ $routes->post('/createCustomer',          'CustomersController::createCustomer')
 $routes->post('/city',                    'CityController::city');
 
 #PAYU
-$routes->get('/payuconfirmation',          'PayuController::index');
+$routes->get('/confirmation',          'PayuController::index');
 
 #TOKEN
 $routes->get('client', 'ClientController::index');

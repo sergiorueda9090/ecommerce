@@ -395,7 +395,7 @@ $(document).ready(function(){
 
                 //let urlPageRespon = WEBSITE_URL_CLIENTE+'compra/pageRespuesta/';
                 //let urlPageConfir =`${BASE_URL}payuconfirmation?&payu=true&productos=${dataSendUrl.ids}&`;
-                let urlPageConfir = `${BASE_URL}payuconfirmation?`;
+                let urlPageConfir = `${BASE_URL}confirmation`;
                 let urlPageRespon = `${BASE_URL}payuconfirmation?`;
                 let urlPageDelicl = WEBSITE_URL_CLIENTE+'cliente/validar';
                 
@@ -420,7 +420,7 @@ $(document).ready(function(){
                 $('.formPayu input[name="currency"]').attr("value", divisa);
                 $('.formPayu input[name="confirmationUrl"]').attr("value", urlPageConfir);
                 $('.formPayu input[name="responseUrl"]').attr("value", `${BASE_URL}`);//http://www.test.com/response
-                $('.formPayu input[name="declinedResponseUrl"]').attr("value", `${BASE_URL}`); //"http://www.test.com/confirmation"
+                //$('.formPayu input[name="declinedResponseUrl"]').attr("value", `${BASE_URL}`); //"http://www.test.com/confirmation"
                 $('.formPayu input[name="displayShippingInformation"]').attr("value", tipoEnvio);
                 $('.formPayu input[name="test"]').attr("value", test);
                 $('.formPayu input[name="signature"]').attr("value", signatureEnviar);
