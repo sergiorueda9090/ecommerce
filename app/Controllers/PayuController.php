@@ -11,69 +11,69 @@ class PayuController extends BaseController{
         #https://ecommerce.sergiodevsolutions.com/payuconfirmation?&payu=true&productos=2-1-2-1
 
                // Capturar todos los parámetros de la URL
-               $params = $this->request->getGet(); // Obtiene todos los parámetros GET
-               $apiKey = "4Vj8eK4rloUd272L48hsrarnUA";
-       
-               // Extraer cada parámetro individualmente
-               $merchantId = $params['merchantId'] ?? '';
-               $referenceCode = $params['referenceCode'] ?? '';
-               $TX_VALUE = $params['TX_VALUE'] ?? '';
-               $currency = $params['currency'] ?? '';
-               $transactionState = $params['transactionState'] ?? '';
-               $firma = $params['signature'] ?? '';
-               $referencePol = $params['reference_pol'] ?? '';
-               $cus = $params['cus'] ?? '';
-               $description = $params['description'] ?? '';
-               $pseBank = $params['pseBank'] ?? '';
-               $lapPaymentMethod = $params['lapPaymentMethod'] ?? '';
-               $transactionId = $params['transactionId'] ?? '';
-       
-               // Calcular la firma para verificarla
-               $newValue = number_format($TX_VALUE, 1, '.', '');
-               $firmaCadena = "$apiKey~$merchantId~$referenceCode~$newValue~$currency~$transactionState";
-               $firmaCreada = md5($firmaCadena);
-       
-               // Determinar el estado de la transacción
-               $estadoTx = '';
-               switch ($transactionState) {
-                   case 4:
-                       $estadoTx = "Transaction approved";
-                       break;
-                   case 6:
-                       $estadoTx = "Transaction rejected";
-                       break;
-                   case 104:
-                       $estadoTx = "Error";
-                       break;
-                   case 7:
-                       $estadoTx = "Pending payment";
-                       break;
-                   default:
-                       $estadoTx = $params['mensaje'] ?? 'Unknown state';
-                       break;
-               }
-       
-               // Cargar el servicio de logger
-               $logger = \Config\Services::logger();
-       
-               // Crear un log bien formateado
-               $logMessage .= "---------------------------------------------------\n";
-               $logMessage = "PayU Transaction Response:\n";
-               $logMessage .= "Merchant ID: $merchantId\n";
-               $logMessage .= "Reference Code: $referenceCode\n";
-               $logMessage .= "Transaction ID: $transactionId\n";
-               $logMessage .= "Reference POL: $referencePol\n";
-               $logMessage .= "Transaction State: $estadoTx\n";
-               $logMessage .= "Total Amount: $TX_VALUE\n";
-               $logMessage .= "Currency: $currency\n";
-               $logMessage .= "Description: $description\n";
-               $logMessage .= "PSE Bank: $pseBank\n";
-               $logMessage .= "Payment Method: $lapPaymentMethod\n";
-               $logMessage .= "Signature Valid: " . (strtoupper($firma) === strtoupper($firmaCreada) ? 'Yes' : 'No') . "\n";
-               $logMessage .= "---------------------------------------------------\n";
-       
-               // Registrar en el log
-               $logger->info($logMessage);
+                       // Capturar todos los parámetros de la URL
+        $params = $this->request->getGet();
+        $apiKey = "4Vj8eK4rloUd272L48hsrarnUA";
+
+        // Extraer cada parámetro individualmente
+        $merchantId = $params['merchantId'] ?? '';
+        $referenceCode = $params['referenceCode'] ?? '';
+        $TX_VALUE = $params['TX_VALUE'] ?? '';
+        $currency = $params['currency'] ?? '';
+        $transactionState = $params['transactionState'] ?? '';
+        $firma = $params['signature'] ?? '';
+        $referencePol = $params['reference_pol'] ?? '';
+        $cus = $params['cus'] ?? '';
+        $description = $params['description'] ?? '';
+        $pseBank = $params['pseBank'] ?? '';
+        $lapPaymentMethod = $params['lapPaymentMethod'] ?? '';
+        $transactionId = $params['transactionId'] ?? '';
+
+        // Calcular la firma para verificarla
+        $newValue = number_format($TX_VALUE, 1, '.', '');
+        $firmaCadena = "$apiKey~$merchantId~$referenceCode~$newValue~$currency~$transactionState";
+        $firmaCreada = md5($firmaCadena);
+
+        // Determinar el estado de la transacción
+        $estadoTx = '';
+        switch ($transactionState) {
+            case 4:
+                $estadoTx = "Transaction approved";
+                break;
+            case 6:
+                $estadoTx = "Transaction rejected";
+                break;
+            case 104:
+                $estadoTx = "Error";
+                break;
+            case 7:
+                $estadoTx = "Pending payment";
+                break;
+            default:
+                $estadoTx = $params['mensaje'] ?? 'Unknown state';
+                break;
+        }
+
+        // Cargar el servicio de logger
+        $logger = \Config\Services::logger();
+
+        // Crear un log bien formateado
+        $logMessage = "PayU Transaction Response:\n";
+        $logMessage .= "Merchant ID: $merchantId\n";
+        $logMessage .= "Reference Code: $referenceCode\n";
+        $logMessage .= "Transaction ID: $transactionId\n";
+        $logMessage .= "Reference POL: $referencePol\n";
+        $logMessage .= "Transaction State: $estadoTx\n";
+        $logMessage .= "Total Amount: $TX_VALUE\n";
+        $logMessage .= "Currency: $currency\n";
+        $logMessage .= "Description: $description\n";
+        $logMessage .= "PSE Bank: $pseBank\n";
+        $logMessage .= "Payment Method: $lapPaymentMethod\n";
+        $logMessage .= "Signature Valid: " . (strtoupper($firma) === strtoupper($firmaCreada) ? 'Yes' : 'No') . "\n";
+        $logMessage .= "---------------------------------------------------\n";
+
+        // Registrar en el log
+        $logger->info($logMessage);
     }
 
 }
