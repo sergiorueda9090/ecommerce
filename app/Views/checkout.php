@@ -312,12 +312,12 @@
                                         <input name="signature"       type="text"  value="">
                                         <input name="test"            type="text"  value="">
                                         <input name="buyerEmail"      type="text"  value="">
-                                        <input name="responseUrl"     type="text"  value="" >
-                                        <input name="confirmationUrl" type="text"  value="" >
+                                        <input name="responseUrl"     type="text" value="" >
+                                        <input name="confirmationUrl" type="text" value="" >
                                         
                                     
 
-                                    <button name="submit" class="ps-btn ps-btn--fullwidth proceedToCheckout" type="submit">Proceed to checkout</button>
+                                    <button name="Submit" class="ps-btn ps-btn--fullwidth proceedToCheckout" type="submit">Proceed to checkout</button>
                  
                                 </div>
 
