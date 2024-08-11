@@ -50,9 +50,10 @@ class PayuController extends BaseController{
         file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "Start of index method" . PHP_EOL, FILE_APPEND);
     
 
-
         $params = $this->request->getGet();
- 
+        
+        $productsArray = explode(",",$params['productos']);
+
         $postData = $this->request->getPost();
 
         if (!empty($params)) {
@@ -86,9 +87,9 @@ class PayuController extends BaseController{
 
                 file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "REGISTRO AGREGADO CORRECTAMENTE". PHP_EOL, FILE_APPEND);
 
-                $products  = $this->request->getGet(); // position-1 = id_color, position-2 = id_size, position-3 = quantity, position-4 = idProduct
+                //$products  = $this->request->getGet(); // position-1 = id_color, position-2 = id_size, position-3 = quantity, position-4 = idProduct
 
-                $productsArray = explode(",",$products);
+                //$productsArray = explode(",",$products);
 
                 $arrayB = [];
         
