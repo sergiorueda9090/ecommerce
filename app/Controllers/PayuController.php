@@ -110,12 +110,12 @@ class PayuController extends BaseController{
                     ];
                 }
         
-                $result = $this->ordersModel->insertBatch($arrayB);
+                $result = $this->OrdersModel->insertBatch($arrayB);
 
                 if ($result === false) {
 
                     
-                    $error = $this->ordersModel->errors();
+                    $error = $this->OrdersModel->errors();
 
                     log_message('error', 'Failed to insert batch orders: ' . print_r($error, true));
                   
