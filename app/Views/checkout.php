@@ -313,11 +313,11 @@
                                         <input name="test"            type="text"  value="">
                                         <input name="buyerEmail"      type="text"  value="">
                                         <input name="responseUrl"     type="text" value="" >
-                                        <input name="confirmationUrl" type="text" value="" >
+                                        <!--<input name="confirmationUrl" type="text" value="" >-->
                                         
                                     
 
-                                    <button name="button" class="ps-btn ps-btn--fullwidth proceedToCheckout" type="button">Proceed to checkout</button>
+                                    <button name="submit" class="ps-btn ps-btn--fullwidth proceedToCheckout" type="submit">Proceed to checkout</button>
                  
                                 </div>
 
