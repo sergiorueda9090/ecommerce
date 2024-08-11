@@ -54,7 +54,7 @@ class PayuController extends BaseController{
         if (!empty($params)) {
             foreach ($params as $key => $value) {
                 $logDataget = "GET - $key: $value" . PHP_EOL;
-                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logDataget);
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logDataget. PHP_EOL, FILE_APPEND);
             }
         }
 
@@ -62,7 +62,7 @@ class PayuController extends BaseController{
         if (!empty($postData)) {
             foreach ($postData as $key => $value) {
                 $logDatapost = "POST - $key: $value" . PHP_EOL;
-                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logDatapost);
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logDatapost. PHP_EOL, FILE_APPEND);
             }
         }
 
