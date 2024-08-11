@@ -17,6 +17,7 @@ class SubCategoriesController extends BaseController{
         $homeController = new Home();
         $pageInfo       = $homeController->pageInfo();
         $categories     = $homeController->listCategories();
+        $header         = $homeController->header();
         $footer         = $homeController->footer();
 
         $products = 
@@ -24,6 +25,7 @@ class SubCategoriesController extends BaseController{
         $data = [
            'pageInfo'      => $pageInfo,
            'categories'    => $categories,
+           'header'        => $header,
            'footer'        => $footer,
            'products'      => $this->productsInfo($subcategory),
            'category'      => $subcategory];

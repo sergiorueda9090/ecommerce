@@ -47,9 +47,7 @@ $routes->get('api/listAllUsers',        'Api\UsersController::listAllUsers');
 $routes->get('api/showUser/(:num)',     'Api\UsersController::showUser/$1');
 $routes->post('api/updateUser/(:num)',  'Api\UsersController::updateUser/$1');
 $routes->delete('api/deleteUser/(:num)','Api\UsersController::deleteUser/$1');
-/* ============================================
-    END APIS USERS
-=============================================== */
+
 
 
 /* ============================================
@@ -108,6 +106,16 @@ $routes->get('api/showBanner/(:num)',      'Api\BannerController::show/$1');
 $routes->post('api/createBanner',          'Api\BannerController::create');
 $routes->post('api/updateBanner/(:num)',   'Api\BannerController::update/$1');
 $routes->delete('api/deletebanner/(:num)', 'Api\BannerController::delete/$1');
+
+
+/* ============================================
+    SOCIAL NETWORK APIS
+=============================================== */
+$routes->get('api/listAllSocialNetwork',          'Api\SocialNetworkController::listAll');
+$routes->get('api/showSocialNetwork/(:num)',      'Api\SocialNetworkController::show/$1');
+$routes->post('api/createSocialNetwork',          'Api\SocialNetworkController::create');
+$routes->post('api/updateSocialNetwork/(:num)',   'Api\SocialNetworkController::update/$1');
+$routes->delete('api/deleteSocialNetwork/(:num)', 'Api\SocialNetworkController::delete/$1');
 
 
 $routes->post('api/email', 'Api\EnqueueEmailController::enqueueEmail');

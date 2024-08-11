@@ -73,7 +73,7 @@
                         <i class="icon-arrow-left"></i> Back to Shop
                     </a>
 
-                    <a class="ps-btn" href="checkout.html">
+                    <a class="ps-btn" href="<?php echo base_url().'checkout'; ?>">
                         Proceed to checkout <i class="icon-arrow-right"></i> 
                     </a>
 

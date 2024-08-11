@@ -19,10 +19,12 @@ class CategoriesController extends BaseController{
          $pageInfo       = $homeController->pageInfo();
          $categories     = $homeController->listCategories();
          $footer         = $homeController->footer();
+         $header         = $homeController->header();
 
          $data = [
             'pageInfo'      => $pageInfo,
             'categories'    => $categories,
+            'header'        => $header,
             'footer'        => $footer,
             'products'      => $this->productsInfo()
         ];
@@ -37,12 +39,12 @@ class CategoriesController extends BaseController{
         $pageInfo       = $homeController->pageInfo();
         $categories     = $homeController->listCategories();
         $footer         = $homeController->footer();
-
-        //$products = 
-
+        $header         = $homeController->header();
+        
         $data = [
            'pageInfo'      => $pageInfo,
            'categories'    => $categories,
+           'header'        => $header,
            'footer'        => $footer,
            'products'      => $this->productsInfo($category),
            'category'      => $category];

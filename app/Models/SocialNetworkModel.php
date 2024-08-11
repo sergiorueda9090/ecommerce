@@ -13,7 +13,7 @@ class SocialNetworkModel extends Model{
     protected $returnType     = 'object';//array;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = ['name','icon'];
+    protected $allowedFields = ['url','icon'];
 
     protected bool $allowEmptyInserts = false;
 

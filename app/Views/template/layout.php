@@ -169,10 +169,15 @@
 
                 <div class="header__left">
                     <ul class="d-flex justify-content-center">
-						<li><a href="#" target="_blank"><i class="fab fa-facebook-f mr-4"></i></a></li>
-						<li><a href="#" target="_blank"><i class="fab fa-instagram mr-4"></i></a></li>					
-						<li><a href="#" target="_blank"><i class="fab fa-twitter mr-4"></i></a></li>
-						<li><a href="#" target="_blank"><i class="fab fa-youtube mr-4"></i></a></li>
+						<?php 
+
+							foreach($header as $key => $heade){
+
+								echo '<li><a href="'.$heade->url.'" target="_blank">'.$heade->icon.'</i></a></li>';
+
+							}
+
+						?>
 					</ul>
                 </div>
 
@@ -182,7 +187,7 @@
 
                 <div class="header__right">
                     <ul class="header__top-links"> 
-                    	<li><i class="icon-telephone"></i> Hotline:<strong> 1-800-234-5678</strong></li>                     
+                    	                   
                         <li>
                             <div class="ps-dropdown language"><a href="#"><img src="<?php echo base_url().'/assets/img/template/en.png'?>" alt="">English</a>
                                 <ul class="ps-dropdown-menu">
@@ -444,17 +449,22 @@
             <div class="header__left">
 
                 <ul class="d-flex justify-content-center">
-					<li><a href="#" target="_blank"><i class="fab fa-facebook-f mr-4"></i></a></li>
-					<li><a href="#" target="_blank"><i class="fab fa-instagram mr-4"></i></a></li>					
-					<li><a href="#" target="_blank"><i class="fab fa-twitter mr-4"></i></a></li>
-					<li><a href="#" target="_blank"><i class="fab fa-youtube mr-4"></i></a></li>
+					<?php 
+
+						foreach($header as $key => $heade){
+
+							echo '<li><a href="'.$heade->url.'" target="_blank">'.$heade->icon.'</i></a></li>';
+
+						}
+
+					?>
 				</ul>
             </div>
 
             <div class="header__right">
 
                 <ul class="navigation__extra">
-                    <li><i class="icon-telephone"></i> Hotline:<strong> 1-800-234-5678</strong></li>    
+                  
 
                     <li>
 

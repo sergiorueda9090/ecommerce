@@ -43,11 +43,14 @@ class ProductsController extends BaseController{
         $homeController = new Home();
         $pageInfo       = $homeController->pageInfo();
         $categories     = $homeController->listCategories();
+        $header         = $homeController->header();
         $footer         = $homeController->footer();
 
+        
         $data = [
            'pageInfo'      => $pageInfo,
            'categories'    => $categories,
+           'header'        => $header,
            'footer'        => $footer,
            'product'       => $products[0],
            'productImage'  => $product_images,

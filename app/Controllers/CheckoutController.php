@@ -15,11 +15,13 @@ class CheckoutController extends BaseController{
         $pageInfo       = $homeController->pageInfo();
         $categories     = $homeController->listCategories();
         $footer         = $homeController->footer();
+        $header         = $homeController->header();
         $deparments     = $this->departamentos();
         
         $data = [
            'pageInfo'      => $pageInfo,
            'categories'    => $categories,
+           'header'        => $header,
            'footer'        => $footer,
            'deparments'    => $deparments,
        ];

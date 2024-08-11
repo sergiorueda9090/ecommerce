@@ -792,9 +792,6 @@
         	<!--=====================================
 			Products of category
 			======================================-->  
-            <h1>NEW</h1>
-                    
-
             <?php
                 foreach($categoriesAll as $key => $categories){
 
@@ -869,21 +866,26 @@
 
                             <div class="ps-product__thumbnail">
     
-                                <a href="'. base_url().$productImage->slug.'">
+                                <a href="'. base_url().'product/'.$productImage->slug.'">
     
                                     <img src='. base_url().$productImage->image.' alt="">
     
-                                </a>
+                                </a>';
+
+                                if($productImage->discount != NULL && $productImage->discount != "" ){
+
+                                    echo'<div class="ps-product__badge">-'.$productImage->discount.'%</div>';
+
+                                }
+                                
     
-                                <div class="ps-product__badge">-16%</div>
-    
-                            </div>
+                            echo'</div>
     
                             <div class="ps-product__container">
     
                                 <div class="ps-product__content" data-mh="clothing">
     
-                                    <a class="ps-product__title" href="'. base_url().$productImage->slug.'">'.$productImage->name.'</a>
+                                    <a class="ps-product__title" href="'. base_url().'product/'.$productImage->slug.'">'.$productImage->name.'</a>
     
                                     <div class="ps-product__rating">
     
@@ -901,7 +903,7 @@
     
                                     </div>
     
-                                    <p class="ps-product__price sale">$'.$productImage->purchase_price.' <del>$'.$productImage->sale_price.' </del></p>
+                                    <p class="ps-product__price sale">$'.number_format($productImage->purchase_price).' <del>$'.number_format($productImage->sale_price).' </del></p>
     
                                 </div>
     

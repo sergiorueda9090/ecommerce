@@ -8,6 +8,7 @@ use App\Models\CategoriesModel;
 use App\Models\PageInfoModel;
 use App\Models\ProductsModel;
 use App\Models\SubCategoriesModel;
+use App\Models\SocialNetworkModel;
 
 class Home extends BaseController
 {   
@@ -18,6 +19,7 @@ class Home extends BaseController
     private $pageInfoModel;
     private $ProductsModel;
     private $SubCategoriesModel;
+    private $SocialNetworkModel;
 
     public function __construct(){
         $this->bannerModel      = new BannerModel();
@@ -26,6 +28,7 @@ class Home extends BaseController
         $this->pageInfoModel    = new PageInfoModel();
         $this->ProductsModel    = new ProductsModel();
         $this->SubCategoriesModel = new SubCategoriesModel();
+        $this->SocialNetworkModel = new SocialNetworkModel();
     }
 
     /*
@@ -94,6 +97,7 @@ class Home extends BaseController
                       'productImages'       => $productImages,
                       'pageInfo'            => $this->pageInfo(),
                       'categories'          => $this->listCategories(),
+                      'header'              => $this->header(),
                       'footer'              => $this->footer());
         
         return view('ecommerce', $data);
@@ -104,6 +108,14 @@ class Home extends BaseController
         $categories = $this->CategoriesModel->select('*')->get()->getResult();
         
         return $categories;
+
+    }
+
+    public function header(){
+
+        $socialNetworkResponse = $this->SocialNetworkModel->get()->getResult();
+
+        return $socialNetworkResponse;
 
     }
 
