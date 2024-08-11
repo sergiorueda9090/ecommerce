@@ -312,8 +312,8 @@
                                         <input name="signature"       type="text"  value="">
                                         <input name="test"            type="text"  value="">
                                         <input name="buyerEmail"      type="text"  value="">
-                                        <input name="responseUrl"     type="hidden" value="http://www.test.com/response" >
-                                        <input name="confirmationUrl" type="hidden" value="http://www.test.com/confirmation" >
+                                        <input name="responseUrl"     type="text" value="" >
+                                        <input name="confirmationUrl" type="text" value="" >
                                         
                                     
 

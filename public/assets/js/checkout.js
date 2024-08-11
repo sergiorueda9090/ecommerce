@@ -418,12 +418,16 @@ $(document).ready(function(){
                 $('.formPayu input[name="taxReturnBase"]').attr("value", taxReturnBase);
                 $('.formPayu input[name="shipmentValue"]').attr("value", shipmentValue);
                 $('.formPayu input[name="currency"]').attr("value", divisa);
-                $('.formPayu input[name="confirmationUrl"]').attr("value", urlPageConfir);
+            
+                $('.formPayu input[name="confirmationUrl"]').attr("value", urlPageConfir);    
                 $('.formPayu input[name="responseUrl"]').attr("value", urlPageConfir);//http://www.test.com/response
+               
                 //$('.formPayu input[name="declinedResponseUrl"]').attr("value", `${BASE_URL}`); //"http://www.test.com/confirmation"
+               
                 $('.formPayu input[name="displayShippingInformation"]').attr("value", tipoEnvio);
                 $('.formPayu input[name="test"]').attr("value", test);
                 $('.formPayu input[name="signature"]').attr("value", signatureEnviar);
+                alert("")
                 $('.formPayu input[name="Submit"]').attr("type", "submit").click(function() {
                     $('.formPayu').submit();
                 });
