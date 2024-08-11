@@ -26,6 +26,7 @@ class PayuController extends BaseController{
         // Crear un log bien formateado
         $logMessage = "PayU Transaction Response:\n";
         $logMessage .= "Merchant ID: " . ($params['merchantId'] ?? 'N/A') . "\n";
+        $logMessage .= "Merchant ID 1 : " . ($_REQUEST['merchantId'] ?? 'N/A') . "\n";
         $logMessage .= "Reference Code: " . ($params['referenceCode'] ?? 'N/A') . "\n";
         // Añade más detalles...
 
