@@ -29,7 +29,7 @@ class PayuController extends BaseController{
 
         $logData = "Received POST data: " . print_r($postData, true) . PHP_EOL;
        
-        file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logData, 'a+');
+        file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logData);
 
         file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "Captured params: " . print_r($params, true) . PHP_EOL, FILE_APPEND);
     
