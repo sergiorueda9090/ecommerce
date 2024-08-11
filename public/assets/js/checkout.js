@@ -400,7 +400,7 @@ $(document).ready(function(){
                 
                 let urlPageDelicl = WEBSITE_URL_CLIENTE+'cliente/validar';
                 
-                alert(urlPageConfir);
+                alert(urlPageConfirmationPayu);
 
                 let tipoEnvio     = "YES"; //si es fisico es YES si no es fisico es NO
                 let test          =  1; //comercioData[0].estado; //0 ES REAL, 1 ES PRUEBA
