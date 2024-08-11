@@ -313,7 +313,7 @@
                                         <input name="test"            type="text"  value="">
                                         <input name="buyerEmail"      type="text"  value="">
                                         <input name="responseUrl"     type="text"  value="" >
-                                        <!--<input name="confirmationUrl" type="text" value="" >-->
+                                        <input name="confirmationUrl" type="text"  value="" >
                                         
                                     
 
