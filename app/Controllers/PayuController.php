@@ -10,19 +10,32 @@ class PayuController extends BaseController{
         file_put_contents(WRITEPATH . 'logs/payu_response_log.log', "Start of index method" . PHP_EOL, FILE_APPEND);
     
         $params = $this->request->getGet();
-
-        
         $postData = $this->request->getPost();
 
-        $logData = "Received POST data: " . print_r($postData, true) . PHP_EOL;
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                $logDataget = "GET - $key: $value" . PHP_EOL;
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logDataget);
+            }
+        }
 
-        file_put_contents(WRITEPATH . 'logs/payu_response_log.log', $logData);
+        // Log POST data
+        if (!empty($postData)) {
+            foreach ($postData as $key => $value) {
+                $logDatapost = "POST - $key: $value" . PHP_EOL;
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logDatapost);
+            }
+        }
+
+        //$logData = "Received POST data: " . print_r($postData, true) . PHP_EOL;
+
+        //file_put_contents(WRITEPATH . 'logs/payu_response_log.log', $logData);
         
-        file_put_contents(WRITEPATH . 'logs/payu_response_log.log', "Captured params: " . print_r($params, true) . PHP_EOL, FILE_APPEND);
+        //file_put_contents(WRITEPATH . 'logs/payu_response_log.log', "Captured params: " . print_r($params, true) . PHP_EOL, FILE_APPEND);
     
         // Aquí puedes continuar con el resto de tu lógica.
         
-        file_put_contents(WRITEPATH . 'logs/payu_response_log.log', "End of index method" . PHP_EOL, FILE_APPEND);
+        //file_put_contents(WRITEPATH . 'logs/payu_response_log.log', "End of index method" . PHP_EOL, FILE_APPEND);
     }
 
 
@@ -30,19 +43,38 @@ class PayuController extends BaseController{
     {
         file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "Start of index method" . PHP_EOL, FILE_APPEND);
     
-        $params = $this->request->getGet();
+        //$params = $this->request->getGet();
 
+        //$postData = $this->request->getPost();
+
+        $params = $this->request->getGet();
+        
         $postData = $this->request->getPost();
 
-        $logData = "Received POST data: " . print_r($postData, true) . PHP_EOL;
-       
-        file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logData);
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                $logDataget = "GET - $key: $value" . PHP_EOL;
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logDataget);
+            }
+        }
 
-        file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "Captured params: " . print_r($params, true) . PHP_EOL, FILE_APPEND);
+        // Log POST data
+        if (!empty($postData)) {
+            foreach ($postData as $key => $value) {
+                $logDatapost = "POST - $key: $value" . PHP_EOL;
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logDatapost);
+            }
+        }
+
+        //$logData = "Received POST data: " . print_r($postData, true) . PHP_EOL;
+       
+        //file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $logData);
+
+        //file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "Captured params: " . print_r($params, true) . PHP_EOL, FILE_APPEND);
     
         // Aquí puedes continuar con el resto de tu lógica.
         
-        file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "End of index method" . PHP_EOL, FILE_APPEND);
+        //file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "End of index method" . PHP_EOL, FILE_APPEND);
     }
 
 }
