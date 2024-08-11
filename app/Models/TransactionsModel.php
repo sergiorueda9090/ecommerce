@@ -13,10 +13,9 @@ class TransactionsModel extends Model{
     protected $returnType     = 'object';//array;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = ['estadoTx','merchant_id','referenceCode',
-                                'TX_VALUE','currency','transactionState','signature',
-                                'reference_pol','cus','extra1','pseBank','lapPaymentMethod',
-                                'transactionId','products','payu'];
+    protected $allowedFields = ['merchant_id','state_pol','payment_method',
+                                'payment_method_type','value','currency','email_buyer',
+                                'date','data'];
 
     protected bool $allowEmptyInserts = false;
 
