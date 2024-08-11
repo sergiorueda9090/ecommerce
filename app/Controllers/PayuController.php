@@ -7,10 +7,12 @@ use App\Models\TransactionsModel;
 class PayuController extends BaseController{
 
     private $TransactionsModel;
+    private $OrdersModel;
 
     public function __construct(){
 
         $this->TransactionsModel = new TransactionsModel();
+        $this->OrdersModel       = new OrdersModel();
 
     }
 
@@ -107,12 +109,12 @@ class PayuController extends BaseController{
                     ];
                 }
         
-                $result = $ordersModel->insertBatch($arrayB);
+                $result = $this->ordersModel->insertBatch($arrayB);
 
                 if ($result === false) {
 
                     
-                    $error = $ordersModel->errors();
+                    $error = $this->ordersModel->errors();
 
                     log_message('error', 'Failed to insert batch orders: ' . print_r($error, true));
                   
