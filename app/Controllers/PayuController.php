@@ -122,7 +122,7 @@ class PayuController extends BaseController{
             $updateProductQuantity = $productQuantityColorModel->set('count', 'count-' . $value['quantity'], FALSE)->where('id_productcolor', $value['id_color'])->update();
         }
 
-        return view('payuConfirm',$data);
+        //return view('payuConfirm',$data);
     }
 
 }
