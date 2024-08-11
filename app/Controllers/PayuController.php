@@ -12,25 +12,15 @@ class PayuController extends BaseController{
 
         #https://ecommerce.sergiodevsolutions.com/payuconfirmation?&payu=true&productos=2-1-2-1
 
-        // Capturar todos los parámetros de la URL
-        // Capturar todos los parámetros de la URL
-        // Cargar el servicio de logger
         $logger = \Config\Services::logger();
 
         // Prueba de log simple
         $logger->info('Logging in PayUController has started.');
 
-        // Ahora, añade el resto de tu lógica para capturar y procesar los datos de PayU
-        $params = $this->request->getGet();
-
-        // Más lógica aquí...
 
         // Crear un log bien formateado
         $logMessage = "PayU Transaction Response:\n";
-        $logMessage .= "Merchant ID: " . ($params['merchantId'] ?? 'N/A') . "\n";
-        //$logMessage .= "Merchant ID 1 : " . ($_REQUEST['merchantId'] ?? 'N/A') . "\n";
-        $logMessage .= "Reference Code: " . ($params['referenceCode'] ?? 'N/A') . "\n";
-        // Añade más detalles...
+
 
         // Registrar en el log
         $logger->info($logMessage);
