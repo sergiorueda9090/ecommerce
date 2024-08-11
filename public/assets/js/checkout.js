@@ -396,7 +396,7 @@ $(document).ready(function(){
                 //let urlPageRespon = WEBSITE_URL_CLIENTE+'compra/pageRespuesta/';
                 //let urlPageConfir =`${BASE_URL}payuconfirmation?&payu=true&productos=${dataSendUrl.ids}&`;
                 let urlPageConfir = `${BASE_URL}payuconfirmation?`;
-                let urlPageRespon ="url";
+                let urlPageRespon = `${BASE_URL}payuconfirmation?`;
                 let urlPageDelicl = WEBSITE_URL_CLIENTE+'cliente/validar';
                 
                 alert(urlPageConfir);
