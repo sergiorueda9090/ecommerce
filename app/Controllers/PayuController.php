@@ -105,7 +105,7 @@ class PayuController extends BaseController{
                         "id_size"           => (int)$id_size,
                         "id_color"          => (int)$id_color,
                         "quantity"          => (int)$quantity,
-                        "transactions_id"   => 5  ?? 'N/A',
+                        "transactions_id"   => $idTransaction  ?? 'N/A',
                         "status"            => 1
                     ];
 
