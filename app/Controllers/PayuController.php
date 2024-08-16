@@ -49,7 +49,6 @@ class PayuController extends BaseController{
     {
         file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "Start of index method" . PHP_EOL, FILE_APPEND);
     
-
         $params = $this->request->getGet();
         
         $productsArray = explode(",",$params['productos']);
@@ -87,10 +86,6 @@ class PayuController extends BaseController{
 
                 file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "REGISTRO AGREGADO CORRECTAMENTE". PHP_EOL, FILE_APPEND);
 
-                //$products  = $this->request->getGet(); // position-1 = id_color, position-2 = id_size, position-3 = quantity, position-4 = idProduct
-
-                //$productsArray = explode(",",$products);
-
                 $arrayB = [];
         
                 foreach($productsArray as $array){
@@ -109,19 +104,20 @@ class PayuController extends BaseController{
                         "status"            => 1
                     ];
                 }
+
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', print_r($arrayB). PHP_EOL, FILE_APPEND);
         
                 $result = $this->OrdersModel->insertBatch($arrayB);
 
                 if ($result === false) {
 
-                    
                     $error = $this->OrdersModel->errors();
 
-                    log_message('error', 'Failed to insert batch orders: ' . print_r($error, true));
+                    file_put_contents('error', 'Failed to insert batch orders: ' . print_r($error, true));
                   
                 } else {
                     
-                    log_message('info', 'Successfully inserted ' . $result . ' batch orders.');
+                    file_put_contents('info', 'Successfully inserted ' . $result . ' batch orders.');
                    
                 }
 
