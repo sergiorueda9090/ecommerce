@@ -4,16 +4,19 @@ use App\Models\ProductQuantityColorModel;
 use App\Models\OrdersModel;
 use App\Models\TransactionsModel;
 
+
 class PayuController extends BaseController{
 
     private $TransactionsModel;
     private $OrdersModel;
+    private $ProductQuantityColorModel;
 
     public function __construct(){
 
-        $this->TransactionsModel = new TransactionsModel();
-        $this->OrdersModel       = new OrdersModel();
-
+        $this->TransactionsModel         = new TransactionsModel();
+        $this->OrdersModel               = new OrdersModel();
+        $this->ProductQuantityColorModel = new ProductQuantityColorModel();
+    
     }
 
     public function response()
@@ -84,6 +87,8 @@ class PayuController extends BaseController{
 
             if($this->TransactionsModel->insert($data)){
 
+                $idTransaction = $this->TransactionsModel->insertID();
+
                 file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "REGISTRO AGREGADO CORRECTAMENTE". PHP_EOL, FILE_APPEND);
 
                 $arrayB = [];
@@ -100,14 +105,22 @@ class PayuController extends BaseController{
                         "id_size"           => (int)$id_size,
                         "id_color"          => (int)$id_color,
                         "quantity"          => (int)$quantity,
-                        "transactions_id"   => $postData['state_pol'] ?? 'N/A',
+                        "transactions_id"   => $idTransaction  ?? 'N/A',
                         "status"            => 1
                     ];
+
+                    
+                    $this->ProductQuantityColorModel->set('count', 'count-'.(int)$quantity.'', false)
+                                                    ->ProductQuantityColorModel->where('id', (int)$id_color)
+                                                    ->ProductQuantityColorModel->update();
+
                 }
 
-                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', print_r($arrayB). PHP_EOL, FILE_APPEND);
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $arrayB . PHP_EOL, FILE_APPEND);
         
                 $result = $this->OrdersModel->insertBatch($arrayB);
+
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', 'Failed to insertBatch orders: ' .$result. PHP_EOL, FILE_APPEND);
 
                 if ($result === false) {
 
