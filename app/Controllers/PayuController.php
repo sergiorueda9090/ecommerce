@@ -110,9 +110,9 @@ class PayuController extends BaseController{
                     ];
 
 
-                    $this->ProductQuantityColorModel->set('count', 'count-'.(int)$quantity, false)
+                    /*$this->ProductQuantityColorModel->set('count', 'count-'.(int)$quantity, false)
                                                     ->where('id', (int)$id_color)
-                                                    ->update();
+                                                    ->update();*/
 
                 }
 
