@@ -89,7 +89,7 @@ class PayuController extends BaseController{
 
                 $idTransaction = $this->TransactionsModel->insertID();
 
-                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "REGISTRO AGREGADO CORRECTAMENTE". PHP_EOL, FILE_APPEND);
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "ID ".$idTransaction. PHP_EOL, FILE_APPEND);
 
                 $arrayB = [];
         
@@ -105,7 +105,7 @@ class PayuController extends BaseController{
                         "id_size"           => (int)$id_size,
                         "id_color"          => (int)$id_color,
                         "quantity"          => (int)$quantity,
-                        "transactions_id"   => $idTransaction  ?? 'N/A',
+                        "transactions_id"   => 5  ?? 'N/A',
                         "status"            => 1
                     ];
 
@@ -119,7 +119,7 @@ class PayuController extends BaseController{
         
                 $result = $this->OrdersModel->insertBatch($arrayB);
 
-                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', 'Failed to insertBatch orders: ' .$result. PHP_EOL, FILE_APPEND);
+                //file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', 'Failed to insertBatch orders: ' .$result. PHP_EOL, FILE_APPEND);
 
                 if ($result === false) {
 
