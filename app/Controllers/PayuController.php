@@ -116,7 +116,7 @@ class PayuController extends BaseController{
 
                 }
 
-                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', $arrayB . PHP_EOL, FILE_APPEND);
+                file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', print_r($arrayB, true) . PHP_EOL, FILE_APPEND);
         
                 $result = $this->OrdersModel->insertBatch($arrayB);
 
