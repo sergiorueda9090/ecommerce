@@ -28,6 +28,11 @@ $routes->post('/authenticationCustomer',  'CustomersController::authenticationCu
 $routes->post('/createCustomer',          'CustomersController::createCustomer');
 $routes->post('/cerrarSession',           'CustomersController::cerrarSession');
 $routes->post('/forgetPasswordCustomer',  'CustomersController::forgetPasswordCustomer');
+
+#WISHES
+$routes->get('/wishes',     'WishesController::index');
+$routes->get('/shopping',   'ShoppingController::index');
+
 #Citys
 $routes->post('/city',                    'CityController::city');
 
