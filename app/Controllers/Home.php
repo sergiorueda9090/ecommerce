@@ -9,6 +9,8 @@ use App\Models\PageInfoModel;
 use App\Models\ProductsModel;
 use App\Models\SubCategoriesModel;
 use App\Models\SocialNetworkModel;
+use App\Models\DepartamentosModel;
+
 
 class Home extends BaseController
 {   
@@ -20,6 +22,7 @@ class Home extends BaseController
     private $ProductsModel;
     private $SubCategoriesModel;
     private $SocialNetworkModel;
+ 
 
     public function __construct(){
         $this->bannerModel      = new BannerModel();
@@ -30,6 +33,7 @@ class Home extends BaseController
         $this->SubCategoriesModel = new SubCategoriesModel();
         $this->SocialNetworkModel = new SocialNetworkModel();
     }
+
 
     /*
         SELECT c.name,
@@ -134,4 +138,29 @@ class Home extends BaseController
         $pageInfo = $this->pageInfoModel->select('*')->first();
         return $pageInfo;
     }
+
+    public function pageRegisterCustomer(){
+
+        $homeController = new Home();
+        $departamentosCheckoutController = new CheckoutController();
+        $pageInfo       = $homeController->pageInfo();
+        $categories     = $homeController->listCategories();
+        $footer         = $homeController->footer();
+        $header         = $homeController->header();
+        $deparments     = $departamentosCheckoutController->departamentos();
+        
+        $data = [
+           'pageInfo'      => $pageInfo,
+           'categories'    => $categories,
+           'header'        => $header,
+           'footer'        => $footer,
+           'deparments'    => $deparments,
+       ];
+
+        return view('register',$data);
+
+    }
+
+
+
 }

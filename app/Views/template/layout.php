@@ -1,3 +1,8 @@
+<?php
+// Start the session
+$session = session();
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -417,14 +422,20 @@
 						<!--=====================================
 						Login and Register
 						======================================-->
-
                         <div class="ps-block--user-header">
                             <div class="ps-block__left">
                             	<i class="icon-user"></i>
                             </div>
                             <div class="ps-block__right">
-                            	<a href="my-account.html">Login</a>
-                            	<a href="my-account.html">Register</a>
+								<?php
+									if($session->nameUser){
+										echo '<a data-toggle="modal">'.$session->nameUser.'</a>
+											 <a data-toggle="modal" data-target="#cerrarSessionModal">Cerrar sesión</a>';
+									}else{
+										echo '<a data-toggle="modal" data-target="#sessionModal"> Login</a>
+											  <a href="'.base_url().'register'.'">Register</a>';
+									}
+								?>
                             </div>
                         </div>
 
@@ -735,7 +746,7 @@
                         	<i class="icon-user"></i>
                         </div>
                         <div class="ps-block__right">
-                        	<a href="my-account.html">Login</a>
+						<a data-toggle="modal" data-target="#sessionModal">Login 2</a>
                         	<a href="my-account.html">Register</a>
                         </div>
 
@@ -765,7 +776,6 @@
     </header> <!-- End Header Mobile -->
 <body>
     
-
 <?php echo $this->renderSection('content'); ?>
 
    <!--=====================================
@@ -933,12 +943,17 @@
 
     </footer>
 
+	
+	<?php include_once 'iniciarSessionModal.php'; ?>
+	<?php include_once 'cerrarSessionModal.php'; ?>
+	<?php include_once 'forgetPasswordModal.php'; ?>
 	<!--=====================================
 	JS PERSONALIZADO
 	======================================-->
 
 	<script src="<?php echo base_url().'/assets/js/main.js';?>"></script>
 	<script src="<?php echo base_url().'/assets/js/menu.js';?>"></script>
+	
 	
 </body>
 </html>

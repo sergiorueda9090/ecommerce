@@ -109,8 +109,9 @@ class CustomersController extends BaseController{
                     
                     if($checkCustomer){
 
-                        $session->set('email',  $email);
-                        $session->set('idUser', $checkCustomer->id);
+                        $session->set('email',      $email);
+                        $session->set('idUser',     $checkCustomer->id);
+                        $session->set('nameUser',   $checkCustomer->name.' '.$checkCustomer->surname);
 
                         return $this->response->setJson(['status'  => 200, 'exists' => true, 
                                                          'message' => 'Customer already exist', 
@@ -184,6 +185,67 @@ class CustomersController extends BaseController{
             }
 
         }
+
+    }
+
+    function forgetPasswordCustomer(){
+        
+        $method = strtoupper($request->getMethod());
+
+        if($method == "POST"){
+
+            $json = $request->getJson();
+
+            if( isset($json->email) ){
+                 
+                $email = $json->email;
+
+                $checkEmail = $this->CustomerModel->where('email', $email)->first();
+
+                if($checkEmail){
+
+                return $this->response->setJson(['status'  => 200, 'exists' => true, 
+                                                 'message' => 'Email was sending to '.$email, 
+                                                 'data'    => ""],200);
+
+                }else{
+
+                    return $this->response->setJson(['status' => 404, 'exists' => false, 'message' => 'Email was not send '.$email], 404);
+
+                }
+
+            }else{
+
+                return $this->response->setJson(['status' => 500, 'exists' => false, 'message' => 'Email was not send '.$email], 500);
+
+            }
+
+        }else{
+
+            return $this->response->setJson(['status' => 500, 'exists' => false, 'message' => 'Email was not send '.$email], 500);
+
+        }
+
+
+    }
+
+    public function cerrarSession(){
+        
+        $request = \Config\Services::request();
+        $session = \Config\Services::session();
+
+        $session = session();
+        
+        $method = strtoupper($request->getMethod());
+
+        if($method == "POST"){
+
+            $session->destroy();
+
+            return $this->response->setJSON(['status' => 200, 'exists' => 'false', 'message' => 'Session destroy succesfully'], 200);
+
+        }
+
 
     }
 

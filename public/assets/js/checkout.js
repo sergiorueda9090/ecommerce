@@ -213,6 +213,13 @@ $(document).ready(function(){
 
         }
 
+
+        $(".iconLoagingCities").addClass("d-none");
+        $(".city").empty();
+        
+        $(".city").append('<option value="">Seleccionar</option>');
+ 
+
     }
 
     function showDataCustomer(mesage, data=""){
@@ -235,17 +242,22 @@ $(document).ready(function(){
     }
 
     $(document).on('change','.deparments',function(){
+        $(".iconLoagingCities").removeClass("d-none");
         selectCity();
     });
 
     function selectCity(){
+        
+        $(".city").empty();
 
         let idDepartment = $(".deparments").val();
 
         let url = `${BASE_URL}city`;
         
         let data = { idDepartment };
-    
+        
+        $(".city").append('<option value="">Loading</option>');
+
         fetch(url, {
             method: "POST",
             body: JSON.stringify(data),
@@ -272,6 +284,7 @@ $(document).ready(function(){
                             </option>`
                         );
        });
+       $(".iconLoagingCities").addClass("d-none");
     }
 
 
@@ -333,6 +346,91 @@ $(document).ready(function(){
 
     }
 
+
+    $(document).on('click','.createAcountRegister',function(){
+        createAcountRegister();
+    })
+
+    function createAcountRegister(){
+
+        let datos = {
+            firstName: $(".firstName").val(),
+            lastName: $(".lastName").val(),
+            email: $(".email").val(),
+            departments: $(".deparments").val(),
+            city: $(".city").val(),
+            phone: $(".phone").val(),
+            address: $(".address").val(),
+            addInformation: $(".addInformation").val(),
+            confirmPassword: $(".confirmPassword").val(),
+            password: $(".passwordAccount").val(),
+          };
+
+     
+        // Array para almacenar los campos vacíos
+        let camposVacios = [];
+        
+        // Recorrer el objeto para verificar campos vacíos
+        for (let campo in datos) {
+            if (!datos[campo] || datos[campo].trim() === '') {
+                camposVacios.push(campo);
+            }
+        }
+
+        // Validar que las contraseñas coincidan
+        if (datos.password !== datos.confirmPassword) {
+            alert("Las contraseñas no coinciden.");
+        }
+  
+
+        // Verificar si hay campos vacíos
+        if (camposVacios.length > 0) {
+            let mensaje = "Por favor, complete los siguientes campos: " + camposVacios.join(", ");
+            alert(mensaje);
+        } else {
+
+            let url = `${BASE_URL}createCustomer`;
+            
+            $(".createAcountRegister").addClass("d-none");
+            $(".createAccountRegisterLoading").removeClass("d-none");
+
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(datos),
+                headers: {
+                    "Content-Type": "application/json",
+            },
+            })
+            .then((res) => res.json())
+            .catch((error) => console.error("Error:", error))
+            .then((response) => response.status == 200 ? showSuccessRegister(response.message,'formBilling') : showFailedRegister(response.message));
+        }
+
+    }
+    
+    function showSuccessRegister(){
+
+        $(".createAccountRegisterLoading").addClass("d-none");
+        $('.createAccountRegisterExitosamente').removeClass('d-none');
+
+        setTimeout(() => {
+            
+            $(".createAccountRegisterLoading").addClass("d-none");
+            $('.createAccountRegisterExitosamente').removeClass('d-none');
+
+        }, 2000); // Adjust the delay as needed
+
+        location.reload();
+
+    }
+
+    function showFailedRegister(response){
+        alert(response)
+        $(".createAccountRegisterLoading").addClass("d-none");
+        $(".createAccountRegisterExitosamente").addClass("d-none");
+        $(".createAcountRegister").removeClass("d-none");
+    }
+
     /*========= START PAYMENT GATEWAY=========*/
     function sendUrlPageConfirmar(){
 
@@ -358,8 +456,8 @@ $(document).ready(function(){
     }
     
     function responseURLPAYU(){
-    let encodedURLIE  = `${BASE_URL}myaccount`;
-    return encodedURLIE;
+        let encodedURLIE  = `${BASE_URL}myaccount`;
+        return encodedURLIE;
     }
     
     

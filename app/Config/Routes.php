@@ -20,13 +20,14 @@ $routes->post('/quantity',              'ProductQuantityColorController::quantit
 $routes->get('/shoppingcart',           'ShoppingCartController::index');
 
 $routes->get('/checkout',               'CheckoutController::index');
-
+$routes->get('/register',               'Home::pageRegisterCustomer');
 
 #Validate email
 $routes->post('/validateEmail',           'CustomersController::validateEmail');
 $routes->post('/authenticationCustomer',  'CustomersController::authenticationCustomer');
 $routes->post('/createCustomer',          'CustomersController::createCustomer');
-
+$routes->post('/cerrarSession',           'CustomersController::cerrarSession');
+$routes->post('/forgetPasswordCustomer',  'CustomersController::forgetPasswordCustomer');
 #Citys
 $routes->post('/city',                    'CityController::city');
 
