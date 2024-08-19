@@ -158,68 +158,28 @@
                             <tbody>
 
                                 <!-- Product -->
+                                <?php
+                                    foreach($productsWish as $key => $value){
+                                        echo '<tr>
+                                                <td>
+                                                    <div class="ps-product--cart">
+                                                        <div class="ps-product__thumbnail">
+                                                            <a href="'.base_url().'product/'.$value->slug.'"><img src="'.base_url().$value->image.'" alt=""></a>
+                                                        </div>
+                                                        <div class="ps-product__content">
+                                                            <a href="'.base_url().'product/'.$value->slug.'">'.$value->name.'</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="price">$'.number_format($value->sale_price).'</td>
+                                                <td><span class="ps-tag ps-tag--in-stock">In-stock</span></td>
+                                                <td><a class="ps-btn" href="#">Add to cart</a></td>
+                                                <td><a class="remove-item" onClick="removeHeart( '.$value->id.', this, true );"><i class="icon-cross"></i></a></td>
+                                            </tr>';
+                                    }
+                                ?>
 
-                                <tr>
-
-                                    <td>
-                                        <div class="ps-product--cart">
-                                            <div class="ps-product__thumbnail"><a href="product-default.html"><img src="img/products/electronic/1.jpg" alt=""></a></div>
-                                            <div class="ps-product__content"><a href="product-default.html">Marshall Kilburn Wireless Bluetooth Speaker, Black (A4819189)</a></div>
-                                        </div>
-                                    </td>
-
-                                    <td class="price">$205.00</td>
-
-                                    <td><span class="ps-tag ps-tag--in-stock">In-stock</span></td>
-
-                                    <td><a class="ps-btn" href="#">Add to cart</a></td>
-
-                                    <td><a href="#"><i class="icon-cross"></i></a></td>
-
-                                </tr>
-
-                                <!-- Product -->
-
-                                <tr>                                  
-
-                                    <td>
-                                        <div class="ps-product--cart">
-                                            <div class="ps-product__thumbnail"><a href="product-default.html"><img src="img/products/clothing/2.jpg" alt=""></a></div>
-                                            <div class="ps-product__content"><a href="product-default.html">Unero Military Classical Backpack</a></div>
-                                        </div>
-                                    </td>
-
-                                    <td class="price">$108.00</td>
-
-                                    <td><span class="ps-tag ps-tag--in-stock">In-stock</span></td>
-
-                                    <td><a class="ps-btn" href="#">Add to cart</a></td>
-
-                                    <td><a href="#"><i class="icon-cross"></i></a></td>
-
-                                </tr>
-
-                                <!-- Product -->
-
-                                <tr>
-                               
-                                    <td>
-                                        <div class="ps-product--cart">
-                                            <div class="ps-product__thumbnail"><a href="product-default.html"><img src="img/products/electronic/15.jpg" alt=""></a></div>
-                                            <div class="ps-product__content"><a href="product-default.html">XtremepowerUS Stainless Steel Tumble Cloths Dryer</a></div>
-                                        </div>
-                                    </td>
-
-                                    <td class="price">$508.00</td>
-
-                                    <td><span class="ps-tag ps-tag--out-stock">Out-stock</span></td>
-
-                                    <td></td>
-
-                                    <td><a href="#"><i class="icon-cross"></i></a></td>
-
-                                </tr>
-
+    
                             </tbody>
 
                         </table>
@@ -290,5 +250,5 @@
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
-
+<script src="<?php echo base_url().'/assets/js/wishes.js';?>"></script>
 <?php  echo $this->endSection("content"); ?>

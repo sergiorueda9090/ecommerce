@@ -175,8 +175,9 @@ $session = session();
                 <div class="header__left">
                     <ul class="d-flex justify-content-center">
 						<?php 
-
-							foreach($header as $key => $heade){
+							//var_dump($header);
+							
+							foreach($header['socialNetworkResponse'] as $key => $heade){
 
 								echo '<li><a href="'.$heade->url.'" target="_blank">'.$heade->icon.'</i></a></li>';
 
@@ -385,9 +386,9 @@ $session = session();
                     	<!--=====================================
 						Wishlist
 						======================================-->
-
+					
                     	<a class="header__extra" href="<?php echo base_url().'wishes'; ?>">
-                    		<i class="icon-heart"></i><span><i>0</i></span>
+                    		<i class="icon-heart"> </i> <span class="totalwishes"> <i> <?php echo $header['resultwished']; ?> </i> </span>
                     	</a>
 
                     	<!--=====================================
@@ -462,7 +463,7 @@ $session = session();
                 <ul class="d-flex justify-content-center">
 					<?php 
 
-						foreach($header as $key => $heade){
+						foreach($header['socialNetworkResponse'] as $key => $heade){
 
 							echo '<li><a href="'.$heade->url.'" target="_blank">'.$heade->icon.'</i></a></li>';
 

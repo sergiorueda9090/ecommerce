@@ -30,8 +30,10 @@ $routes->post('/cerrarSession',           'CustomersController::cerrarSession');
 $routes->post('/forgetPasswordCustomer',  'CustomersController::forgetPasswordCustomer');
 
 #WISHES
-$routes->get('/wishes',     'WishesController::index');
-$routes->get('/shopping',   'ShoppingController::index');
+$routes->get('/wishes',         'WishesController::index');
+$routes->get('/shopping',       'ShoppingController::index');
+$routes->post('/addWish',       'WishesController::addWish');
+$routes->delete('/removeWish',  'WishesController::removeWish');
 
 #Citys
 $routes->post('/city',                    'CityController::city');

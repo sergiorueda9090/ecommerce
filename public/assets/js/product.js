@@ -8,8 +8,6 @@ $(document).ready(function(){
         arrayAddCar = JSON.parse(localStorage.getItem('addCart')); 
     }
 
-    console.log(arrayAddCar);
-
 })
 
 
@@ -242,5 +240,208 @@ function addCar() {
 
     $(".amountBag").html(arrayAddCar.length)
         
-    console.log(arrayAddCar);
+}
+
+function addHeart(idProduct, status=false) {
+    let url = `${BASE_URL}addWish`;
+
+    let data = { idProduct: idProduct };
+
+    fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    .then((res) => res.json())
+    .catch((error) => {
+        console.error("Error:", error);
+        showWishMessage(false, "Hubo un problema al agregar el producto a la lista de deseos.");
+    })
+    .then((response) => {
+
+        if (response.status == 200 && response.success) {
+
+            showWishMessage(true, response.message, response.total);
+
+            if(!status){
+                updateHeartRed(idProduct);
+            }else{
+                updateWishMessage(idProduct);
+            }
+
+        } else if (response.status == 200 && response.exists) {
+
+            showWishMessage(false, response.message);
+
+        } else if (response.status == 400 || response.status == 404) {
+
+            showWishMessage(false, response.message);
+
+        } else {
+
+            showWishMessage(false, "Ha ocurrido un error inesperado. Inténtalo nuevamente.");
+
+        }
+    });
+    
+}
+
+function showWishMessage(success, message, total = 0) {
+    // Crear el contenedor del mensaje
+    let wishMessage = $('<div class="wish-message"></div>').html(message);
+
+    success ? $(".totalwishes i").html(total) : ''
+   
+    // Agregar el ícono de corazón dependiendo del éxito o error
+    let heartIcon = success ? '&#10084;' : '&#x2764;'; // Corazón verde para éxito, rojo para error
+    let iconColor = success ? '#4caf50' : '#f44336'; // Verde para éxito, rojo para error
+
+    // Crear un elemento para el ícono de corazón
+    let heartElement = $('<span class="icon"></span>').html(heartIcon).css('color', iconColor);
+
+    // Prepend the icon to the message
+    wishMessage.prepend(heartElement);
+
+    // Aplicar estilos según el éxito o error
+    if (success) {
+        wishMessage.css({
+            "background-color": "#4caf50", // Verde para éxito
+            "color": "#fff"
+        });
+    } else {
+        wishMessage.css({
+            "background-color": "#f44336", // Rojo para error
+            "color": "#fff"
+        });
+    }
+
+    // Aplicar estilos generales
+    wishMessage.css({
+        "padding": "15px",
+        "border-radius": "8px",
+        "box-shadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+        "font-family": "'Arial', sans-serif",
+        "font-size": "18px",
+        "text-align": "center",
+        "position": "fixed",
+        "top": "20px",
+        "left": "50%",
+        "transform": "translateX(-50%)",
+        "z-index": "1000",
+        "opacity": "1",
+        "display": "none"
+    }).appendTo('body').fadeIn();
+
+    // Ocultar el mensaje después de 5 segundos
+    setTimeout(function() {
+        wishMessage.fadeOut(function() {
+            $(this).remove(); // Elimina el elemento del DOM
+        });
+    }, 5000);
+}
+
+function removeHeart(idProduct, status=false) {
+
+    let url = `${BASE_URL}removeWish`;
+
+    // Enviar la solicitud DELETE con el ID del producto en la URL
+    fetch(`${url}?idProduct=${idProduct}`, {
+        method: "delete",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    .then((res) => res.json())
+    .catch((error) => {
+        console.error("Error:", error);
+        showWishMessage(false, "Hubo un problema al eliminar el producto de la lista de deseos.");
+    })
+    .then((response) => {
+        if (response.status == 200 && response.success) {
+        
+            showWishMessage(true, response.message);
+        
+            if(!status){
+                revertHeart(idProduct);    
+            }else{
+                revertWishMessage(idProduct);
+            }
+            
+        } else {
+        
+            showWishMessage(false, response.message);
+        
+        }
+    });
+}
+
+function updateHeartRed(productId) {
+    var heartIcon = document.getElementById('heart-icon-' + productId);
+
+    // Remover el onClick existente
+    heartIcon.removeAttribute('onClick');
+
+    // Remover el ícono <i>
+    var iconElement = heartIcon.querySelector('i');
+    if (iconElement) {
+        heartIcon.removeChild(iconElement);
+    }
+
+    // Agregar el nuevo onClick y el <span>
+    heartIcon.setAttribute('onClick', 'removeHeart(' + productId + ');');
+    heartIcon.setAttribute('class', 'wish-message-a');
+    heartIcon.innerHTML = '<span class="icon">&#10084;</span>';
+}
+
+function revertHeart(productId) {
+    var heartIcon = document.getElementById('heart-icon-' + productId);
+
+    // Remover el onClick existente
+    heartIcon.removeAttribute('onClick');
+
+    // Remover el <span> elemento
+    var spanElement = heartIcon.querySelector('span');
+    if (spanElement) {
+        heartIcon.removeChild(spanElement);
+    }
+
+    // Agregar el nuevo onClick y el <i>
+    heartIcon.setAttribute('onClick', 'addHeart(' + productId + ');');
+    heartIcon.innerHTML = '<i class="icon-heart"></i>';
+}
+
+function revertWishMessage(productId) {
+    var wishMessage = document.getElementById('wish-message-a-' + productId);
+
+    // Remover el onClick existente
+    wishMessage.removeAttribute('onClick');
+
+    // Remover el <span> elemento
+    var spanElement = wishMessage.querySelector('span');
+    if (spanElement) {
+        wishMessage.removeChild(spanElement);
+    }
+
+    // Agregar el nuevo onClick y el <i>
+    wishMessage.setAttribute('onClick', 'addHeart(' + productId + ', true);');
+    wishMessage.innerHTML = '<i class="icon-heart"></i>';
+}
+
+function updateWishMessage(productId) {
+    var wishMessage = document.getElementById('wish-message-a-' + productId);
+
+    // Remover el onClick existente
+    wishMessage.removeAttribute('onClick');
+
+    // Remover el <i> elemento
+    var iconElement = wishMessage.querySelector('i');
+    if (iconElement) {
+        wishMessage.removeChild(iconElement);
+    }
+
+    // Agregar el nuevo onClick y el <span>
+    wishMessage.setAttribute('onClick', 'removeHeart(' + productId + ', true);');
+    wishMessage.innerHTML = '<span class="icon">&#10084;</span>';
 }

@@ -1,6 +1,19 @@
 <?php  echo $this->extend('template/layout'); ?>
 <?php  echo $this->section("content"); ?>
+<style>
 
+.wish-message-a .icon {
+    font-size: 30px;
+    margin-right: 3px;
+    color: #ff6b6b;
+}
+
+.icon {
+    font-size: 24px;
+    display: inline-block;
+}
+
+</style>
     <!--=====================================
     Breadcrumb
     ======================================-->  
@@ -260,11 +273,26 @@
 
                                     <a class="ps-btn" href="#">Buy Now</a>
 
-                                    <div class="ps-product__actions">
+                                    <div class="ps-product__actions addHeart">
+                                        
+                                        <?php if(!$productWish){ ?>
+                                          
+                                            <a id="heart-icon-<?php echo $product->id; ?>" onClick="addHeart( <?php echo $product->id; ?> );">
+                                                <i class="icon-heart"></i>
+                                            </a>
 
-                                    	<a href="#">
-                                    		<i class="icon-heart"></i>
-                                    	</a>
+                                        <?php }else{ ?>
+
+                                            <a id="wish-message-a-<?php echo $product->id; ?>" 
+                                               class="wish-message-a"
+                                               onClick="removeHeart( <?php echo $product->id; ?>, true );">
+
+                                                <span class="icon">&#10084;</span>
+
+                                            </a>
+
+                                        <?php }; ?>
+                                        <!--<div id="wish-message" class="wish-message"><span class="icon">&#10084;</span></div>-->
 
                                     </div>
 

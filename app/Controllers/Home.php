@@ -10,6 +10,7 @@ use App\Models\ProductsModel;
 use App\Models\SubCategoriesModel;
 use App\Models\SocialNetworkModel;
 use App\Models\DepartamentosModel;
+use App\Models\WishesModel;
 
 
 class Home extends BaseController
@@ -22,6 +23,7 @@ class Home extends BaseController
     private $ProductsModel;
     private $SubCategoriesModel;
     private $SocialNetworkModel;
+    private $WishesModel;
  
 
     public function __construct(){
@@ -32,6 +34,7 @@ class Home extends BaseController
         $this->ProductsModel    = new ProductsModel();
         $this->SubCategoriesModel = new SubCategoriesModel();
         $this->SocialNetworkModel = new SocialNetworkModel();
+        $this->WishesModel      = new WishesModel();
     }
 
 
@@ -117,9 +120,29 @@ class Home extends BaseController
 
     public function header(){
 
-        $socialNetworkResponse = $this->SocialNetworkModel->get()->getResult();
+        $session = \Config\Services::session();
 
-        return $socialNetworkResponse;
+        $session = session();
+
+        if($session->idUser){
+
+           $resultwished = $this->WishesModel->select('count(*) as total')->where("id_customer", $session->idUser)->where('wishes.deleted_at', NULL)->get()->getResult();
+           
+           $total =  $resultwished[0]->total;
+
+           $socialNetworkResponse = $this->SocialNetworkModel->get()->getResult();
+
+           return array("resultwished" => $total, "socialNetworkResponse" => $socialNetworkResponse);
+
+        }else{
+          
+            $socialNetworkResponse = $this->SocialNetworkModel->get()->getResult();
+
+            return array("resultwished" => 0, "socialNetworkResponse" => $socialNetworkResponse);
+        
+        }
+
+
 
     }
 

@@ -4,31 +4,48 @@ namespace App\Controllers;
 use App\Models\ProductsModel;
 use App\Models\ProductsImageModel;
 use App\Models\ProductSizeModel;
+use App\Models\WishesModel;
 
 class ProductsController extends BaseController{
 
     private $ProductsModel;
     private $ProductsImageModel;
+    private $WishesModel;
 
     public function __construct(){
         $this->ProductsModel        = new ProductsModel();
         $this->ProductsImageModel   = new ProductsImageModel();
         $this->ProductSizeModel     = new ProductSizeModel();
+        $this->WishesModel          = new WishesModel();
     }
 
     public function index($product){
-        /*
-            SELECT p.id, p.name, pi.image, GROUP_CONCAT(pz.size SEPARATOR ",") AS size,
-            GROUP_CONCAT(pz.id SEPARATOR ",") AS idsize FROM products p 
-            INNER JOIN productimages pi ON pi.id_product = p.id
-            INNER JOIN productsize pz ON pz.id_product = p.id
-            WHERE p.slug = 'cool-cotton-tee'
-            GROUP BY p.id;
-        */      
+
+        $session = \Config\Services::session();
+        $session = session();
+
         $products       = $this->ProductsModel->where('products.slug',   $product)->get()->getResult();
         $product_images = $this->ProductsImageModel->where('id_product', $products[0]->id)->get()->getResult();
         $product_size   = $this->ProductSizeModel->where('id_product',   $products[0]->id)->get()->getResult();
         
+        $productWish = false;
+
+        if($session->idUser){
+                
+            $idCustomer = $session->idUser;
+            
+            $responseWish = $this->WishesModel->where('id_customer', $idCustomer)
+                                                ->where('id_product', $products[0]->id)
+                                                ->where('wishes.deleted_at', NULL)->get()->getResult();
+
+            if($responseWish){
+
+                $productWish = true;
+            
+            }
+
+        }
+ 
 
         /*$product = $this->ProductsModel->select('products.*,  pi.image, 
                                                  GROUP_CONCAT(pz.size SEPARATOR ",")    AS size,
@@ -54,7 +71,8 @@ class ProductsController extends BaseController{
            'footer'        => $footer,
            'product'       => $products[0],
            'productImage'  => $product_images,
-           'productSize'   => $product_size
+           'productSize'   => $product_size,
+           'productWish'   => $productWish
        ];
 
        return view('product',$data);
