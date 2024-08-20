@@ -99,8 +99,12 @@
                                                 </li>
     
                                                 <li>
-                                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist">
-                                                        <i class="icon-heart"></i>
+                                                      <a    id="heart-icon-'.$product->productoid.'"
+                                                            onClick="addHeart('.$product->productoid.');"
+                                                            data-toggle="tooltip" 
+                                                            data-placement="top" 
+                                                            title="Add to Whishlist 1">
+                                                            <i class="icon-heart"></i>
                                                     </a>
                                                 </li>                                           
     
@@ -218,7 +222,11 @@
                                                 </li>
     
                                                 <li>
-                                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist">
+                                                    <a  id="heart-icon-'.$product->productoid.'"
+                                                        onClick="addHeart('.$product->productoid.');"
+                                                        data-toggle="tooltip" 
+                                                        data-placement="top" 
+                                                        title="Add to Whishlist 1">
                                                         <i class="icon-heart"></i>
                                                     </a>
                                                 </li>                                           
@@ -383,7 +391,11 @@
                                                             </li>
     
                                                             <li>
-                                                                <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist">
+                                                               <a  id="heart-icon-'.$product->productoid.'"
+                                                                    onClick="addHeart('.$product->productoid.');"
+                                                                    data-toggle="tooltip" 
+                                                                    data-placement="top" 
+                                                                    title="Add to Whishlist 1">
                                                                     <i class="icon-heart"></i>
                                                                 </a>
                                                             </li>
@@ -567,4 +579,5 @@
 </script>
 
 <script src="<?php echo base_url().'/assets/js/customers.js';?>"></script>
+<script src="<?php echo base_url().'/assets/js/product.js';?>"></script>
 <?php  echo $this->endSection("content"); ?>

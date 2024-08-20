@@ -1,7 +1,13 @@
-function removeHeart(idProduct, element, status=false) {
+function removeHeart(idProduct, element) {
 
     let url = `${BASE_URL}removeWish`;
-    
+    let loadingImage = $(element).siblings('.removeloadingwish');
+    let iconX = $(element);
+
+    // Ocultar el icono de la "X" y mostrar la imagen de carga
+    iconX.addClass('d-none');
+    loadingImage.removeClass('d-none');
+
     // Enviar la solicitud DELETE con el ID del producto en la URL
     fetch(`${url}?idProduct=${idProduct}`, {
         method: "delete",
@@ -15,16 +21,15 @@ function removeHeart(idProduct, element, status=false) {
     })
     .then((response) => {
 
-        if (response.status == 200 && response.success) {
-        
-            showWishMessage(true, response.message);
-            
-            $(element).closest('tr').remove();
+        // Ocultar la imagen de carga y volver a mostrar el icono de la "X"
+        loadingImage.addClass('d-none');
 
+        if (response.status == 200 && response.success) {
+            showWishMessage(true, response.message, response.total);
+            $(element).closest('tr').remove();
         } else {
-        
-            showWishMessage(false, response.message);
-        
+            iconX.removeClass('d-none');
+            showWishMessage(false, response.message, total = 0);
         }
         
     });
@@ -78,8 +83,10 @@ function showWishMessage(success, message, total = 0) {
 
     // Ocultar el mensaje después de 5 segundos
     setTimeout(function() {
+
         wishMessage.fadeOut(function() {
             $(this).remove(); // Elimina el elemento del DOM
         });
+        
     }, 5000);
 }

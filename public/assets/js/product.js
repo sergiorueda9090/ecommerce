@@ -243,6 +243,7 @@ function addCar() {
 }
 
 function addHeart(idProduct, status=false) {
+    console.log("ok")
     let url = `${BASE_URL}addWish`;
 
     let data = { idProduct: idProduct };

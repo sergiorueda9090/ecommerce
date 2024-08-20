@@ -174,7 +174,11 @@
                                                 <td class="price">$'.number_format($value->sale_price).'</td>
                                                 <td><span class="ps-tag ps-tag--in-stock">In-stock</span></td>
                                                 <td><a class="ps-btn" href="#">Add to cart</a></td>
-                                                <td><a class="remove-item" onClick="removeHeart( '.$value->id.', this, true );"><i class="icon-cross"></i></a></td>
+                                                <td>
+                                                    <a class="remove-item" onClick="removeHeart( '.$value->id.', this, true );"><i class="icon-cross"></i></a>
+                                                  
+                                                    <a class="d-none removeloadingwish"><img src="'.base_url().'assets/img/ajax_clock_small.gif'.'" alt=""></a>
+                                                </td>
                                             </tr>';
                                     }
                                 ?>

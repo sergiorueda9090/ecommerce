@@ -58,6 +58,7 @@ class CategoriesController extends BaseController{
             
             $productImages = $this->CategoriesModel->select('categories.id, 
                                                             p.name, 
+                                                            p.id as productoid,
                                                             p.slug,
                                                             p.keywords,
                                                             p.sale_price,
@@ -74,6 +75,7 @@ class CategoriesController extends BaseController{
         
             $productImages = $this->CategoriesModel->select('categories.id, 
                                                             p.name, 
+                                                            p.id as productoid
                                                             p.slug,
                                                             p.keywords,
                                                             p.sale_price,
