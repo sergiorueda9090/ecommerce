@@ -10,6 +10,7 @@ class RatingsCommentsController extends BaseController{
         $this->RatingsCommentsModel = new RatingsCommentsModel();
     }
     public function index(){
+
         $homeController = new Home();
         $pageInfo       = $homeController->pageInfo();
         $categories     = $homeController->listCategories();
@@ -24,6 +25,7 @@ class RatingsCommentsController extends BaseController{
        ];
 
         return view('shoppingcar',$data);
+    
     }
 
     public function addRatingsCommet(){

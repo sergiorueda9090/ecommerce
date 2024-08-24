@@ -22,6 +22,9 @@ class WishesController extends BaseController{
         $footer         = $homeController->footer();
         $header         = $homeController->header();
 
+        $session = \Config\Services::session();
+        $session = session();
+
         $data = [
            'pageInfo'      => $pageInfo,
            'categories'    => $categories,
@@ -30,7 +33,16 @@ class WishesController extends BaseController{
            'productsWish'  => $this->showProductWish()
        ];
 
-        return view('my_account_wishlist',$data);
+        if($session->idUser){
+
+            return view('my_account_wishlist',$data);
+
+       }else{
+
+            $url = base_url();
+            return redirect()->to($url);
+            
+        }
 
     }
 

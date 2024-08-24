@@ -37,7 +37,13 @@ class ShoppingController extends BaseController{
            'orders'        => $orders
        ];
 
-        return view('my_account_my_shopping',$data);
+       if($session->idUser){
+            return view('my_account_my_shopping',$data);
+       }else{
+            $url = base_url();
+            return redirect()->to($url);
+        }
+        
     }
 
     
