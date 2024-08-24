@@ -269,7 +269,7 @@ class WishesController extends BaseController{
                                                 ->get()
                                                 ->getResult();*/
 
-            $sql = "SELECT image, products.id, name, slug, sale_price
+            $sql = "SELECT productimages.image, products.id, products.name, products.slug, products.sale_price
                     FROM wishes
                     INNER JOIN products ON products.id = wishes.id_product
                     INNER JOIN productimages ON products.id = productimages.id_product
