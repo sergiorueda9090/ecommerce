@@ -13,7 +13,7 @@ class OrdersModel extends Model{
     protected $returnType     = 'object';//array;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = ['email','id_user','id_product','id_size','id_color','quantity','transactions_id','status'];
+    protected $allowedFields = ['email','id_user','id_product','id_size','id_color','quantity','price','image','transactions_id','status'];
 
     protected bool $allowEmptyInserts = false;
 
