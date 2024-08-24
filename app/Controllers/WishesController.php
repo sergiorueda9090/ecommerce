@@ -260,16 +260,16 @@ class WishesController extends BaseController{
         
         if($session->idUser){
 
-            /*$responseWish = $this->wishesModel->select('image ,products.id, name, slug, sale_price')
+            $responseWish = $this->wishesModel->select('image ,products.id, name, slug, sale_price')
+                                                ->distinct()
                                                 ->join('products'     , 'products.id = wishes.id_product', 'inner')
                                                 ->join('productimages', 'products.id = productimages.id_product', 'inner')
                                                 ->where('id_customer' , $session->idUser)
                                                 ->where('wishes.deleted_at', NULL)
-                                                ->groupBy('products.id')
                                                 ->get()
-                                                ->getResult();*/
+                                                ->getResult();
 
-            $sql = "SELECT productimages.image, products.id, products.name, products.slug, products.sale_price
+            /*$sql = "SELECT productimages.image, products.id, products.name, products.slug, products.sale_price
                     FROM wishes
                     INNER JOIN products ON products.id = wishes.id_product
                     INNER JOIN productimages ON products.id = productimages.id_product
@@ -278,7 +278,7 @@ class WishesController extends BaseController{
                     GROUP BY products.id";
                                 
             $query = $this->db->query($sql, [$session->idUser]);
-            $responseWish = $query->getResult();
+            $responseWish = $query->getResult();*/
 
             return $responseWish;
        
