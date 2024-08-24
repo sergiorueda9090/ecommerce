@@ -7,11 +7,13 @@ class WishesController extends BaseController{
     
     private $wishesModel;
     private $productsModel;
+    protected $db;
 
     public function __construct(){
 
         $this->wishesModel = new WishesModel();
         $this->productsModel = new ProductsModel();
+        $this->db = \Config\Database::connect();
     }
 
     public function index(){
@@ -258,14 +260,26 @@ class WishesController extends BaseController{
         
         if($session->idUser){
 
-            $responseWish = $this->wishesModel->select('image ,products.id, name, slug, sale_price')
-                                            ->join('products'     , 'products.id = wishes.id_product', 'inner')
-                                            ->join('productimages', 'products.id = productimages.id_product', 'inner')
-                                            ->where('id_customer' , $session->idUser)
-                                            ->where('wishes.deleted_at', NULL)
-                                            ->groupBy('products.id')
-                                            ->get()
-                                            ->getResult();
+            /*$responseWish = $this->wishesModel->select('image ,products.id, name, slug, sale_price')
+                                                ->join('products'     , 'products.id = wishes.id_product', 'inner')
+                                                ->join('productimages', 'products.id = productimages.id_product', 'inner')
+                                                ->where('id_customer' , $session->idUser)
+                                                ->where('wishes.deleted_at', NULL)
+                                                ->groupBy('products.id')
+                                                ->get()
+                                                ->getResult();*/
+
+            $sql = "SELECT image, products.id, name, slug, sale_price
+                    FROM wishes
+                    INNER JOIN products ON products.id = wishes.id_product
+                    INNER JOIN productimages ON products.id = productimages.id_product
+                    WHERE id_customer = ?
+                    AND wishes.deleted_at IS NULL
+                    GROUP BY products.id";
+                                
+            $query = $this->db->query($sql, [$session->idUser]);
+            $responseWish = $query->getResult();
+
             return $responseWish;
        
         }

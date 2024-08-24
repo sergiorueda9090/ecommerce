@@ -11,9 +11,9 @@
 
             <ul class="breadcrumb">
 
-                <li><a href="index.html">Home</a></li>
+                <li><a href="<?php base_url() ?>">Home</a></li>
 
-                <li><a href="shopping-car.html">My Wishes</a></li>
+                <li><a href="<?php echo base_url().'wishes' ?>">My Wishes</a></li>
 
             </ul>
 

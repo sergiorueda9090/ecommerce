@@ -443,7 +443,7 @@ $(document).ready(function(){
 
         let ids = bagProducts.map(function(producto) {
             // Limpia los puntos y comas de producto.sale
-            let saleLimpio = producto.sale.trim().replace(/[.,]/g, '');
+            let saleLimpio = producto.sale.trim().replace(/[.,$]/g, '');
         
             // Devuelve la cadena con los valores concatenados
             return producto.id_color + '-' + producto.id_size + '-' + producto.quantity + '-' + producto.idProduct + '-' + producto.img.trim() + '-' + saleLimpio;
