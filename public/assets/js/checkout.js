@@ -437,9 +437,17 @@ $(document).ready(function(){
         let bagProducts = JSON.parse(localStorage.getItem('addCart'));
     
         // Crear una cadena de consulta con los IDs de productos y cantidades
-        let ids = bagProducts.map(function(producto) {
+        /*let ids = bagProducts.map(function(producto) {
                     return producto.id_color + '-' + producto.id_size + '-' + producto.quantity + '-' + producto.idProduct + '-' + producto.img.trim() + '-' + producto.sale.trim();
-                }).join(',');
+                }).join(',');*/
+
+        let ids = bagProducts.map(function(producto) {
+            // Limpia los puntos y comas de producto.sale
+            let saleLimpio = producto.sale.trim().replace(/[.,]/g, '');
+        
+            // Devuelve la cadena con los valores concatenados
+            return producto.id_color + '-' + producto.id_size + '-' + producto.quantity + '-' + producto.idProduct + '-' + producto.img.trim() + '-' + saleLimpio;
+        }).join(',');
 
         // Usar reduce para sumar los valores de "count"
         let suma = bagProducts.reduce((total, objeto) => {
