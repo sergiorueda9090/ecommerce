@@ -112,6 +112,8 @@ class PayuController extends BaseController{
                     ];
 
                     file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "ID COLOR ".(int)$id_color. PHP_EOL, FILE_APPEND);
+                    file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "ID price ".$price. PHP_EOL, FILE_APPEND);
+                    file_put_contents(WRITEPATH . 'logs/payu_confirmation_log.log', "ID img ".(int)$img. PHP_EOL, FILE_APPEND);
                     
                     $this->ProductQuantityColorModel->set('count', 'count-'.(int)$quantity, false)
                                                     ->where('id', (int)$id_color)
