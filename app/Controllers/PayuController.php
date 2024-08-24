@@ -95,7 +95,7 @@ class PayuController extends BaseController{
         
                 foreach($productsArray as $array){
                     // Explota cada elemento en subelementos
-                    list($id_color, $id_size, $quantity, $idProduct) = explode("-", $array);
+                    list($id_color, $id_size, $quantity, $idProduct, $img, $price) = explode("-", $array);
         
                     // Crea un array asociativo para cada producto
                     $arrayB[] = [
@@ -105,6 +105,8 @@ class PayuController extends BaseController{
                         "id_size"           => (int)$id_size,
                         "id_color"          => (int)$id_color,
                         "quantity"          => (int)$quantity,
+                        "price"             => (int)$price,
+                        "image"             => (int)$img,
                         "transactions_id"   => $idTransaction  ?? 'N/A',
                         "status"            => 1
                     ];

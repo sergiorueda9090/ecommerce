@@ -438,7 +438,7 @@ $(document).ready(function(){
     
         // Crear una cadena de consulta con los IDs de productos y cantidades
         let ids = bagProducts.map(function(producto) {
-                    return producto.id_color + '-' + producto.id_size + '-' + producto.quantity + '-' + producto.idProduct;
+                    return producto.id_color + '-' + producto.id_size + '-' + producto.quantity + '-' + producto.idProduct + '-' + producto.img.trim() + '-' + producto.sale.trim();
                 }).join(',');
 
         // Usar reduce para sumar los valores de "count"
