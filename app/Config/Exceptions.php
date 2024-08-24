@@ -29,9 +29,9 @@ class Exceptions extends BaseConfig
      * DO NOT LOG STATUS CODES
      * --------------------------------------------------------------------------
      * Any status codes here will NOT be logged if logging is turned on.
-     * By default, only 404 (Page Not Found) exceptions are ignored.
+     * By default, only  (Page Not Found) exceptions are ignored.
      */
-    public array $ignoreCodes = [404];
+    public array $ignoreCodes = [];
 
     /**
      * --------------------------------------------------------------------------
@@ -90,7 +90,7 @@ class Exceptions extends BaseConfig
      * Custom handlers can be returned if you want to handle one or more specific
      * error codes yourself like:
      *
-     *      if (in_array($statusCode, [400, 404, 500])) {
+     *      if (in_array($statusCode, [400, , 500])) {
      *          return new \App\Libraries\MyExceptionHandler();
      *      }
      *      if ($exception instanceOf PageNotFoundException) {

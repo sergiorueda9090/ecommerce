@@ -40,6 +40,7 @@
                     <ul class="ps-section__links">
                         <li><a href="<?php echo base_url().'wishes' ?>">My Wishlist</a></li>
                         <li class="active"><a href="<?php echo base_url().'shopping' ?>">My Shopping</a></li>
+                        <li><a href="<?php echo base_url().'account' ?>">My Account</a></li>
                     </ul>
 
                     <!--=====================================

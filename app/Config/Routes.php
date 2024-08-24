@@ -1,7 +1,7 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
-
+use App\Controllers\Home;
 /**
  * @var RouteCollection $routes
  */
@@ -37,6 +37,9 @@ $routes->delete('/removeWish',  'WishesController::removeWish');
 #CUSTOMER SHOOPING
 $routes->get('/shopping',       'ShoppingController::index');
 
+#CUSTOMER ACCOUNT
+$routes->get('/account',        'AccountController::index');
+
 #RATINGS COMMENTS
 $routes->post('/addratingscommet', 'RatingsCommentsController::addRatingsCommet');
 
@@ -46,6 +49,27 @@ $routes->post('/city',                    'CityController::city');
 #PAYU
 $routes->get('/response',        'PayuController::response');
 $routes->post('/confirmation',   'PayuController::confirmation');
+
+#ERROR 404
+$routes->set404Override(static function () {
+    // Instancia del controlador Home
+    $homeController = new Home();
+    $pageInfo       = $homeController->pageInfo();
+    $categories     = $homeController->listCategories();
+    $footer         = $homeController->footer();
+    $header         = $homeController->header();
+
+    // Datos a pasar a la vista 404
+    $data = [
+        'pageInfo'      => $pageInfo,
+        'categories'    => $categories,
+        'header'        => $header,
+        'footer'        => $footer,
+    ];
+
+    // Carga la vista personalizada 404
+    return view('404-page', $data);
+});
 
 #TOKEN
 $routes->get('client', 'ClientController::index');
