@@ -242,11 +242,14 @@ function addCar() {
         
 }
 
-function addHeart(idProduct, status=false) {
-    console.log("ok")
+function addHeart(idProduct, uniqueId, status=false) {
+    
     let url = `${BASE_URL}addWish`;
 
     let data = { idProduct: idProduct };
+    
+    $(`#heart-icon-${idProduct}${uniqueId}`).addClass("d-none");
+    $(`#loading-icon-${idProduct}${uniqueId}`).removeClass("d-none");
 
     fetch(url, {
         method: "POST",
@@ -265,11 +268,11 @@ function addHeart(idProduct, status=false) {
         if (response.status == 200 && response.success) {
 
             showWishMessage(true, response.message, response.total);
-
+            
             if(!status){
-                updateHeartRed(idProduct);
+                updateHeartRed(idProduct,uniqueId);
             }else{
-                updateWishMessage(idProduct);
+                updateWishMessage(idProduct,uniqueId);
             }
 
         } else if (response.status == 200 && response.exists) {
@@ -285,6 +288,10 @@ function addHeart(idProduct, status=false) {
             showWishMessage(false, "Ha ocurrido un error inesperado. Inténtalo nuevamente.");
 
         }
+
+        $(`#loading-icon-${idProduct}${uniqueId}`).addClass("d-none");
+        $(`#heart-icon-${idProduct}${uniqueId}`).removeClass("d-none");
+
     });
     
 }
@@ -335,6 +342,8 @@ function showWishMessage(success, message, total = 0) {
         "display": "none"
     }).appendTo('body').fadeIn();
 
+    
+    
     // Ocultar el mensaje después de 5 segundos
     setTimeout(function() {
         wishMessage.fadeOut(function() {
@@ -343,7 +352,7 @@ function showWishMessage(success, message, total = 0) {
     }, 5000);
 }
 
-function removeHeart(idProduct, status=false) {
+function removeHeart(idProduct, uniqueId, status=false) {
 
     let url = `${BASE_URL}removeWish`;
 
@@ -365,9 +374,9 @@ function removeHeart(idProduct, status=false) {
             showWishMessage(true, response.message);
         
             if(!status){
-                revertHeart(idProduct);    
+                revertHeart(idProduct,uniqueId);    
             }else{
-                revertWishMessage(idProduct);
+                revertWishMessage(idProduct,uniqueId);
             }
             
         } else {
@@ -378,8 +387,8 @@ function removeHeart(idProduct, status=false) {
     });
 }
 
-function updateHeartRed(productId) {
-    var heartIcon = document.getElementById('heart-icon-' + productId);
+function updateHeartRed(productId,uniqueId) {
+    var heartIcon = document.getElementById('heart-icon-' + productId+uniqueId);
 
     // Remover el onClick existente
     heartIcon.removeAttribute('onClick');
@@ -391,13 +400,13 @@ function updateHeartRed(productId) {
     }
 
     // Agregar el nuevo onClick y el <span>
-    heartIcon.setAttribute('onClick', 'removeHeart(' + productId + ');');
+    heartIcon.setAttribute('onClick', 'removeHeart(' + productId + ', '+uniqueId+');');
     heartIcon.setAttribute('class', 'wish-message-a');
     heartIcon.innerHTML = '<span class="icon">&#10084;</span>';
 }
 
-function revertHeart(productId) {
-    var heartIcon = document.getElementById('heart-icon-' + productId);
+function revertHeart(productId,uniqueId) {
+    var heartIcon = document.getElementById('heart-icon-' + productId+uniqueId);
 
     // Remover el onClick existente
     heartIcon.removeAttribute('onClick');
@@ -409,12 +418,12 @@ function revertHeart(productId) {
     }
 
     // Agregar el nuevo onClick y el <i>
-    heartIcon.setAttribute('onClick', 'addHeart(' + productId + ');');
+    heartIcon.setAttribute('onClick', 'addHeart(' + productId + ', '+uniqueId+');');
     heartIcon.innerHTML = '<i class="icon-heart"></i>';
 }
 
-function revertWishMessage(productId) {
-    var wishMessage = document.getElementById('wish-message-a-' + productId);
+function revertWishMessage(productId,uniqueId) {
+    var wishMessage = document.getElementById('wish-message-a-' + productId+uniqueId);
 
     // Remover el onClick existente
     wishMessage.removeAttribute('onClick');
@@ -426,12 +435,12 @@ function revertWishMessage(productId) {
     }
 
     // Agregar el nuevo onClick y el <i>
-    wishMessage.setAttribute('onClick', 'addHeart(' + productId + ', true);');
+    wishMessage.setAttribute('onClick', 'addHeart(' + productId + ','+uniqueId+',true);');
     wishMessage.innerHTML = '<i class="icon-heart"></i>';
 }
 
-function updateWishMessage(productId) {
-    var wishMessage = document.getElementById('wish-message-a-' + productId);
+function updateWishMessage(productId, uniqueId) {
+    var wishMessage = document.getElementById('wish-message-a-' + productId+uniqueId);
 
     // Remover el onClick existente
     wishMessage.removeAttribute('onClick');
@@ -443,6 +452,6 @@ function updateWishMessage(productId) {
     }
 
     // Agregar el nuevo onClick y el <span>
-    wishMessage.setAttribute('onClick', 'removeHeart(' + productId + ', true);');
+    wishMessage.setAttribute('onClick', 'removeHeart(' + productId + ',' + uniqueId + ', true);');
     wishMessage.innerHTML = '<span class="icon">&#10084;</span>';
 }

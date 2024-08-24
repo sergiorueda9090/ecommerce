@@ -386,10 +386,17 @@ $session = session();
                     	<!--=====================================
 						Wishlist
 						======================================-->
-					
-                    	<a class="header__extra" href="<?php echo base_url().'wishes'; ?>">
-                    		<i class="icon-heart"> </i> <span class="totalwishes"> <i> <?php echo $header['resultwished']; ?> </i> </span>
-                    	</a>
+						<?php if($session->nameUser){ ?>
+							<a class="header__extra" href="<?php echo base_url().'wishes'; ?>">
+								<i class="icon-heart"> </i> <span class="totalwishes"> <i> <?php echo $header['resultwished']; ?> </i> </span>
+							</a>
+						<?php }else{ ?>
+
+							<a class="header__extra" data-toggle="tooltip" data-placement="bottom" title="Para agregar productos a tu lista de deseos, por favor inicia sesión o regístrate.">
+								<i class="icon-heart"> </i> <span class="totalwishes"> <i> 0 </i> </span>
+							</a>
+
+							<?php }?>
 
                     	<!--=====================================
 						Cart

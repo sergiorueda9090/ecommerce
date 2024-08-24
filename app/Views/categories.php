@@ -1,6 +1,9 @@
 <?php  echo $this->extend('template/layout'); ?>
 <?php  echo $this->section("content"); ?>
-
+<?php 
+// Inicia un contador global
+$globalCounter = 0;
+?>
     <!--=====================================
     Breadcrumb
     ======================================-->  
@@ -73,7 +76,7 @@
                                 <?php
 
                                      foreach($products as $key => $product){
-
+                                        $uniqueId = $globalCounter++;
                                         echo '<div class="ps-product">
 
                                         <div class="ps-product__thumbnail">
@@ -99,14 +102,19 @@
                                                 </li>
     
                                                 <li>
-                                                      <a    id="heart-icon-'.$product->productoid.'"
-                                                            onClick="addHeart('.$product->productoid.');"
+                                                      <a    id="heart-icon-'.$product->productoid.$uniqueId.'"
+                                                            onClick="addHeart('.$product->productoid.','.$uniqueId.');"
                                                             data-toggle="tooltip" 
                                                             data-placement="top" 
                                                             title="Add to Whishlist 1">
                                                             <i class="icon-heart"></i>
-                                                    </a>
-                                                </li>                                           
+                                                      </a>
+                                                     
+                                                </li>     
+                                                
+                                                <li id="loading-icon-'.$product->productoid.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
+                                                    <img src="'.base_url().'assets/img/ajax_clock_small.gif'.'" alt="" style="max-width:100%; max-height:100%;">
+                                                </li>
     
                                             </ul>
     
@@ -198,6 +206,8 @@
 
                                 <?php
                                      foreach($products as $key => $product){
+                                        
+                                        $uniqueId = $globalCounter++;
 
                                         echo '<div class="ps-product">
 
@@ -222,14 +232,19 @@
                                                 </li>
     
                                                 <li>
-                                                    <a  id="heart-icon-'.$product->productoid.'"
-                                                        onClick="addHeart('.$product->productoid.');"
+                                                    <a  id="heart-icon-'.$product->productoid.$uniqueId.'"
+                                                        onClick="addHeart('.$product->productoid.','.$uniqueId.');"
                                                         data-toggle="tooltip" 
                                                         data-placement="top" 
-                                                        title="Add to Whishlist 1">
+                                                        title="Add to Whishlist 2">
                                                         <i class="icon-heart"></i>
                                                     </a>
-                                                </li>                                           
+                                                    
+                                                </li> 
+                                                
+                                                <li id="loading-icon-'.$product->productoid.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
+                                                    <img src="'.base_url().'assets/img/ajax_clock_small.gif'.'" alt="" style="max-width:100%; max-height:100%;">
+                                                </li>
     
                                             </ul>
     
@@ -361,6 +376,8 @@
     									======================================--> 
                                         <?php
                                             foreach($products as $key => $product){
+                                                
+                                                $uniqueId = $globalCounter++;
 
                                                 echo '<div class="col-lg-2 col-md-4 col-6">
 
@@ -391,16 +408,18 @@
                                                             </li>
     
                                                             <li>
-                                                               <a  id="heart-icon-'.$product->productoid.'"
-                                                                    onClick="addHeart('.$product->productoid.');"
+                                                               <a  id="heart-icon-'.$product->productoid.$uniqueId.'"
+                                                                    onClick="addHeart('.$product->productoid.','.$uniqueId.');"
                                                                     data-toggle="tooltip" 
                                                                     data-placement="top" 
-                                                                    title="Add to Whishlist 1">
+                                                                    title="Add to Whishlist 3">
                                                                     <i class="icon-heart"></i>
                                                                 </a>
                                                             </li>
-    
-                                                            
+
+                                                            <li id="loading-icon-'.$product->productoid.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
+                                                                <img src="'.base_url().'assets/img/ajax_clock_small.gif'.'" alt="" style="max-width:100%; max-height:100%;">
+                                                            </li>
     
                                                         </ul>
     
@@ -471,6 +490,9 @@
                                     <?php 
                                     
                                         foreach($products as $key => $product){
+                                            
+                                            $uniqueId = $globalCounter++;
+
                                             echo '<div class="ps-product ps-product--wide">
 
                                             <div class="ps-product__thumbnail"><a href="product-default.html"><img src='.base_url().$product->image.' alt='.$product->keywords.'></a>
@@ -492,7 +514,19 @@
                                                     <p class="ps-product__price">$'.number_format($product->sale_price).'</p><a class="ps-btn" href="#">Add to cart</a>
                                                     <ul class="ps-product__actions">
                                                         <li><a href="'.base_url().'product/'.$product->slug.'"><i class="icon-eye"></i>View</a></li>
-                                                        <li><a href="#"><i class="icon-heart"></i> Wishlist</a></li>       
+                                                        <li>
+                                                              <a    id="heart-icon-'.$product->productoid.$uniqueId.'"
+                                                                    onClick="addHeart('.$product->productoid.', '.$uniqueId.');"
+                                                                    data-toggle="tooltip" 
+                                                                    data-placement="top" 
+                                                                    title="Add to Whishlist 4">
+                                                                    <i class="icon-heart"></i>
+                                                            </a>
+                                                        </li>   
+                                                        
+                                                        <li id="loading-icon-'.$product->productoid.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
+                                                            <img src="'.base_url().'assets/img/ajax_clock_small.gif'.'" alt="" style="max-width:100%; max-height:100%;">
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>

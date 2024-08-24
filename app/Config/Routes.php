@@ -31,9 +31,14 @@ $routes->post('/forgetPasswordCustomer',  'CustomersController::forgetPasswordCu
 
 #WISHES
 $routes->get('/wishes',         'WishesController::index');
-$routes->get('/shopping',       'ShoppingController::index');
 $routes->post('/addWish',       'WishesController::addWish');
 $routes->delete('/removeWish',  'WishesController::removeWish');
+
+#CUSTOMER SHOOPING
+$routes->get('/shopping',       'ShoppingController::index');
+
+#RATINGS COMMENTS
+$routes->post('/addratingscommet', 'RatingsCommentsController::addRatingsCommet');
 
 #Citys
 $routes->post('/city',                    'CityController::city');

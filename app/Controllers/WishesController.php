@@ -258,7 +258,6 @@ class WishesController extends BaseController{
        
         }
 
-
     }
 
 }

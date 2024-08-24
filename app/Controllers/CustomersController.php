@@ -249,4 +249,10 @@ class CustomersController extends BaseController{
 
     }
 
+    public function showCustomer(){
+        
+        $checkEmail = $this->CustomerModel->where('email', $email)->first();
+
+    }
+
 }
