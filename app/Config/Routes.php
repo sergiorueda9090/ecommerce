@@ -39,6 +39,9 @@ $routes->get('/shopping',       'ShoppingController::index');
 
 #CUSTOMER ACCOUNT
 $routes->get('/account',        'AccountController::index');
+$routes->post('/updateaccount', 'AccountController::updateaccount');
+$routes->post('/updatepassword','AccountController::updatepassword');
+
 
 #RATINGS COMMENTS
 $routes->post('/addratingscommet', 'RatingsCommentsController::addRatingsCommet');

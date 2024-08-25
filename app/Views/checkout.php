@@ -148,9 +148,9 @@
 
                                     <div class="form-group__content">
 
-                                    <select name="city" class="form-control city" id="city">
-                                        <option value="">Seleccionar</option>
-                                    </select>
+                                        <select name="city" class="form-control city" id="city">
+                                            <option value="">Seleccionar</option>
+                                        </select>
 
                                     </div>
 

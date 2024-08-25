@@ -38,9 +38,9 @@
                 <div class="ps-section__content">
 
                     <ul class="ps-section__links">
-                        <li class="active"><a href="<?php echo base_url().'wishes' ?>">My Wishlist</a></li>
+                        <li><a href="<?php echo base_url().'wishes' ?>">My Wishlist</a></li>
                         <li><a href="<?php echo base_url().'shopping' ?>">My Shopping</a></li>
-                        <li><a href="<?php echo base_url().'account' ?>">My Account</a></li>
+                        <li class="active"><a href="<?php echo base_url().'account' ?>">My Account</a></li>
                     </ul>
 
                     <!--=====================================
@@ -49,82 +49,62 @@
 
                     <div class="container">
                         <div class="row">
+
                             <div class="col-4">
-                                <div class="list-group">
+
+                                <div class="list-group" id="list-tab" role="tablist">
+
                                     <div class="text-center">
                                         <img style="width:170px; height:170px" src="<?php echo base_url(); ?>assets/img/001-man.svg" class="rounded" alt="...">
                                     </div>
+
                                     <h4>Sergio Rueda</h4>
-                                    <ul class="list-group">
-                                        <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action">
-                                            Mi perfil
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action">
-                                            Compras
-                                            <span class="badge badge-primary badge-pill">12</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action">
-                                            Cerrar session
-                                        </li>
-                                        </ul>
+
+                                    <div class="list-group" id="list-tab" role="tablist">
+                                        <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Mi perfil</a>
+                                        <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Actualizar información</a>
+                                        <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Actualizar contraseña </a>
+                                        <a class="list-group-item list-group-item-action" id="list-bought-list" data-toggle="list" href="#list-bought" role="tab" aria-controls="bought">Mis compras</a>
+                                        <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">cerrar sesion</a>
+                                        
+                                    </div>
+
                                 </div>
+
                             </div>
 
-                           
+                            <div class="col-7 mt-5">
 
-                            <div class="col-7">
+                                <div class="tab-content" id="nav-tabContent">
 
-                                <div class="form-group">
-                                    <label>First Name<sup>*</sup></label>
-                                    <div class="form-group__content"><input class="form-control firstName" id="firstName" type="text"></div>
+                                    <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                                        <!-- MY PROFIEL -->
+                                            <?php include_once 'template/profielAccount.php'; ?>
+                                        <!-- end PROFIEL -->
+                                    </div>
+
+                                    <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                                        <!-- MY UPDATE INFORMATION -->
+                                            <?php include_once 'template/updateInformatioAccount.php'; ?>
+                                        <!-- end UPDATE INFORMATION -->
+                                    </div>
+
+                                    <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+                                        <!-- MY UPDATE INFORMATION -->
+                                           <?php include_once 'template/changePasswordAccount.php'; ?>
+                                        <!-- end UPDATE INFORMATION -->
+                                    </div>
+                                    
+                                    <div class="tab-pane fade" id="list-bought" role="tabpanel" aria-labelledby="list-bought-list">
+
+                                        <!-- MY UPDATE INFORMATION -->
+                                            <?php include_once 'template/boughtAccount.php'; ?>
+                                        <!-- end UPDATE INFORMATION -->
+
+                                    </div>
+
+                                    <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">Amaya</div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Last Name<sup>*</sup></label>
-                                    <div class="form-group__content"><input class="form-control firstName" id="firstName" type="text"></div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Email Address<sup>*</sup></label>
-                                    <div class="form-group__content"><input class="form-control firstName" id="firstName" type="text"></div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Departamento<sup>*</sup></label>
-                                    <div class="form-group__content"><input class="form-control firstName" id="firstName" type="text"></div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Ciudad<sup>*</sup></label>
-                                    <div class="form-group__content"><input class="form-control firstName" id="firstName" type="text"></div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Phone<sup>*</sup></label>
-                                    <div class="form-group__content"><input class="form-control firstName" id="firstName" type="text"></div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Address<sup>*</sup></label>
-                                    <div class="form-group__content"><input class="form-control firstName" id="firstName" type="text"></div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>contraseña<sup>*</sup></label>
-                                    <div class="form-group__content"><input class="form-control firstName" id="firstName" type="password"></div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Confirmar contraseña<sup>*</sup></label>
-                                    <div class="form-group__content"><input class="form-control firstName" id="firstName" type="password"></div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Addition information<sup>*</sup></label>
-                                    <div class="form-group__content"><input class="form-control firstName" id="firstName" type="text"></div>
-                                </div>
-
-
                             </div>
 
                         </div>
@@ -194,5 +174,5 @@
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
-<script src="<?php echo base_url().'/assets/js/wishes.js';?>"></script>
+<script src="<?php echo base_url().'/assets/js/profielAccount.js';?>"></script>
 <?php  echo $this->endSection("content"); ?>

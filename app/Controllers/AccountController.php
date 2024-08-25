@@ -2,25 +2,35 @@
 namespace App\Controllers;
 use App\Models\WishesModel;
 use App\Models\ProductsModel;
+use App\Models\CustomersModel;
+use App\Models\CitysModel;
 
 class AccountController extends BaseController{
     
     private $wishesModel;
     private $productsModel;
+    private $customerModel;
+    private $cityModel;
 
     public function __construct(){
 
         $this->wishesModel = new WishesModel();
         $this->productsModel = new ProductsModel();
+        $this->customerModel = new CustomersModel();
+        $this->cityModel = new CitysModel();
     }
 
     public function index(){
 
         $homeController = new Home();
+        $checkoutController = new CheckoutController();
         $pageInfo       = $homeController->pageInfo();
         $categories     = $homeController->listCategories();
         $footer         = $homeController->footer();
         $header         = $homeController->header();
+        $deparments     = $checkoutController->departamentos();
+        $customerInfo   = $this->informationCustomer();
+        $cities         = $this->showCities();
 
         $session = \Config\Services::session();
         $session = session();
@@ -30,6 +40,9 @@ class AccountController extends BaseController{
            'categories'    => $categories,
            'header'        => $header,
            'footer'        => $footer,
+           'deparments'    => $deparments,
+           'customerInfo'  => $customerInfo,
+           'cities'        => $cities,
        ];
 
         if($session->idUser){
@@ -271,4 +284,173 @@ class AccountController extends BaseController{
 
     }
 
+    function informationCustomer(){
+        
+        $request = \Config\Services::request();
+        $session = \Config\Services::session();
+
+        $session = session();
+        
+        $method = strtoupper($request->getMethod());
+
+        if($method == "GET"){
+
+            if($session->idUser){
+                 
+
+                $checkId = $this->customerModel->where('id', $session->idUser)->first();
+
+                if($checkId){
+
+                    $checkCustomer = $this->customerModel->where('id', $session->idUser)
+                                                        ->join('municipios' , 'municipios.id_municipio = customers.city', 'inner')
+                                                        ->where('id', $session->idUser)
+                                                        ->first();
+                    
+                    if($checkCustomer){
+
+                        return $checkCustomer;
+
+                    }else{
+
+                        return $this->response->setJson(['status' => 404, 'exists' => false, 
+                                                         'message' => 'Error in the authentication'], 404);
+
+                    }
+
+                }else{
+
+                    return $this->response->setJson(['status' => 404, 'exists' => false, 'message' => 'Email not exist '], 404);
+
+                }
+
+            }
+
+        }
+
+
+    }
+
+    function showCities(){
+        $cities = $this->cityModel->findAll();
+        return $cities;
+    }
+
+    public function updateaccount(){
+
+        $request = \Config\Services::request();
+        $session = \Config\Services::session();
+        $session = session();
+        
+        $method = strtoupper($request->getMethod());
+
+        if($method == "POST"){
+            
+            $idUser = $session->idUser;
+
+            if($session->idUser){
+
+                $json = $request->getJSON();
+
+                // Guardar la información del comentario y la calificación
+                $updateInfo = array(
+                                "name"       => $json->name,
+                                "lastname"   => $json->lastname,
+                                "email"      => $json->email,
+                                "department" => $json->department,
+                                "city"       => $json->city,
+                                "phone"      => $json->phone,
+                                "address"    => $json->address,
+                            );
+    
+                if($this->customerModel->set($updateInfo)->where('id',$idUser)->update()){
+    
+                    return response()->setJSON([
+                        'status' => 200,
+                        'success' => true,
+                        'message' => 'Informacion actualizada agregado.'
+                    ]);
+    
+                }else{
+    
+                    return response()->setJSON([
+                        'status' => 400,
+                        'success' => false,
+                        'message' => 'Informacion no actualizada.'
+                    ]);
+    
+                }
+
+            }else{
+
+                return $this->response->setJSON([
+                    'status' => 401,
+                    'success' => false,
+                    'message' => 'Para eliminar productos de tu lista de deseos, por favor inicia sesión.'
+                ]);
+                
+            }
+
+            return $response;
+        
+        }
+
+
+    }
+
+    public function updatepassword(){
+
+        $request = \Config\Services::request();
+        $session = \Config\Services::session();
+        $session = session();
+        
+        $method = strtoupper($request->getMethod());
+
+        if($method == "POST"){
+
+            $json = $request->getJSON();
+            $idUser = $session->idUser;
+
+            if($session->idUser){
+
+                
+                // Guardar la información del comentario y la calificación
+                $updateInfo = array(
+                    //"oldPassword"   => $json->oldPassword,
+                    "password"      => $json->password
+                    //"repitPassword" => $json->repitPassword
+                    );
+
+                if($this->customerModel->set($updateInfo)->where('id',$idUser)->update()){
+
+                    return response()->setJSON([
+                        'status' => 200,
+                        'success' => true,
+                        'message' => 'Informacion actualizada agregado.'
+                    ]);
+
+                }else{
+
+                    return response()->setJSON([
+                        'status' => 400,
+                        'success' => false,
+                        'message' => 'Informacion no actualizada.'
+                    ]);
+
+                }
+
+
+            }else{
+
+                return $this->response->setJSON([
+                    'status' => 401,
+                    'success' => false,
+                    'message' => 'Para eliminar productos de tu lista de deseos, por favor inicia sesión.'
+                ]);
+
+            }
+        
+        }
+
+    }
 }
