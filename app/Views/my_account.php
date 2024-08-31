@@ -103,7 +103,21 @@
 
                                     </div>
 
-                                    <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">Amaya</div>
+                                    <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
+                                        <button type="button" class="ps-btn ps-btn--fullwidth btn btn-lg cerrarSessionModal">Cerrar sesión</button>
+                                        
+                                        <!-- Loading Button (Initially Hidden) -->
+                                        <button type="button" class="ps-btn ps-btn--fullwidth btn btn-lg cerrarSessionModalLoading d-none">
+                                            <img src="<?php echo base_url().'assets/img/ajax_clock_small.gif'; ?>" class="iconLoagingCities " alt=""> Loading...
+                                        </button>
+
+                                        <!-- Success Button (Initially Hidden) -->
+                                        <button type="button" class="ps-btn ps-btn--fullwidth btn btn-lg cerrarSessionModalSuccess d-none">
+                                            <img src="<?php echo base_url().'assets/img/s_success.png'; ?>" style="max-width:10%" alt="" > 
+                                            <span id="successIcon" style="color: #28a745; font-weight: 500; font-size:16px;">Cerrar sesión exitosamente</span>
+                                        </button>
+
+                                    </div>
                                 </div>
                             </div>
 
