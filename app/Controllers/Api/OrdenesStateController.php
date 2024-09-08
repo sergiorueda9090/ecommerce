@@ -254,7 +254,7 @@ class OrdenesStateController extends ResourceController{
                 return [
                         'status'  => 404, // Not Found
                         'message' => 'No traceability data found for the provided Order ID.',
-                        'data'    => ["id"            => "",
+                        'data'    => [["id"            => "",
                                       "id_user"       => "",
                                       "id_order"      => "",
                                       "id_transaction"=> "",
@@ -262,7 +262,7 @@ class OrdenesStateController extends ResourceController{
                                       "order_note"    => " ",
                                       "created_at"    => "",
                                       "updated_at"    => "",
-                                      "deleted_at"    => ""]
+                                      "deleted_at"    => ""]]
                     ];
             }
     

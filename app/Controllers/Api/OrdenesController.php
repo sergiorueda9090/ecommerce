@@ -53,9 +53,11 @@ class OrdenesController extends ResourceController{
                 $page = $this->request->getVar('page') ?: 1;
         
                 // Ejecuta la consulta con paginación
-                $data = $this->ordersModel->select('orders.id, products.name, orders.email, orders.quantity, orders.price, orders.image, 
-                                                    transactions.estadoTx, transactions.transactionState, 
-                                                    transactions.lapPaymentMethod, orders.transactions_id, transactions.created_at')
+                $data = $this->ordersModel->select('orders.id,orders.transactions_id, products.name, orders.email, orders.quantity, orders.price, orders.image, 
+                                                    transactions.state_pol, transactions.payment_method, 
+                                                    transactions.payment_method_type, transactions.value, transactions.currency,
+                                                    transactions.email_buyer,transactions.date,
+                                                    transactions.created_at')
                                          ->join('transactions', 'orders.transactions_id = transactions.id')
                                          ->join('products', 'products.id = orders.id_product')
                                          ->groupBy('orders.transactions_id')

@@ -171,7 +171,6 @@ $routes->get('api/showOrden/(:num)',    'Api\OrdenesController::show/$1');
 =============================================== */
 //$routes->get('api/listAllOrdenesState',     'Api\OrdenesStateController::listAll');
 $routes->get('api/showOrdenState/(:num)',   'Api\OrdenesStateController::show/$1');
-$routes->get('api/showOrdenState/(:num)',   'Api\OrdenesStateController::show/$1');
 $routes->post('api/createOrdenState',       'Api\OrdenesStateController::create');
 
 
