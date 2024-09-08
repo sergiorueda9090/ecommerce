@@ -77,8 +77,8 @@ class Filters extends BaseConfig
             'before' => [
                 'client/*',
                 'client',
-                'api/*',
-                'api'
+                //'api/*',
+                //'api'
             ]
         ]
     ];

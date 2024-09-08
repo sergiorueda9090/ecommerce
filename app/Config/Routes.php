@@ -159,4 +159,26 @@ $routes->post('api/updateSocialNetwork/(:num)',   'Api\SocialNetworkController::
 $routes->delete('api/deleteSocialNetwork/(:num)', 'Api\SocialNetworkController::delete/$1');
 
 
-$routes->post('api/email', 'Api\EnqueueEmailController::enqueueEmail');
+/* ============================================
+    ORDERS APIS
+=============================================== */
+$routes->get('api/listAllOrdenes',      'Api\OrdenesController::listAll');
+$routes->get('api/showOrden/(:num)',    'Api\OrdenesController::show/$1');
+
+
+/* ============================================
+    ORDERS STATES APIS
+=============================================== */
+//$routes->get('api/listAllOrdenesState',     'Api\OrdenesStateController::listAll');
+$routes->get('api/showOrdenState/(:num)',   'Api\OrdenesStateController::show/$1');
+$routes->get('api/showOrdenState/(:num)',   'Api\OrdenesStateController::show/$1');
+$routes->post('api/createOrdenState',       'Api\OrdenesStateController::create');
+
+
+/* ============================================
+    TRANSACTIONS APIS
+=============================================== */
+$routes->get('api/listAllTransactions',        'Api\TransactionsController::listAll');
+$routes->get('api/showAllTransactions/(:num)', 'Api\TransactionsController::show/$1');
+
+$routes->post('api/email',              'Api\EnqueueEmailController::enqueueEmail');
