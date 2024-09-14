@@ -135,15 +135,6 @@ $session = session();
 		}
 	</style>
 
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-N8G9F22VD7"></script>
-	<script>
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-
-	gtag('config', 'G-N8G9F22VD7');
-	</script>
 </head>
 	<!--=====================================
 	Header Promotion
@@ -972,6 +963,15 @@ $session = session();
 	<script src="<?php echo base_url().'/assets/js/main.js';?>"></script>
 	<script src="<?php echo base_url().'/assets/js/menu.js';?>"></script>
 	
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-N8G9F22VD7"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'G-N8G9F22VD7');
+		</script>
 	
 </body>
 </html>
