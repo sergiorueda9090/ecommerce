@@ -180,4 +180,13 @@ $routes->post('api/createOrdenState',       'Api\OrdenesStateController::create'
 $routes->get('api/listAllTransactions',        'Api\TransactionsController::listAll');
 $routes->get('api/showAllTransactions/(:num)', 'Api\TransactionsController::show/$1');
 
+
+/* ============================================
+    COMERCIO APIS
+=============================================== */
+$routes->get('api/listAllComercio',        'Api\ComercioController::listAll');
+$routes->get('api/showComercio/(:num)',    'Api\ComercioController::show/$1');
+$routes->get('api/activateTrade/(:num)',   'Api\ComercioController::activateTrade/$1');
+
+
 $routes->post('api/email',              'Api\EnqueueEmailController::enqueueEmail');

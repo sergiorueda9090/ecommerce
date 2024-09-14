@@ -134,6 +134,16 @@ $session = session();
 			background-color: rgba(0, 0, 0, 0.1); /* Adjust opacity as needed */
 		}
 	</style>
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-N8G9F22VD7"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'G-N8G9F22VD7');
+	</script>
 </head>
 	<!--=====================================
 	Header Promotion
