@@ -67,6 +67,9 @@ $session = session();
 	<!-- Market Place 4 -->
 	<link rel="stylesheet" href="<?php echo base_url().'/assets/css/market-place-4.css';?>">
 
+	<!-- PRODUCT -->
+	<link rel="stylesheet" href="<?php echo base_url().'/assets/css/product/style.css';?>">
+	
 	<!--=====================================
 	PLUGINS JS
 	======================================-->
@@ -133,6 +136,49 @@ $session = session();
 		.shaded {
 			background-color: rgba(0, 0, 0, 0.1); /* Adjust opacity as needed */
 		}
+
+	
+		.brands{
+			display:flex; flex-wrap:wrap; justify-content:center; gap:1.5em 1em;
+		}
+
+		.brand-logo{
+			max-height: 56px; width: calc(20% - 1em); display: flex;
+			 flex-direction: column; border-radius: 8px;
+			  background-color: white; 
+			  border: solid 1px rgb(225, 224, 224); 
+			  overflow: hidden; 
+			  text-decoration: none !important; 
+			transition: background-color .5s ease;
+		}
+
+		.brand-logo img {
+			min-height: 56px;
+			align-self: center;
+			justify-self: center;
+			aspect-ratio: 19 / 10;
+			object-fit: cover;
+			transition: transform .5s ease;
+		}
+
+		.brand-logo:hover img, .brand-logo:focus img {
+			transform: translateY(-56px);
+		}
+
+		.brand-logo p {
+			min-height: 56px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 0;
+			text-align: center;
+			color: var(--text-color1);
+			transition: transform .5s ease;
+		}
+		.brand-logo:hover p, .brand-logo:focus p {
+			transform: translateY(-56px);
+		}
+
 	</style>
 
 </head>

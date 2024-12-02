@@ -3,6 +3,9 @@
 namespace App\Controllers\api;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\ProductsModel;
+use App\Models\ProductAttributesModel;
+use App\Models\ValueAttributesModel;
+
 use App\Models\ProductsImageModel;
 use App\Models\ProductSizeModel;
 use App\Models\ProductColorModel;
@@ -12,6 +15,8 @@ use App\Models\ProductQuantityColorModel;
 class ProductsController extends ResourceController{
 
     protected $productModel;
+    protected $productAttributesModel;
+    protected $valueAttributesModel;
     protected $productImageModel;
     protected $productSizeModel;
     protected $productColorModel;
@@ -21,7 +26,10 @@ class ProductsController extends ResourceController{
     protected $validateArray;
 
     public function __construct(){
-        $this->productModel         = new ProductsModel();
+        $this->productModel            = new ProductsModel();
+        $this->productAttributesModel = new ProductAttributesModel();
+        $this->valueAttributesModel   = new ValueAttributesModel();
+
         $this->productImageModel    = new ProductsImageModel();
         $this->productSizeModel     = new ProductSizeModel();
         $this->productColorModel    = new ProductColorModel();
@@ -45,9 +53,12 @@ class ProductsController extends ResourceController{
 
         return $errors;
     }
+    
 
-    public function saveImage($id = null, $image = null, $keywords = "", $name_category = ""){
-        
+    public function saveImage($id = null, $image = null, $keywords = "", $name_category = "", $name_subcategory = "", $newIdColor = null) {
+        // Obtener el archivo
+        $image = $image;
+    
         // Validar si es una imagen y si fue subida correctamente
         if ($image->isValid() && !$image->hasMoved()) {
             // Validar el tipo de archivo
@@ -66,47 +77,43 @@ class ProductsController extends ResourceController{
             
                 // Generar un nombre único para la imagen
                 $originalName = pathinfo($image->getName(), PATHINFO_FILENAME);
-                $newName = $originalName.'_'.$image->getRandomName();
-    
-                // Mover la imagen a la carpeta 'asset/image'
-                $image->move(ROOTPATH . 'public/assets/img/products/'.$name_category.'/', $newName);
-    
+                $newName = $originalName . '_' . $image->getRandomName();
+
+               // Mover la imagen a la carpeta 'asset/image' con el nuevo nombre
+                $image->move(ROOTPATH . 'public/assets/img/products/' . $name_category, $newName);
+
                 // Preparar los datos para guardar en la base de datos
                 $dataImage = [
-                    'id_product' =>  $id,
-                    'image'      => '/assets/img/products/'.$name_category.'/'.$newName,
-                    'keywords'   => $keywords,
+                    'id_product' => $id,
+                    'id_color' => $newIdColor,
+                    'image' => '/assets/img/products/' . $name_category . '/' . $newName,
+                    'keywords' => $keywords
                 ];
-    
-                // Insertar los datos en la base de datos
-                $queryRresponse = $this->productImageModel->insert($dataImage);
-                
-                if($queryRresponse){
 
-                    $newId    = $this->productImageModel->insertID();
-
-                    $response = array("status" => true, "newId" => $newId, "code" => 200);
-    
-                    return $response;
-
-                }else{
-
-                    $response = array("status" => false, "newId" => "", "code" => 404);
-    
-                    return $response;
-
+                // Insertar en la base de datos
+                $queryResponse = $this->productImageModel->insert($dataImage);
+                if ($queryResponse) {
+                    return "Image saved successfully.";
+                } else {
+                    return "Error saving image to the database.";
                 }
 
-               
+                
+                return array("status" => true, "message" => "successfull", "data" => $dataImage);
+
             } else {
+                
                 // Manejar la validación fallida
                 $errors = $this->validator->getErrors();
-                return "Validation failed: " . implode(', ', $errors);
+
+                return array("status" => false, "message" => "Error", "data" => "Validation failed: " . implode(', ', $errors));
+
             }
         } else {
             return "Invalid image file or no file uploaded.";
         }
     }
+
 
     /* ======================================
                 CREATE PRODUCT
@@ -114,26 +121,130 @@ class ProductsController extends ResourceController{
     
     public function create(){
         
-        $images         = $this->request->getFiles();
-        $keywords       = $this->request->getPost("keywords");
-        $sizes          = $this->request->getPost("sizes");
-        $name_category  = $this->request->getPost("name_category");
+        $files  = $this->request->getFiles();
+
+        if (empty($files) || !is_array($files)) {
+            return [
+                'status'  => false,
+                'message' => 'Files are required.',
+                'data'    => null,
+                'code'    => 400
+            ];
+        }
+
+        //$sizes          = $this->request->getPost("sizes");
+ 
+        $arrayAttributes  = $this->request->getPost("arrayAttributes");
+
+        // Verificar que arrayAttributes esté presente, no esté vacío y sea un array
+        if (empty($arrayAttributes) || !is_array($arrayAttributes)) {
+            return [
+                'status'  => false,
+                'message' => 'arrayAttributes is required and must be a non-empty array.',
+                'data'    => null,
+                'code'    => 400
+            ];
+        }
+
+
+        // Obtén los límites de PHP
+        $maxUploads = ini_get("max_file_uploads");
+        $maxFileSize = $this->parseSize(ini_get("upload_max_filesize"));
+        $postMaxSize = $this->parseSize(ini_get("post_max_size"));
+
+        // Verificar el número de archivos
+        $fileCount = 0;
+        $totalSize = 0;
+
+        foreach ($files as $file) {
+            // Manejo de archivos múltiples o individuales
+            if (is_array($file)) {
+                foreach ($file as $singleFile) {
+                    $fileCount++;
+                    $totalSize += $this->checkFileSize($singleFile, $maxFileSize);
+                }
+            } else {
+                $fileCount++;
+                $totalSize += $this->checkFileSize($file, $maxFileSize);
+            }
+        }
+
+        // Verificar límite de cantidad de archivos
+        if ($fileCount > $maxUploads) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => "Se excede el número máximo de archivos permitidos: $maxUploads.",
+                'data'    => null,
+                'code'    => 400
+            ]);
+        }
+
+        // Verificar el tamaño total de la carga
+        if ($totalSize > $postMaxSize) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => "El tamaño total de los archivos excede el máximo permitido de " . ini_get("post_max_size") . ".",
+                'data'    => null,
+                'code'    => 400
+            ]);
+        }
+
+
+        $attribute        = $this->request->getPost("attribute");
+        $description      = $this->request->getPost("description");
+        $details          = $this->request->getPost("details");
+
+        $discount          = $this->request->getPost("discount");
+        $id_categories     = $this->request->getPost("id_categories");
+        $id_category       = $this->request->getPost("id_category");
+        $id_subcategories  = $this->request->getPost("id_subcategories");
+        $id_user           = 1;
+
+        $keywords = $this->request->getPost("keywords");
+        $keywords = !empty($keywords) ? implode(", ", $keywords) : null;
+        if (is_null($keywords)) {
+            return $this->respond([
+                "status"  => false,
+                "message" => "The fields are required.",
+                "data"    => "Keywords are required and cannot be empty.",
+                "code"    => 500
+            ]);
+        }
+
+        $name              = $this->request->getPost("name");
+        $name_category     = $this->request->getPost("name_category");
+        $name_subcategory  = $this->request->getPost("name_subcategory");
+        $percentage_profit = $this->request->getPost("percentage_profit");
+        $purchase_price    = $this->request->getPost("purchase_price");
+
+        $sale_price     = $this->request->getPost("sale_price");
+        $slug           = $this->request->getPost("slug");
+        $specifications = $this->request->getPost("specifications");
+        // Validar que specifications tenga un valor y sea un array
+        if (empty($specifications) || !is_array($specifications)) {
+            return $this->respond([
+                "status"  => false,
+                "message" => "The fields are required.",
+                "data"    => "specifications are required and cannot be empty.",
+                "code"    => 500
+            ]);
+        }
 
         $this->message = "The fields are required. ";
         
-        $data = array("id_subcategories"    => $this->request->getPost("id_subcategories"),
-                        "id_categories"     => $this->request->getPost("id_categories"),
+        $data = array("id_subcategories"    => $id_subcategories,
+                        "id_categories"     => $id_categories,
                         "id_user"           => 1,
-                        "name"              => $this->request->getPost("name"),
-                        "slug"              => $this->request->getPost("slug"),
-                        "description"       => $this->request->getPost("description"),
-                        "details"           => $this->request->getPost("details"),
-                        "specifications"    => $this->request->getPost("specifications"),
+                        "name"              => $name,
+                        "slug"              => $slug,
+                        "description"       => $description,
+                        "details"           => $details,
+                        "specifications"    => json_encode($specifications),
                         "keywords"          => $keywords,
-                        "purchase_price"    => $this->request->getPost("purchase_price"),
-                        "percentage_profit" => $this->request->getPost("percentage_profit"),
-                        "sale_price"        => $this->request->getPost("sale_price"),
-                        "discount"          => $this->request->getPost("discount"));
+                        "purchase_price"    => $purchase_price,
+                        "percentage_profit" => $percentage_profit,
+                        "sale_price"        => $sale_price,
+                        "discount"          => $discount);
 
         $responseValidate = $this->validateInfo($data);
 
@@ -153,22 +264,92 @@ class ProductsController extends ResourceController{
         if($responseQuery){
 
             $newId = $this->productModel->insertID();
+            
+            $dataAttribute          = array("id_product" => $newId, "name" => $attribute);
+            $responseQueryAttribute = $this->productAttributesModel->insert($dataAttribute);
+            
+            if($responseQueryAttribute){
 
-            foreach ($images['images'] as $key => $image){
+                $newIdAtt = $this->productAttributesModel->insertID();
 
-                $queryResponseImage = $this->saveImage($newId, $image, $keywords, $name_category);
-           
+                // Array para almacenar los colores únicos y sus imágenes
+                $uniqueImagesByColor = [];
+
+                foreach ($arrayAttributes as $key => $arrayAttribute){
+                   
+                    // Guardar el valor de atributo
+                    $dataValueAttribute = [
+                        "id_product"            => $newId,
+                        "id_productattributes"  => $newIdAtt,
+                        "name"                  => $arrayAttribute['value']
+                    ];
+
+                    $responseQueryValueAtt = $this->valueAttributesModel->insert($dataValueAttribute);
+
+                    if($responseQueryValueAtt){
+
+                        $newIdValueAttr = $this->valueAttributesModel->insertID();
+                        
+                        // Guardar el color asociado con el atributo
+                        $dataColor = [
+                            "id_product"     => $newId,
+                            "id_productsize" => $newIdValueAttr,
+                            "color"          => $arrayAttribute['color']
+                        ]; 
+
+                        $responseQueryColor = $this->productColorModel->insert($dataColor);
+
+                        if($responseQueryColor){
+                            
+                            $newIdColor = $this->productColorModel->insertID();
+                            
+                            // Verificar si el color ya fue procesado para evitar duplicados
+                            $dataQuantity = ["id_productcolor" => $newIdColor, "count" => $arrayAttribute['cantidad'], "id_product" => $newId,];
+                            $responseQueryQuantity = $this->productQuantityModel->insert($dataQuantity);
+
+                            if($responseQueryQuantity){
+
+                                $color = $arrayAttribute['color'];
+
+                                if (!isset($uniqueImagesByColor[$color])) {
+
+                                    $uniqueImagesByColor[$color] = $arrayAttribute['images'];
+            
+                                    // Guardar las imágenes de este color único
+                                    foreach ($uniqueImagesByColor[$color] as $imageData) {
+                                        // Llamar a la función saveImage para cada imagen
+                                        // Suponiendo que `$imageData` es un objeto con los métodos necesarios.
+                                        $n = $imageData["name"];
+                                        
+                                        $selectedFile = "";
+                                       
+
+                                        foreach ($files['images'] as $file) {
+                                            // Verificar si el nombre del archivo coincide
+                                            if ($file->getClientName() === $imageData["name"]) {
+                                                $selectedFile = $file; // Guardar el archivo seleccionado
+                                                break; // Salir del bucle si se encuentra el archivo
+                                            }
+                                        }
+                                        $this->saveImage(
+                                            $newId,                          // ID del producto
+                                            $selectedFile,                      // Imagen a procesar
+                                            $keywords,                              // Palabras clave
+                                            $name_category,          // Categoría del producto
+                                            $name_subcategory,       // Subcategoría del producto
+                                            $newIdColor                      // ID del color
+                                        );
+                                    }
+                                }
+
+                            }
+                    
+                        }
+
+                    }
+                }
             }
-
-
-            foreach($sizes as $key => $size){
-                
-                $size["id"] = $newId;
-
-                $this->createSize($size);
-
-            }
-
+        
             $response = array('status'   => true,
                               'message'  => 'Product create successfull',
                               'data'     => "",
@@ -189,50 +370,20 @@ class ProductsController extends ResourceController{
 
     }
 
-
-    public function createSize($size){
-
-        if($size){
-     
-            $newSize = array("id_product" => $size["id"], "size" =>$size["size"]);
-
-            $queryResponseSize = $this->productSizeModel->insert($newSize);
-
-            if($queryResponseSize){
-
-                $sizeNewId = $this->productSizeModel->insertID();
-
-                $this->createColor($sizeNewId, $size["color"], $size["quantity"]);
-            }
+    // Verificar y sumar tamaño de archivo, lanzando error si excede el límite
+    private function checkFileSize($file, $maxFileSize) {
+        if ($file->getSize() > $maxFileSize) {
+            throw new \RuntimeException("El archivo '{$file->getName()}' excede el tamaño máximo permitido de " . ini_get("upload_max_filesize") . ".");
         }
-
+        return $file->getSize();
     }
 
-    public function createColor($id_productsize, $color, $quantity){
-
-        if($id_productsize && $color){
-            
-            $color = array("id_productsize" => $id_productsize, "color" => $color);
-
-            $queryResponseColor = $this->productColorModel->insert($color);
-
-            if($queryResponseColor){
-
-                $colorNewId = $this->productColorModel->insertID();
-
-                $this->createQuantity($colorNewId, $quantity);
-
-            }
-        }
-
-    }
-
-    public function createQuantity($id_productcolor, $count){
-
-        $quantity = array("id_productcolor" => $id_productcolor, "count" => $count);
-
-        $queryResponseColor = $this->productQuantityModel->insert($quantity);
-
+    // Función auxiliar para convertir el tamaño a bytes
+    private function parseSize($size) {
+        $units = ["K" => 1024, "M" => 1024 * 1024, "G" => 1024 * 1024 * 1024];
+        $unit = strtoupper(substr($size, -1));
+        $num = (float) substr($size, 0, -1);
+        return isset($units[$unit]) ? $num * $units[$unit] : (float) $size;
     }
 
     /* ======================================
@@ -335,6 +486,274 @@ class ProductsController extends ResourceController{
         }
     }
 
+    public function updateOnlyProduct($id){
+
+        // Validate the existence of the product by ID
+        $existingProduct = $this->productModel->find($id);
+        
+        if (!$existingProduct) {
+            return $this->respond([
+                'status'  => false,
+                'message' => 'Product not found.',
+                'data'    => null,
+                'code'    => 404,
+            ]);
+        }
+
+        $id_subcategories   = $this->request->getPost("id_subcategories");
+        $id_categories      = $this->request->getPost("id_categories");
+        $name               = $this->request->getPost("name");
+        $slug               = $this->request->getPost("slug");
+        $keywords           = $this->request->getPost("keywords");
+        $keywords           = !empty($keywords) ? implode(", ", $keywords) : null;
+        $purchase_price     = $this->request->getPost("purchase_price");
+        $percentage_profit  = $this->request->getPost("percentage_profit");
+        $sale_price         = $this->request->getPost("sale_price");
+        $discount           = $this->request->getPost("discount");
+    
+        if (is_null($keywords)) {
+            return $this->respond([
+                'status'  => false,
+                'message' => 'Keywords are required and cannot be empty.',
+                'data'    => null,
+                'code'    => 400,
+            ]);
+        }
+
+        $data = array("id_subcategories"    => $id_subcategories,
+                        "id_categories"     => $id_categories,
+                        "id_user"           => 1,
+                        "name"              => $name,
+                        "slug"              => $slug,
+                        "keywords"          => $keywords,
+                        "purchase_price"    => $purchase_price,
+                        "percentage_profit" => $percentage_profit,
+                        "sale_price"        => $sale_price,
+                        "discount"          => $discount);
+
+        $responseValidate = $this->validateInfo($data);
+
+        if(!empty($responseValidate) ){
+            $response = array("status"  => false, 
+                              "message" => "The fields are required. ", 
+                              "data"    => $this->message,
+                              "code"    => 500);
+            return $this->respond($response);
+        }
+
+        $responseUpdate = $this->productModel->update($id, $data);
+
+        if (!$responseUpdate) {
+            return $this->respond([
+                'status'  => false,
+                'message' => 'Failed to update product.',
+                'data'    => null,
+                'code'    => 500,
+            ]);
+        }
+
+        return $this->respond([
+            'status'  => true,
+            'message' => 'Product updated successfully.',
+            'data'    => $data,
+            'code'    => 200,
+        ]);
+
+
+    }
+
+    public function updateAddValueattributes($idProduct, $idAtrributo){
+        /**
+         * 1. Select Id of the table productattributes
+         * 2. Create the new element in the table valueattributes
+         * 3. id, id_productattributes, id_product, name, created_at, updated_at, deleted_at
+         * 4. table productcolor
+         * 5. table productquantity
+         * 6. table productimages
+         */
+
+        $files  = $this->request->getFiles();
+
+        $name_category  = $this->request->getPost("name_category");
+
+        $keywords = $this->request->getPost("keywords");
+        $keywords = !empty($keywords) ? implode(", ", $keywords) : null;
+
+        if (empty($files) || !is_array($files)) {
+            return [
+                'status'  => false,
+                'message' => 'Files are required.',
+                'data'    => null,
+                'code'    => 400
+            ];
+        }
+
+        //$arrayAttributes  = $this->request->getPost("arrayAttributes");
+
+        $arrayAttributes = array("attribute" => $this->request->getPost("attribute"),
+                                  "value"     => $this->request->getPost("value"),
+                                  "color"     => $this->request->getPost("color"),
+                                  "cantidad"  => $this->request->getPost("cantidad"));
+
+        // Verificar que arrayAttributes esté presente, no esté vacío y sea un array
+        if (empty($arrayAttributes) || !is_array($arrayAttributes)) {
+            return [
+                'status'  => false,
+                'message' => 'arrayAttributes is required and must be a non-empty array.',
+                'data'    => null,
+                'code'    => 400
+            ];
+        }
+
+        // Array para almacenar los colores únicos y sus imágenes
+        $uniqueImagesByColor = [];
+
+        // Guardar el valor de atributo
+        $dataValueAttribute = [
+            "id_product"            => $idProduct,
+            "id_productattributes"  => $idAtrributo,
+            "name"                  => $arrayAttributes['value']
+        ];
+
+        $responseQueryValueAtt = $this->valueAttributesModel->insert($dataValueAttribute);
+
+        if($responseQueryValueAtt){
+
+            $newIdValueAttr = $this->valueAttributesModel->insertID();
+            
+            // Guardar el color asociado con el atributo
+            $dataColor = [
+                "id_product"     => $idProduct,
+                "id_productsize" => $newIdValueAttr,
+                "color"          => $arrayAttributes['color']
+            ]; 
+
+            $responseQueryColor = $this->productColorModel->insert($dataColor);
+
+            if($responseQueryColor){
+                
+                $newIdColor = $this->productColorModel->insertID();
+                
+                // Verificar si el color ya fue procesado para evitar duplicados
+                $dataQuantity = ["id_productcolor" => $newIdColor, "count" => $arrayAttributes['cantidad'], "id_product" => $idProduct];
+
+                $responseQueryQuantity = $this->productQuantityModel->insert($dataQuantity);
+
+                if($responseQueryQuantity){
+
+                    $color = $arrayAttributes['color'];
+
+                    if (!isset($uniqueImagesByColor[$color])) {
+
+                        $selectedFile = "";
+                    
+                        foreach ($files['imagesFiles'] as $file) {
+
+                            $selectedFile = $file;
+                            
+                            $this->saveImage(
+                                $idProduct,            // ID del producto
+                                $selectedFile,         // Imagen a procesar
+                                $keywords,             // Palabras clave
+                                $name_category,        // Categoría del producto
+                                $name_subcategory = "",// Subcategoría del producto
+                                $newIdColor            // ID del color
+                            );
+
+                        }
+
+                    }
+
+                }
+        
+            }
+
+        }
+        
+        $response = array('status'   => true,
+                        'message'  => 'Product create successfull',
+                        'data'     => "",
+                        'code'     => 200);
+
+        return $this->respond($response);
+    }
+
+    public function updateDescriptionProduct($id){
+
+        $description = $this->request->getPost("description");
+
+        $data = array("description" => $description);
+
+        $responseValidate = $this->validateInfo($data);
+
+        if(!empty($responseValidate) ){
+            $response = array("status"  => false, 
+                                "message" => "The fields are required. ", 
+                                "data"    => $this->message,
+                                "code"    => 500);
+            return $this->respond($response);
+        }
+
+        $responseUpdate = $this->productModel->update($id, $data);
+
+        if (!$responseUpdate) {
+
+            return $this->respond([
+            'status'  => false,
+            'message' => 'Failed description to update product.',
+            'data'    => null,
+            'code'    => 500,
+            ]);
+
+        }
+
+        return $this->respond([
+            'status'  => true,
+            'message' => 'Product description updated successfully.',
+            'data'    => $data,
+            'code'    => 200,
+        ]);
+    }
+
+    public function updateDetailsProduct($id){
+
+        $details = $this->request->getPost("details");
+
+        $data = array("details" => $details);
+
+        $responseValidate = $this->validateInfo($data);
+
+        if(!empty($responseValidate) ){
+
+            $response = array("status"  => false, 
+                        "message" => "The fields are required. ", 
+                        "data"    => $this->message,
+                        "code"    => 500);
+            return $this->respond($response);
+
+        }
+
+        $responseUpdate = $this->productModel->update($id, $data);
+
+        if (!$responseUpdate) {
+
+            return $this->respond([
+            'status'  => false,
+            'message' => 'Failed details to update product.',
+            'data'    => null,
+            'code'    => 500,
+            ]);
+
+        }
+
+        return $this->respond([
+            'status'  => true,
+            'message' => 'Product details updated successfully.',
+            'data'    => $data,
+            'code'    => 200,
+        ]);
+    }
+
     /* ==================================
              END UPDATE PRODUCT
     ==================================== */
@@ -398,39 +817,65 @@ class ProductsController extends ResourceController{
 
             }
 
-            $arrayProductos = array("product" => [],
-                                    "image"   => [],
-                                    "size"    => []);
+            $arrayProductos = array("products"            => [],
+                                    "productattributes"   => [],
+                                    "valueattributes"     => [],
+                                    "productimages"       => []);
 
-            $query = $this->productModel->where('products.id', $id)->where('products.deleted_at', NULL);
+            $responseQuery = $this->productModel->select("id, id_subcategories, id_categories, id_user, id_brand, id_gender,name, 
+                                                          slug, description, details, specifications, keywords,
+                                                          purchase_price, percentage_profit, sale_price, discount")
+                                                ->where('id', $id)
+                                                ->where('deleted_at', NULL)
+                                                ->get()
+                                                ->getResult();
 
-            $responseQuery = $query->get()->getResult();
-            
             if($responseQuery){
 
-                $arrayProductos["product"] = $responseQuery;
+                $arrayProductos["products"] = $responseQuery;
 
-                $responseImage = $this->showImage($id);
+                $responseAttributes = $this->showAttributes($id);
 
-                if($responseImage){
+                if($responseAttributes){
 
-                    $arrayProductos["image"] = $responseImage;
+                    $arrayProductos["productattributes"] = $responseAttributes;
 
-                    $responseSize = $this->showSize($id);
+                    $id_productattributes = $responseAttributes[0]->id;
+
+                    $responseValueattribute = $this->showValueattributes($id, $id_productattributes);
                     
-                    if($responseSize){
+                    if($responseValueattribute){
+                        
+                        //$id_productsize = array_column($responseValueattribute, 'id');
+                        $arrayProductos["valueattributes"] = $responseValueattribute;
 
-                        $arrayProductos["size"] = $responseSize;
-
+                        foreach ($arrayProductos["valueattributes"] as $key => $image) {
+                            // Convertir el objeto a un array para manipularlo
+                            $imageArray = (array) $image;
+                        
+                            // Obtener las imágenes
+                            $responseImages = $this->showImage($id, $image->id_color);
+                        
+                            // Si hay imágenes, agregarlas
+                            if ($responseImages) {
+                                $imageArray["images"] = $responseImages;
+                                $arrayProductos["productimages"] = $responseImages;
+                            } else {
+                                $imageArray["images"] = []; // Si no hay imágenes, agregar un array vacío
+                            }
+                        
+                            // Reemplazar el objeto original con el array modificado
+                            $arrayProductos["valueattributes"][$key] = (object) $imageArray;
+                        }
                     }
 
                 }
 
-                $response = array("status" => 200, "message" => $this->message, "data" => $arrayProductos);
+                $response = array("status" => 200, "message" => "Show Product successfull", "data" => $arrayProductos);
 
             }else{
 
-                $response = array("status" => 404, "message" => $this->messageError, "data" => "");
+                $response = array("status" => 404, "message" => "Error Show Product successfull", "data" => "");
 
             }
 
@@ -440,8 +885,59 @@ class ProductsController extends ResourceController{
 
     }
 
-    public function showImage($id){
-        $query = $this->productImageModel->where("id_product", $id)->where('productimages.deleted_at', NULL)->get()->getResult();
+    public function showAttributes($id){
+        $query = $this->productAttributesModel->select("id, id_product, name")->where("id_product", $id)
+                                              ->where('productattributes.deleted_at', NULL)
+                                              ->get()
+                                              ->getResult();
+        return $query;
+    }
+
+    public function showValueattributes($id, $idProductAttribute){
+
+        $showColumns = "productattributes.id, productattributes.id_product, productattributes.name AS attribute, 
+                        va.id as id_v, va.id_productattributes, va.id_product, va.name AS value,
+                        pc.id as id_color, pc.id_productsize, pc.color,
+                        pq.id as id_q, pq.count AS cantidad";
+
+        $query = $this->productAttributesModel->select($showColumns)
+                                            ->join('valueattributes AS va', 'va.id_productattributes = productattributes.id')
+                                            ->join('productcolor AS pc', 'pc.id_productsize = va.id')
+                                            ->join('productquantity AS pq', 'pq.id_productcolor  = pc.id')
+                                            ->where("productattributes.id_product", $id)
+                                            ->where("pc.id_product", $id)
+                                            ->get()
+                                            ->getResult();
+
+        /*$query = $this->valueAttributesModel->select("id, id_productattributes, id_product, name")
+                                            ->where("id_product", $id)
+                                            ->where("id_productattributes", $idProductAttribute)
+                                            ->where('valueattributes.deleted_at', NULL)
+                                            ->get()->getResult();*/
+        return $query;
+    }
+
+    /*public function showProductColor($id){
+        $query = $this->productColorModel->select("id, color")->where("id_product", $id)
+                                         ->get()
+                                         ->getResult();
+        return $query;
+    }
+
+    public function showProductQuantity($id){
+        $query = $this->productQuantityModel->select("id, count")->where("id_product", $id)
+                                        ->get()
+                                        ->getResult();
+        return $query;
+    }*/
+
+    public function showImage($id, $id_color){
+        $query = $this->productImageModel->select("id, image, image as name")
+                                         ->where("id_product", $id)
+                                         ->where("id_color",   $id_color)
+                                         ->where('productimages.deleted_at', NULL)
+                                         ->get()
+                                         ->getResult();
         return $query;
     }
 

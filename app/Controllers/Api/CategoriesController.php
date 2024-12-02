@@ -5,17 +5,20 @@ namespace App\Controllers\Api;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\CategoriesModel;
 use App\Models\CategoriesImageModel;
+use App\Models\CategoriesBannerImagesModel;
 
 class CategoriesController extends ResourceController{
     
     protected $categoriesModel;
     protected $CategoriesImageModel;
+    protected $CategoriesBannerImagesModel;
     protected $format = 'json';
 
     public function __construct(){
 
         $this->categoriesModel      = new CategoriesModel();
         $this->CategoriesImageModel = new CategoriesImageModel();
+        $this->CategoriesBannerImagesModel = new CategoriesBannerImagesModel();
 
     }
 
@@ -72,13 +75,24 @@ class CategoriesController extends ResourceController{
                                                  categories.created_at, categories.deleted_at,
                                                  categoriesimages.image')
                       ->join('categoriesimages','categories.id = categoriesimages.id_categories')
-                      ->where('categories.id', $id);
+                      ->where('categories.id', $id)
+                      ->where('categories.deleted_at', NULL);
 
         $category = $query->get()->getResult();
 
         if($category){
 
-            $response = array("status" => 200, "message" => "Category Found", "data" => $category);
+            $queryImageBanne = $this->CategoriesBannerImagesModel->select('id, image')
+                                                                 ->where('id_categories', $id)
+                                                                 ->where('deleted_at', NULL)
+                                                                 ->get()
+                                                                 ->getResult();
+
+                                                                 
+            $arrayCategories = array("category"     => $category,
+                                    "imageBanners" => $queryImageBanne);
+
+            $response = array("status" => 200, "message" => "Category Found", "data" => $arrayCategories);
 
         }else{
             
@@ -93,8 +107,9 @@ class CategoriesController extends ResourceController{
 
     public function createCategory(){
         
-        $image    = $this->request->getFile('image');
-        $keywords = $this->request->getPost("keywords");
+        $imageBanner = $this->request->getFileMultiple('imageBanner');
+        $image       = $this->request->getFile('image');
+        $keywords    = $this->request->getPost("keywords");
 
         $dataCategory = array("id_user"     => 1,
                               "name"        => $this->request->getPost("name"),
@@ -126,10 +141,18 @@ class CategoriesController extends ResourceController{
 
             if($queryCategoryImage){
 
+                if($imageBanner != null){
+
+                    foreach ($imageBanner as $file) {
+                        $queryCategoryImageBanner = $this->saveCategoryImage($newId, $file, $keywords, "banner");
+                    }
+
+                }
+
                 $response = [
-                    'status'    => $queryCategoryImage['status'],
+                    'status'    => true,
                     'message'   => 'Category create successfull',
-                    'data'      => $queryCategoryImage['newId'],
+                    'data'      => $newId,
                     'code'      => 200
                 ];
 
@@ -220,8 +243,9 @@ class CategoriesController extends ResourceController{
 
 
     public function updateCategory($id = null){
-        
-        $image    = $this->request->getFile('image');
+
+        $imageBanner = $this->request->getFileMultiple('imageBanner');
+        $image       = $this->request->getFile('image');
 
         if($image == null){
 
@@ -251,9 +275,17 @@ class CategoriesController extends ResourceController{
                 $queryCategoryImage = $this->updateCategoryImage($id, $image, $keywords);
     
                 if($queryCategoryImage){
-    
+                    
+                    if($imageBanner != null){
+                        
+                        foreach ($imageBanner as $file) {
+                            $queryCategoryImageBanner = $this->saveCategoryImage($id, $file, $keywords, "banner");
+                        }
+
+                    }
+        
                     $response = [
-                        'status'    => $queryCategoryImage['status'],
+                        'status'    => true,
                         'message'   => 'Category update successfull',
                         'data'      => ""
                     ];
@@ -286,7 +318,7 @@ class CategoriesController extends ResourceController{
     }
 
 
-    public function saveCategoryImage($id_categories = null, $image = null, $keywords = ""){
+    public function saveCategoryImage($id_categories = null, $image = null, $keywords = "", $banner=""){
         // Obtener el archivo
         $image = $image;
     
@@ -296,10 +328,12 @@ class CategoriesController extends ResourceController{
             $validated = $this->validate([
                 'image' => [
                     'uploaded[image]',
-                    'mime_in[image,image/jpg,image/jpeg,image/gif,image/png]',
+                    'mime_in[image,image/jpg, image/jpeg, image/gif, image/png, image/webp]',
                     'max_size[image,2048]', // Tamaño máximo de 2MB
                 ],
             ]);
+
+            $validated = true;
     
             if ($validated) {
                 // Generar un nombre único para la imagen
@@ -307,20 +341,35 @@ class CategoriesController extends ResourceController{
                 $newName = $originalName.'_'.$image->getRandomName();
     
                 // Mover la imagen a la carpeta 'asset/image'
-                $image->move(ROOTPATH . 'public/assets/img/categories/', $newName);
-    
+                $banner == "" ? $image->move(ROOTPATH . 'public/assets/img/categories/', $newName) : $image->move(ROOTPATH . 'public/assets/img/categories/banner/', $newName);
+            
+ 
+            
                 // Preparar los datos para guardar en la base de datos
                 $dataCategoryImage = [
                     'id_categories' => $id_categories,
-                    'image'         => '/assets/img/categories/'.$newName,
+                    'image'         => $banner === "" 
+                                        ? '/assets/img/categories/'.$newName 
+                                        : '/assets/img/categories/banner/'.$newName,
                     'keywords'      => $keywords,
                 ];
     
                 // Insertar los datos en la base de datos
-                $this->CategoriesImageModel->insert($dataCategoryImage);
-               
-                $newId        = $this->CategoriesImageModel->insertID();
-                $dataResponse = array("status" => true, "newId" => $newId, "code" => 200);
+                if($banner == ""){
+
+                    $this->CategoriesImageModel->insert($dataCategoryImage);
+                    $newId        = $this->CategoriesImageModel->insertID();
+                    $dataResponse = array("status" => true, "newId" => $newId, "code" => 200);
+
+                }else{
+
+                    $this->CategoriesBannerImagesModel->insert($dataCategoryImage);
+                    $newId        = $this->CategoriesBannerImagesModel->insertID();
+                    $dataResponse = array("status" => true, "newId" => $newId, "code" => 200);
+
+                }
+
+            
 
                 return $dataResponse;
                
@@ -354,7 +403,7 @@ class CategoriesController extends ResourceController{
                         'max_size[image,2048]', // Tamaño máximo de 2MB
                     ],
                 ]);
-        
+                $validated = true;
                 if ($validated) {
                     // Generar un nombre único para la imagen
                     $originalName = pathinfo($image->getName(), PATHINFO_FILENAME);
@@ -486,19 +535,29 @@ class CategoriesController extends ResourceController{
 
                 if($queryDeleteCategoryImage){
 
-                    $queryDeleteCategory = $this->categoriesModel->where("id",$id)->delete();
+                    $responseBannerImagesModel = $this->CategoriesBannerImagesModel->where("id_categories",$id)->delete();
+                    
+                    if($responseBannerImagesModel){
 
-                    if($queryDeleteCategory){
+                        $queryDeleteCategory = $this->categoriesModel->where("id",$id)->delete();
 
-                        $response = array("status" => true, "message" => "Category and Category Image delete successfull", "data" => "", "code" => 200);
-                        return $this->respond($response);
-
+                        if($queryDeleteCategory){
+    
+                            $response = array("status" => true, "message" => "Category and Category Image delete successfull", "data" => "", "code" => 200);
+                            return $this->respond($response);
+    
+                        }else{
+    
+                            $response = array("status" => true, "message" => "Error Category not delete", "data" => "", "code" => 404);
+                            return $this->respond($response); 
+    
+                        }
+                        
                     }else{
-
-                        $response = array("status" => true, "message" => "Error Category not delete", "data" => "", "code" => 404);
-                        return $this->respond($response); 
-
+                        $response = array("status" => true, "message" => "Error responseBannerImagesModel not delete", "data" => "", "code" => 404);
+                        return $this->respond($response);  
                     }
+                    
 
                 }else{
 
@@ -520,6 +579,39 @@ class CategoriesController extends ResourceController{
             return $this->respond($response);
 
         }
+
+    }
+
+    public function deleteImageBannerCategory($id = null){
+
+        $queryValidate = $this->CategoriesBannerImagesModel->where("id", $id)->first();
+
+        if($queryValidate){
+
+            $response = $this->CategoriesBannerImagesModel->where("id",$id)->delete();
+
+            if($response){
+
+                $response = array("status" => true, "message" => "Banner Image delete successfull", "data" => "", "code" => 200);
+                return $this->respond($response);
+
+            }else{
+
+                $response = array("status" => true, "message" => "Error Banner not delete", "data" => "", "code" => 404);
+                return $this->respond($response); 
+
+            }
+
+        }else{
+
+            $response = array("status" => true, "message" => "Error Banner Image not delete", "data" => "", "code" => 404);
+            return $this->respond($response); 
+
+        }
+
+           
+
+        
 
     }
 

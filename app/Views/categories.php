@@ -37,6 +37,122 @@ $globalCounter = 0;
 	    	<!--=====================================
 			Layout Categories
 			======================================--> 
+            <div class="row mb-3">
+            	<!--=====================================
+                BANNER Categories
+                ======================================--> 
+                <?php if(count($bannerImg) > 0){ ?>
+
+                    <div class="col-lg-6">
+
+                        <div class="ps-block__slider">
+
+                            <div class="ps-carousel--product-box owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="7000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="500" data-owl-mousedrag="off">
+
+                            <?php 
+                                foreach($bannerImg as $key => $value){
+                                    echo '<a href="#"><img src="'.$value->image.'" alt=""></a>';
+                                } 
+                            ?>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                <?php }; ?>
+
+                <!--=====================================
+                BRANDS IMAGES Categories
+                ======================================--> 
+                <div class="col-lg-6">
+
+                    <div>
+
+                        <h3 class="mt-3 mb-3" style="font-weight: 400; font-size: 24px; color: #000;">Busca por marcas</h3>
+
+                        <nav class="brands">
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/motorola-1.svg" alt="">
+                                <p>Motorola</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/vivo-1.svg" alt="">
+                                <p>VIVO</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/zte-1.svg" alt="">
+                                <p>ZTE</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/iphone-1.svg" alt="">
+                                <p>IPHONE</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/samsung-1.svg" alt="">
+                                <p>SAMSUNG</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/honor-1.svg" alt="">
+                                <p>HONOR</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/xiaomi-logo-33.svg" alt="">
+                                <p>XIAOMI</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2024/marcas/oppo/v2/LOGO-OPPO-150px-x-150px.svg" alt="">
+                                <p>OPPO</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/tecno-1.svg" alt="">
+                                <p>TECNO</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/realme-2.svg" alt="">
+                                <p>REALME</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/kalley-1.svg" alt="">
+                                <p>KELLEY</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/huawei-1.svg" alt="">
+                                <p>HUAWEI</p>
+                            </a>
+
+                            
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/tcl-1.svg" alt="">
+                                <p>TCL</p>
+                            </a>
+
+                            <a class="brand-logo">
+                                <img src="https://media.aws.alkomprar.com/ymarketingcolcomercio/Alkosto/2023/celulares/primer-nivel/marcas/logo-infinix.svg" alt="">
+                                <p>INFINIX</p>
+                            </a>
+
+                        </nav>
+
+                        <p class="mt-3 mb-3 text-center">Échale un vistazo a nuestros últimos lanzamientos</p>
+                    
+                    </div>
+
+                </div>
+
+            </div>
 
 		    <div class="ps-layout--shop">
 	        
@@ -75,8 +191,10 @@ $globalCounter = 0;
     							======================================--> 
                                 <?php
 
-                                     foreach($products as $key => $product){
+                                     foreach($productsCategory as $key => $product){
+
                                         $uniqueId = $globalCounter++;
+                                        
                                         echo '<div class="ps-product">
 
                                         <div class="ps-product__thumbnail">
@@ -102,8 +220,8 @@ $globalCounter = 0;
                                                 </li>
     
                                                 <li>
-                                                      <a    id="heart-icon-'.$product->productoid.$uniqueId.'"
-                                                            onClick="addHeart('.$product->productoid.','.$uniqueId.');"
+                                                      <a    id="heart-icon-'.$product->id.$uniqueId.'"
+                                                            onClick="addHeart('.$product->id.','.$uniqueId.');"
                                                             data-toggle="tooltip" 
                                                             data-placement="top" 
                                                             title="Add to Whishlist 1">
@@ -112,7 +230,7 @@ $globalCounter = 0;
                                                      
                                                 </li>     
                                                 
-                                                <li id="loading-icon-'.$product->productoid.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
+                                                <li id="loading-icon-'.$product->id.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
                                                     <img src="'.base_url().'assets/img/ajax_clock_small.gif'.'" alt="" style="max-width:100%; max-height:100%;">
                                                 </li>
     

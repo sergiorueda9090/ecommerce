@@ -3,13 +3,16 @@
 namespace App\Controllers;
 
 use App\Models\CategoriesModel;
+use App\Models\SubCategoriesModel;
 
 class SubCategoriesController extends BaseController{
 
     private $CategoriesModel;
+    private $subCategoryModel;
 
     public function __construct(){
         $this->CategoriesModel = new CategoriesModel();
+        $this->subCategoryModel = new SubCategoriesModel();
     }
 
     public function index($subcategory){
@@ -27,10 +30,10 @@ class SubCategoriesController extends BaseController{
            'categories'    => $categories,
            'header'        => $header,
            'footer'        => $footer,
-           'products'      => $this->productsInfo($subcategory),
+           'products'      => $this->showProductsBySubcategory($subcategory),
            'category'      => $subcategory];
 
-        return view('categories',$data);
+        return view('subcategories',$data);
 
     }
 
@@ -59,4 +62,56 @@ class SubCategoriesController extends BaseController{
        return $productImages;
     }
 
+    public function showProductsBySubcategory($subcategory=null){
+        /*
+            SELECT 
+                p.id AS product_id,
+                sc.id AS subcategory_id,
+                sc.name AS subcategory_name,
+                p.name AS product_name,
+                MIN(pi.image) AS product_image -- Usamos MIN para obtener solo una imagen por producto
+            FROM 
+                subcategories sc
+            INNER JOIN 
+                products p ON sc.id = p.id_subcategories
+            INNER JOIN 
+                productimages pi ON pi.id_product = p.id
+            WHERE 
+                sc.name = "Smartphones"
+            GROUP BY 
+                p.id;
+        */
+        $productsBySubcategory = $this->subCategoryModel->select('p.id AS productoid, p.slug, p.keywords, p.sale_price, 
+                                                                  p.description, p.discount, 
+                                                                  subcategories.id AS idSc, subcategories.name AS nameSc, p.name, MIN(pi.image) AS image')
+                                                            ->join('products p', 'subcategories.id = p.id_subcategories')
+                                                            ->join('productimages pi', 'pi.id_product = p.id')
+                                                            ->where('subcategories.name', $subcategory)
+                                                            ->where('subcategories.deleted_at', NULL)
+                                                            ->groupBy('p.id')
+                                                            ->get()
+                                                            ->getResult();
+        return $productsBySubcategory;
+
+    }
+
+    public function showSubcategoriesByCategory($idCategory = null){
+
+        if($idCategory != null){
+
+            $response = $this->subCategoryModel->select("id, name, slug")
+                                               ->where("id_categories", $idCategory)
+                                               ->where("deleted_at",NULL)
+                                               ->get()
+                                               ->getResult();
+            
+        }else{
+
+            $response = [];
+
+        }
+
+        return $response;
+
+    }
 }

@@ -13,7 +13,7 @@ class ProductsModel extends Model{
     protected $returnType     = 'object';//array;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = ['id_subcategories','id_categories','id_user','name','slug','description','details','specifications','keywords','purchase_price','percentage_profit','sale_price','discount'];
+    protected $allowedFields = ['id_subcategories','id_categories','id_user','id_brand','id_gender','name','slug','description','details','specifications','keywords','purchase_price','percentage_profit','sale_price','discount'];
 
     protected bool $allowEmptyInserts = false;
 

@@ -13,7 +13,7 @@ class ProductColorModel extends Model{
     protected $returnType     = 'object';//array;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = ['id_productsize','color'];
+    protected $allowedFields = ['id_productsize','color', 'id_product'];
 
     protected bool $allowEmptyInserts = false;
 

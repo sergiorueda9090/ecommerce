@@ -13,7 +13,7 @@ class ProductsImageModel extends Model{
     protected $returnType     = 'object';//array;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = ['id_product','image', 'keywords'];
+    protected $allowedFields = ['id_product','id_color','image', 'keywords'];
 
     protected bool $allowEmptyInserts = false;
 

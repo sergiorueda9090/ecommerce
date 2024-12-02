@@ -35,18 +35,42 @@ class CategoriesController extends BaseController{
 
     public function category($category){
        
-        $homeController = new Home();
+        $homeController     = new Home(); 
+        $productsByCategory = new ProductsController();
+        $imageProdCtr       = new ProductImagesControlles();
+        $banneImages        = new CategoriesBannerController();
+        $subcategories      = new SubCategoriesController();
+
         $pageInfo       = $homeController->pageInfo();
         $categories     = $homeController->listCategories();
         $footer         = $homeController->footer();
         $header         = $homeController->header();
+        $products       =  $this->productsInfo($category);
+        $bannerImg      = $banneImages->showBannerByIdCategory($products[0]->id);
+        $subcategories  = $subcategories->showSubcategoriesByCategory($products[0]->id);
+        $productsCategory = $productsByCategory->showProductByCategory($products[0]->id);
+
+        foreach ($productsCategory as $key => $value) {
+            // Obtén la imagen del producto
+            $imageProduct = $imageProdCtr->showImagesByProduct($value->id);
+        
+            // Si la imagen existe, la agregamos al producto
+            if (!empty($imageProduct)) {
+                $value->image = $imageProduct[0]->image; // Agrega la URL o el campo que necesites
+            } else {
+                $value->image = null; // Si no hay imagen, agrega un valor por defecto
+            }
+        }
         
         $data = [
            'pageInfo'      => $pageInfo,
            'categories'    => $categories,
            'header'        => $header,
            'footer'        => $footer,
-           'products'      => $this->productsInfo($category),
+           'bannerImg'     => $bannerImg,
+           'products'      => $products,
+           'subcategories' => $subcategories,
+           'productsCategory' => $productsCategory,
            'category'      => $category];
 
         return view('categories',$data);
@@ -68,6 +92,7 @@ class CategoriesController extends BaseController{
                                                     ->join('subcategories s' , 's.id_categories      = categories.id', 'inner')
                                                     ->join('products      p' , 'p.id_subcategories   = s.id', 'inner')
                                                     ->join('productimages pi', 'pi.id_product        = p.id', 'inner')
+                                                    ->where('p.deleted_at', NULL)
                                                     ->where('categories.slug',$category)
                                                     ->get()
                                                     ->getResult();
@@ -85,6 +110,7 @@ class CategoriesController extends BaseController{
                                                     ->join('subcategories s' , 's.id_categories      = categories.id', 'inner')
                                                     ->join('products      p' , 'p.id_subcategories   = s.id', 'inner')
                                                     ->join('productimages pi', 'pi.id_product        = p.id', 'inner')
+                                                    ->where('p.deleted_at', NULL)
                                                     ->groupBy('s.id')
                                                     ->get()
                                                     ->getResult();

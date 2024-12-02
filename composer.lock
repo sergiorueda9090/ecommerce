@@ -2023,12 +2023,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/resource-operations.git",
-                "reference": "05d5692a7993ecccd56a03e40cd7e5b09b1de"
+                "reference": "05d5692a7993ecccd56a03e40cd7e5b09b1d404e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/05d5692a7993ecccd56a03e40cd7e5b09b1de",
-                "reference": "05d5692a7993ecccd56a03e40cd7e5b09b1de",
+                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/05d5692a7993ecccd56a03e40cd7e5b09b1d404e",
+                "reference": "05d5692a7993ecccd56a03e40cd7e5b09b1d404e",
                 "shasum": ""
             },
             "require": {
@@ -2300,12 +2300,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.4 || ^8.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }

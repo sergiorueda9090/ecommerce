@@ -24,9 +24,16 @@ class ProductColorController extends BaseController{
 
             if(isset($json->idSize) && !empty($json->idSize) ){
                 
-                $idSize = $json->idSize;
+                $idSize         = $json->idSize;
+                $id_attribute   = $json->id_attribute;
+                $name           = $json->name;
                 
-                $requestColor = $this->ProductColorModel->where('id_productsize', $idSize)->get()->getResult();
+                $requestColor = $this->ProductColorModel->select('productcolor.id, productcolor.id_productsize, productcolor.color, valueattributes.id_product')
+                                                        ->join("valueattributes","productcolor.id_productsize = valueattributes.id")
+                                                        ->where('id_productattributes', $id_attribute)
+                                                        ->where('valueattributes.name', $name)                                                
+                                                        ->get()
+                                                        ->getResult();
                 
                 if ($requestColor) {
 

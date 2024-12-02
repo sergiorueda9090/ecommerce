@@ -13,7 +13,7 @@ $routes->get('/category/(:segment)',    'CategoriesController::category/$1');
 
 $routes->get('/subcategory/(:segment)', 'SubCategoriesController::index/$1');
 
-$routes->get('/product/(:segment)',     'ProductsController::index/$1');
+$routes->get('/product/(:segment)',     'ProductsController::showProduct/$1');
 $routes->post('/colors',                'ProductColorController::colors');
 $routes->post('/quantity',              'ProductQuantityColorController::quantity');
 
@@ -100,6 +100,7 @@ $routes->post('api/createCategory',         'Api\CategoriesController::createCat
 $routes->post('api/createCategoryMany',     'Api\CategoriesController::createCategoryMany');
 $routes->post('api/updateCategory/(:num)',  'Api\CategoriesController::updateCategory/$1');
 $routes->delete('api/deleteCategory/(:num)','Api\CategoriesController::deleteCategory/$1');
+$routes->delete('api/deleteImageBannerCategory/(:num)','Api\CategoriesController::deleteImageBannerCategory/$1');
 $routes->post('api/saveCategoryImage',      'Api\CategoriesController::saveCategoryImage');
 $routes->get('api/listAllOptionsCategories','Api\CategoriesController::options');
 
@@ -116,17 +117,44 @@ $routes->delete('api/deleteSubCategory/(:num)', 'Api\SubCategoriesController::de
 $routes->get('api/listAllOptionsSubCategories/(:num)', 'Api\SubCategoriesController::options/$1');
 
 /* ============================================
+    START APIS BRANDS
+=============================================== */
+$routes->post('api/createBrands',         'Api\BrandsController::create');
+$routes->post('api/createManyBrands',     'Api\BrandsController::createMany');
+$routes->get('api/listAllBrands',         'Api\BrandsController::listAll');
+$routes->get('api/showBrands/(:num)',     'Api\BrandsController::show/$1');
+$routes->post('api/updateBrands/(:num)',  'Api\BrandsController::update/$1');
+$routes->delete('api/deleteBrands/(:num)','Api\BrandsController::delete/$1');
+$routes->get('api/getBrandsByCategory/(:num)/(:num)','Api\BrandsController::getBrandsByCategory/$1/$2');
+
+
+
+/* ============================================
+    START APIS GENDERS
+=============================================== */
+$routes->post('api/createGender',         'Api\GendersController::create');
+$routes->get('api/listAllGenders',        'Api\GendersController::listAll');
+$routes->get('api/showGender/(:num)',     'Api\GendersController::show/$1');
+$routes->post('api/updateGender/(:num)',  'Api\GendersController::update/$1');
+$routes->delete('api/deleteGender/(:num)','Api\GendersController::delete/$1');
+$routes->get('api/getGenderByCategory/(:num)/(:num)','Api\GendersController::getGenderByCategory/$1/$2');
+
+/* ============================================
     START APIS PRODUCTS
 =============================================== */
-$routes->post('api/createProduct',          'Api\ProductsController::create');
-$routes->post('api/updateProduct/(:num)',   'Api\ProductsController::updateProduct/$1');
-$routes->get('api/listAllProduct',          'Api\ProductsController::listAll');
-$routes->get('api/showProduct/(:num)',      'Api\ProductsController::show/$1');
-$routes->get('api/showColor/(:num)',        'Api\ProductsController::showColor/$1');
-$routes->get('api/showQuantity/(:num)',     'Api\ProductsController::showQuantity/$1');
-$routes->delete('api/deletesizeproduct/(:num)/(:num)/(:num)', 'Api\ProductsController::deleteSize/$1/$2/$3');
-$routes->delete('api/deleteimageproduct/(:num)', 'Api\ProductsController::deleteImage/$1');
-$routes->delete('api/deleteproduct/(:num)',        'Api\ProductsController::deleteProduct/$1');
+$routes->post('api/createProduct',                          'Api\ProductsController::create');
+$routes->post('api/updateProduct/(:num)',                   'Api\ProductsController::updateProduct/$1');
+$routes->post('api/updateOnlyProduct/(:num)',               'Api\ProductsController::updateOnlyProduct/$1');
+$routes->post('api/updateAddValueattributes/(:num)/(:num)', 'Api\ProductsController::updateAddValueattributes/$1/$2');
+$routes->post('api/updateDescriptionProduct/(:num)',        'Api\ProductsController::updateDescriptionProduct/$1');
+$routes->post('api/updateDetailsProduct/(:num)',            'Api\ProductsController::updateDetailsProduct/$1');
+$routes->get('api/listAllProduct',           'Api\ProductsController::listAll');
+$routes->get('api/showProduct/(:num)',       'Api\ProductsController::show/$1');
+$routes->get('api/showColor/(:num)',         'Api\ProductsController::showColor/$1');
+$routes->get('api/showQuantity/(:num)',      'Api\ProductsController::showQuantity/$1');
+$routes->delete('api/deletesizeproduct/(:num)/(:num)/(:num)',   'Api\ProductsController::deleteSize/$1/$2/$3');
+$routes->delete('api/deleteimageproduct/(:num)',                'Api\ProductsController::deleteImage/$1');
+$routes->delete('api/deleteproduct/(:num)',                     'Api\ProductsController::deleteProduct/$1');
 
 
 /* ============================================

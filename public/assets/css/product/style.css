@@ -1,0 +1,95 @@
+:root {
+    --new-pdp-border-sizes: #eb5b25;              /* Color del borde */
+    --new-pdp-border-sizes-bg: rgba(235, 91, 37, 0.1); /* Color de fondo */
+}
+
+.ps-variant.ps-variant--size{
+    border-color: #fcb800;
+    border-radius: 10px;
+
+}
+.ps-variant {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;                /* Espacio adicional */
+    margin: 5px;                       /* Espaciado entre las variantes */
+    background-color: var(--new-pdp-border-sizes-bg);  /* Color de fondo */
+    border: 1px solid var(--new-pdp-border-sizes);      /* Color y grosor del borde */
+    border-radius: 5px;                /* Bordes redondeados */
+    cursor: pointer;                   /* Cursor de puntero */
+    min-width: 65px;                   /* Ancho mínimo para mantener el tamaño */
+    white-space: nowrap;               /* Evita que el texto se divida en varias líneas */
+    font-size: 14px;                   /* Tamaño de texto */
+    transition: transform 0.2s;        /* Efecto de transformación suave */
+}
+
+.ps-variant__tooltip {
+display: none;                     /* Oculta el tooltip por defecto */
+position: absolute;
+background-color: #333;
+color: #fff;
+padding: 5px;
+border-radius: 3px;
+font-size: 12px;
+white-space: nowrap;
+z-index: 10;
+}
+
+.ps-variant:hover .ps-variant__tooltip {
+display: block;                    /* Muestra el tooltip al hacer hover */
+}
+
+.ps-variant:hover {
+transform: scale(1.05);            /* Escala ligera al hacer hover */
+}
+
+.ps-variant__size {
+font-weight: bold;                 /* Negrita para mejor visibilidad */
+}
+
+
+/*COLOR*/
+.color-selector {
+    display: flex;                     /* Flexbox para alinear los elementos uno al lado del otro */
+    justify-content: flex-start;       /* Alineación hacia la izquierda para más cohesión */
+    gap: 5px;                          /* Espaciado reducido entre los elementos */
+    flex-wrap: wrap;                   /* Permite que los elementos se ajusten cuando no haya espacio */
+}
+
+.color-option {
+    width: 30px;                       /* Tamaño del círculo de color */
+    height: 30px;                      /* Alto del círculo de color */
+    border-radius: 50%;                /* Hacerlo redondeado */
+    border: 2px solid #ccc;            /* Borde sutil */
+    cursor: pointer;                   /* Cursor de puntero */
+    position: relative;                /* Necesario para el tooltip */
+    transition: transform 0.2s ease, border-color 0.2s ease; /* Animación al hacer hover */
+}
+
+.color-option:hover {
+    transform: scale(1.1);             /* Agrandar ligeramente el color al pasar el mouse */
+    border-color: #fcb800;             /* Cambiar el color del borde */
+}
+
+.color-option[title]:hover::after {
+    content: attr(title);              /* Muestra el valor del atributo title */
+    position: absolute;
+    top: -30px;                        /* Coloca el tooltip por encima */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro y semitransparente */
+    color: #fff;                       /* Texto blanco */
+    padding: 5px;                       /* Espaciado */
+    border-radius: 4px;                 /* Bordes redondeados */
+    font-size: 12px;                    /* Tamaño de la fuente */
+    white-space: nowrap;                /* Evitar que el texto se divida en varias líneas */
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.color-option[title]:not(:hover)::after {
+    visibility: hidden;
+    opacity: 0;
+}

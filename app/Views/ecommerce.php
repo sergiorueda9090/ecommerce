@@ -810,7 +810,7 @@
                             foreach($subcategoriesAll as $key => $subcategories){
                                 
                                 if($categories->id == $subcategories->id_categories){
-                                   echo '<li><a href="' . base_url() .'category/'. $subcategories->slug.'">'. $subcategories->name.'</a></li>';
+                                   echo '<li><a href="' . base_url() .'subcategory/'. $subcategories->slug.'">'. $subcategories->name.'</a></li>';
                                  
                                 }
                             }

@@ -94,7 +94,7 @@
 
                                 </figure>
 
-                                <div class="ps-product__variants" data-item="4" data-md="4" data-sm="4" data-arrow="false">
+                                <div class="ps-product__variants" data-item="6" data-md="6" data-sm="6" data-arrow="false">
 
                                     <?php
 
@@ -167,37 +167,58 @@
 
                                 <div class="ps-product__variations">
 
-                                    <figure>
-                                        <figcaption>Size <strong> Choose an option</strong></figcaption>
-                                       
-                                        <?php
-                                            foreach($productSize as $key => $value){
-                                                echo '<div class="ps-variant ps-variant--size" 
-                                                            onClick="callColor('.$value->id.');"
-                                                            id="checkbox_'.trim($value->id).'">
-                                                            <span class="ps-variant__tooltip">'.$value->size.'</span>
-                                                            <span class="ps-variant__size">'.$value->size.'</span>
-                                                    </div>';
-                                            }
-                                        ?>
-                                    </figure>
+                                    <div class="row">
 
-                                    
-                                    <div id="loaderColors" class="loaderColors" style="display:none;">
-                                            <div class="loaderColors-inner">
-                                                <div class="loaderColors-text">Cargando...</div>
+                                        <div class="col-lg-6">
+                                            
+                                            <figure>
+                                                <figcaption><?php echo $product->attribute_name; ?> <strong> Choose an option</strong></figcaption>
+                                                
+                                                <?php
+                                                    foreach($valueattributes as $key => $value){
+                                                        echo '<div class="ps-variant ps-variant--size" 
+                                                                    onClick="callColor(' . $value->id . ', ' . $product->id_attribute . ', \'' . addslashes($value->name) . '\');"
+                                                                    id="checkbox_'.trim($value->id).'">
+                                                                    <span class="ps-variant__tooltip">'.$value->name.'</span>
+                                                                    <span class="ps-variant__size">'.$value->name.'</span>
+                                                            </div>';
+                                                    }
+                                                ?>
+                                            </figure>
+
+                                            
+                                            <div id="loaderColors" class="loaderColors" style="display:none;">
+                                                <div class="loaderColors-inner">
+                                                    <div class="loaderColors-text">  
+                                                        <img src="http://ecommerce/assets/img/ajax_clock_small.gif" alt="">Cargando...
+                                                    </div>
+                                                </div>
                                             </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+
+                                            <figure class="figureColors">
+                                
+                                                <figcaption>Color: <strong> Choose an option</strong></figcaption>
+                                                
+                                                <div class="color-selector">
+                                                    <img src="http://ecommerce/assets/img/ajax_clock_small.gif" alt="" class="imgLoad" style="display:none;">   
+                                                    <?php
+                                                        foreach($productcolors as $key => $value){
+                                                            echo '<div class="color-option" style="background-color: '.$value->color.'; " title="'.$value->color.'"></div>';
+                                                        }
+                                                    ?>
+                                                </div>
+
+                                            </figure>
+
+                                        </div>
                                     </div>
-
-                                    <figure class="figureColors">
-                                    
-                                       <figcaption>Color: <strong> Choose an option</strong></figcaption>
-
-                                    </figure>
 
                                 </div>
 
-                                <div class="ps-product__countdown">
+                                <!--<div class="ps-product__countdown">
 
                                     <figure>
 
@@ -239,19 +260,22 @@
 
                                     </figure>
 
-                                </div>
-
+                                </div>-->
+                                
+                                
+                                <figcaption class="Quantity">¡Últimas unidades disponibles!</figcaption>
+                                
                                 <div class="ps-product__shopping">
-
+                                                        
                                     <figure>
 
                                         <div id="loaderQuantity" class="loaderQuantity" style="display:none;">
                                             <div class="loaderQuantity-inner">
-                                                <div class="loaderQuantity-text">Cargando...</div>
+                                                <div class="loaderQuantity-text">
+                                                    <img src="http://ecommerce/assets/img/ajax_clock_small.gif" alt=""> Cargando...
+                                                </div>
                                             </div>
                                         </div>
-
-                                        <figcaption class="Quantity">Quantity </figcaption>
 
                                         <div class="form-group--number" id="myDiv">
 
@@ -426,17 +450,29 @@
                                 </div>
 
                                 <div class="ps-tab" id="tab-2">
-
                                     <div class="table-responsive">
+                                        <?php
+                                            $specifications = json_decode($product->specifications, true); // Decodificar JSON a array asociativo
 
-                                        <table class="table table-bordered ps-table ps-table--specification">
+                                            foreach ($specifications as $section) {
+                                                echo '<table class="table table-bordered ps-table ps-table--specification">';
+                                                echo '<thead>';
+                                                echo '<tr><th colspan="2">' . $section['title'] . '</th></tr>'; // Título de la sección
+                                                echo '</thead>';
+                                                echo '<tbody>';
 
-                                            <?php echo $product->specifications; ?>
+                                                foreach ($section['rows'] as $row) {
+                                                    echo '<tr>';
+                                                    echo '<td>' . $row['label'] . '</td>';  // Etiqueta
+                                                    echo '<td>' . $row['value'] . '</td>';  // Valor
+                                                    echo '</tr>';
+                                                }
 
-                                        </table>
-
+                                                echo '</tbody>';
+                                                echo '</table>';
+                                            }
+                                        ?>
                                     </div>
-
                                 </div>
 
                                 <div class="ps-tab" id="tab-3">

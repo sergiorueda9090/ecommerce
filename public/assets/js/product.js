@@ -12,9 +12,11 @@ $(document).ready(function(){
 
 
 
-function callColor(idSize) {
+function callColor(idSize, id_attribute, name) {
+
     var div = document.getElementById('checkbox_' + idSize);
     if (div) {
+        console.log("ingresa");
         // Check if the element is already shaded
         var isShaded = div.classList.contains('shaded');
         
@@ -30,9 +32,10 @@ function callColor(idSize) {
         
         // Check if the shading class was added (i.e., the element is being shaded)
         if (!isShaded) {
+            $(".figureColors").css('display', 'none');
             $('.loaderColors').css('display', 'block');
             // Send the request only if the element is being shaded
-            sendRequest(idSize);
+            sendRequest(idSize, id_attribute, name);
         }else{
             
             // Selecciona el elemento contenedor donde se agregarán los colores
@@ -58,12 +61,12 @@ function callColor(idSize) {
 }
 
 
-function sendRequest(idSize){
+function sendRequest(idSize, id_attribute, name){
     id_size = idSize;
     //let domain = window.location.hostname;
     let url = `${BASE_URL}colors`;
 
-    let data = { idSize: idSize };
+    let data = { idSize: idSize, id_attribute:id_attribute, name:name };
 
     fetch(url, {
         method: "POST",
@@ -77,10 +80,12 @@ function sendRequest(idSize){
     .then((response) => response.status == 200 ? showColors(response.colors) : showFailedColors(response.colors));
 }
 
-function showColors(colors){
+function showColors(colors) {
     // Oculta el loader de colores si está visible
-    $(".Quantity").html('Quantity ');
+    $(".Quantity").html('¡Últimas unidades disponibles!');
+    $(".figureColors").css('display', 'block');
     $('.loaderColors').css('display','none');
+    $(".quantity").val(0);
 
     // Selecciona el elemento contenedor donde se agregarán los colores
     const figureColorsElement = document.querySelector('.figureColors');
@@ -95,37 +100,31 @@ function showColors(colors){
     figcaptionElement.innerHTML = 'Color: <strong>Choose an option</strong>';
     figureColorsElement.appendChild(figcaptionElement);
 
+    // Crea un contenedor para las opciones de color
+    const colorSelectorDiv = document.createElement('div');
+    colorSelectorDiv.classList.add('color-selector');
+    console.log("colors ",colors);
     // Recorre la información de los colores y agrega el código HTML a '.figureColors'
     colors.forEach((color) => {
-        // Crea un nuevo elemento div
-        const div = document.createElement('div');
-        // Agrega las clases al nuevo elemento div
-        div.classList.add('ps-variant', 'ps-variant--image');
+        // Crea un nuevo elemento div para cada opción de color
+        const colorOptionDiv = document.createElement('div');
+        colorOptionDiv.classList.add('color-option');
 
-        // Agrega el atributo onClick que llama a la función cantidad(color.id)
-        div.setAttribute('onClick', `callQuantity(${color.id})`);
+        // Agrega el estilo de fondo dinámico y el atributo de título
+        colorOptionDiv.style.backgroundColor = color.color;
+        colorOptionDiv.title   = color.color;
+        colorOptionDiv.idColor = color.id;
 
-        // Crea un nuevo elemento span para el tooltip
-        const span = document.createElement('span');
-        // Agrega la clase al nuevo elemento span
-        span.classList.add('ps-variant__tooltip');
-        // Establece el texto del span como el color actual
-        span.textContent = color.color;
-        // Crea un nuevo elemento img
-        const img = document.createElement('img');
-        // Establece el atributo src de la imagen (aquí asumo una ruta estática)
-        img.setAttribute('src', `${BASE_URL}assets/img/products/detail/variants/small-1.jpg`);
-        
-        // Establece el atributo alt de la imagen
-        img.setAttribute('alt', '');
+        // Agrega el atributo onClick que llama a la función callQuantity(color.id)
+        colorOptionDiv.setAttribute('onClick', `callQuantity(${color.id}, '${color.color}', ${color.id_product})`);
 
-        // Agrega el span y la imagen al div
-        div.appendChild(span);
-        div.appendChild(img);
 
-        // Agrega el div al elemento con la clase '.figureColors'
-        figureColorsElement.appendChild(div);
+        // Agrega el colorOptionDiv al contenedor de selector de color
+        colorSelectorDiv.appendChild(colorOptionDiv);
     });
+
+    // Agrega el contenedor de opciones de color a figureColorsElement
+    figureColorsElement.appendChild(colorSelectorDiv);
 }
 
 
@@ -138,17 +137,17 @@ function showFailed(message){
     alert(message);
 }
 
-function callQuantity(idquantity){
+function callQuantity(idquantity, color, id_product){
     id_color =  idquantity;
     $('.loaderQuantity').css('display','block');
-    sendRequestQuantity(idquantity);
+    sendRequestQuantity(idquantity, color, id_product);
 }
 
-function sendRequestQuantity(idquantity){
+function sendRequestQuantity(idquantity, color, id_product){
 
     let url = `${BASE_URL}quantity`;
 
-    let data = { idquantity: idquantity };
+    let data = { idquantity: idquantity, color:color, id_product:id_product };
 
     fetch(url, {
         method: "POST",
@@ -159,13 +158,40 @@ function sendRequestQuantity(idquantity){
     })
     .then((res) => res.json())
     .catch((error) => console.error("Error:", error))
-    .then((response) => response.status == 200 ? showQuantity(response.data) : showFailedQuantity(response.data));
+    .then((response) => response.status == 200 ? showQuantity(response.data, response.images) : showFailedQuantity(response.data));
 }
 
-function showQuantity(data){
+function showQuantity(data, images){
+
+
+    // Verifica si se recibieron nuevas imágenes
+    if (images && images.length > 0) {
+        // Selecciona los contenedores de la galería y las variantes
+        const galleryContainer = $(".ps-product__gallery");
+        const variantsContainer = $(".ps-product__variants");
+
+        // Actualiza las imágenes de la galería
+        galleryContainer.find(".item").each((index, element) => {
+            // Reemplaza la imagen en cada item de la galería
+            if (images[index]) {
+                $(element).find("a img").attr("src", images[index].image);
+                $(element).find("a").attr("href", images[index].image);
+            }
+        });
+
+        // Actualiza las imágenes de las variantes
+        variantsContainer.find(".item").each((index, element) => {
+            // Reemplaza la imagen en cada item de las variantes
+            if (images[index]) {
+                $(element).find("img").attr("src", images[index].image);
+            }
+        });
+    }
+
     $(".quantity").val(0);
     $('.loaderQuantity').css('display','none');
-    $(".Quantity").html('Quantity '+'<span class="numberQuantity">'+data.count+'</span>');
+    $(".Quantity").html('<span>¡Últimas <strong class="numberQuantity" style="color: #669900;">' + data.count + '</strong> unidades disponibles! No te quedes sin la tuya.</span>');
+
 }
 
 function showFailedQuantity(data){
@@ -175,6 +201,9 @@ function showFailedQuantity(data){
 function plus(){
     let  quantity = Number($(".quantity").val());
     let  numberQuantity = Number($(".numberQuantity").text()); 
+    
+    console.log("numberQuantity ",numberQuantity);
+
     quantity = quantity + 1;
     if(quantity <= numberQuantity ){
         $(".quantity").val(Number(quantity));

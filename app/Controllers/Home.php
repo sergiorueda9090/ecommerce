@@ -48,7 +48,7 @@ class Home extends BaseController
         GROUP BY C.id;
     */
     public function index(){
-
+ 
         $sliderAll      = $this->sliderModel->findAll();
 
         $categoriesAll  = $this->CategoriesModel->select('categories.*, categoriesimages.image')

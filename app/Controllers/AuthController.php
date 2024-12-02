@@ -42,7 +42,7 @@ class AuthController extends BaseController
         ];
 
         $input = $this->getRequestInput($this->request);
-
+     
         if (!$this->validateRequest($input, $rules, $errors)) {
             return $this->getResponse($this->validator->getErrors(), ResponseInterface::HTTP_BAD_REQUEST);
         }
