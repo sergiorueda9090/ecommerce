@@ -46,9 +46,15 @@ class CategoriesController extends BaseController{
         $footer         = $homeController->footer();
         $header         = $homeController->header();
         $products       =  $this->productsInfo($category);
-        $bannerImg      = $banneImages->showBannerByIdCategory($products[0]->id);
-        $subcategories  = $subcategories->showSubcategoriesByCategory($products[0]->id);
-        $productsCategory = $productsByCategory->showProductByCategory($products[0]->id);
+        $bannerImg      = $banneImages->showCategoryBySlug($category);
+        $subcategories    = $subcategories->showSubcategoriesBySlug($category);
+
+        if($products){
+            $productsCategory = $productsByCategory->showProductByCategory($products[0]->id);    
+        }else{
+            $productsCategory   = [];
+        }
+
 
         foreach ($productsCategory as $key => $value) {
             // Obtén la imagen del producto

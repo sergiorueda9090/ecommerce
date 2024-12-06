@@ -105,6 +105,35 @@ class CategoriesController extends ResourceController{
 
     }
 
+    public function isUniqueSlug($slug = null){
+      
+        if($slug != null){
+
+            $query = $this->categoriesModel->where('slug', $slug)
+                                            ->where('deleted_at',NULL)
+                                            ->get()
+                                            ->getResult();
+
+            if($query){
+
+                $response = false;
+
+            }else{
+
+                $response = true;
+
+            }
+
+        }else{
+            
+            return false;
+
+        }
+
+
+        return $response;
+    }
+
     public function createCategory(){
         
         $imageBanner = $this->request->getFileMultiple('imageBanner');
@@ -124,6 +153,17 @@ class CategoriesController extends ResourceController{
 
             $response = array("status"  => false, 
                               "message" => "The fields are required. ", 
+                              "data"    => $responseValidate,
+                              "code"    => 500);
+
+            return $this->respond($response);
+
+        }
+
+        if($this->isUniqueSlug($this->request->getPost("slug")) != true){
+
+            $response = array("status"  => false, 
+                              "message" => "El slug ya está en uso y hace referencia a un registro existente con el mismo nombre. Si deseas usar este slug, primero elimina el registro actual.", 
                               "data"    => $responseValidate,
                               "code"    => 500);
 

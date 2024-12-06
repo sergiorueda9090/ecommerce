@@ -1,4 +1,21 @@
 <?php  echo $this->extend('template/layout'); ?>
+<style>
+    .search-container {
+      margin-bottom: 15px;
+    }
+    .filter-list {
+      list-style-type: none !important;
+      padding-left: 0 !important;
+    }
+    .filter-list li {
+      margin-bottom: 10px;
+    }
+
+    ul{
+        list-style-type: none;
+        padding: 0px
+    }
+  </style>
 <?php  echo $this->section("content"); ?>
 <?php 
 // Inicia un contador global
@@ -181,7 +198,7 @@ $globalCounter = 0;
                             </div>
 
                         </div>
-
+  
                         <div class="ps-block__content">
 
                             <div class="owl-slider" id="recommended1" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="6" data-owl-item-xs="2" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
@@ -282,8 +299,6 @@ $globalCounter = 0;
                                 
                                 ?>
                                 
-
-
                             </div>
 
                         </div>
@@ -298,7 +313,7 @@ $globalCounter = 0;
 
                         <div class="ps-block__header">
 
-                            <h3>Recommended Items</h3>
+                            <h3>Filtrar por</h3>
 
                             <div class="ps-block__navigation">
 
@@ -313,111 +328,149 @@ $globalCounter = 0;
                             </div>
 
                         </div>
+                        
+                  
 
-                        <div class="ps-block__content">
+                            <!--<div class="col-lg-2 p-0">
+                             
+                                <div class="mt-4">
+                                   
+                                    <div class="search-container">
+                                        <input type="text" id="searchInput" class="form-control" placeholder="Buscar marca..." onkeyup="filterBrands()">
+                                    </div>
 
-                            <div class="owl-slider" id="recommended" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="6" data-owl-item-xs="2" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+                                 
+                                    <ul id="brandList" class="filter-list" style="list-style-type: none !important; padding: 0;">
+                                        <?php
+                                            foreach($subcategories as $key => $value){
+                                                echo '
+                                                     <li style="display: flex; align-items: center; gap: 8px; margin: 5px 0;">
+                                                        <input style="margin: 0; width: 16px; height: 16px;" type="checkbox" id="brand1" value="'.$value->name.'">
+                                                        <label style="margin: 0; line-height: 1;" for="brand1">'.$value->name.'</label>
+                                                    </li>
+                                                ';
+                                            }
+                                        ?>
+                                    </ul>
 
-                                <!--=====================================
-    							Product
-    							======================================--> 
+                                    <div>
+                                        <button class="btn btn-block btn-primary">Buscar</button>
+                                    </div>
 
-                                <?php
-                                     foreach($products as $key => $product){
-                                        
-                                        $uniqueId = $globalCounter++;
+                                </div>
 
-                                        echo '<div class="ps-product">
+                            </div>-->
 
-                                        <div class="ps-product__thumbnail">
-    
-                                            <a href="'.base_url().'product/'.$product->slug.'">
-                                                <img src="'.base_url().$product->image.'" alt='.$product->keywords.'>
-                                            </a>
-    
-                                            <ul class="ps-product__actions">
-    
-                                                <li>
-                                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Cart">
-                                                        <i class="icon-bag2"></i>
-                                                    </a>
-                                                </li>
-    
-                                                <li>
-                                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Quick View">
-                                                        <i class="icon-eye"></i>
-                                                    </a>
-                                                </li>
-    
-                                                <li>
-                                                    <a  id="heart-icon-'.$product->productoid.$uniqueId.'"
-                                                        onClick="addHeart('.$product->productoid.','.$uniqueId.');"
-                                                        data-toggle="tooltip" 
-                                                        data-placement="top" 
-                                                        title="Add to Whishlist 2">
-                                                        <i class="icon-heart"></i>
-                                                    </a>
-                                                    
-                                                </li> 
-                                                
-                                                <li id="loading-icon-'.$product->productoid.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
-                                                    <img src="'.base_url().'assets/img/ajax_clock_small.gif'.'" alt="" style="max-width:100%; max-height:100%;">
-                                                </li>
-    
-                                            </ul>
-    
-                                        </div>
-    
-                                        <div class="ps-product__container">
-    
-                                            <a class="ps-product__vendor" href="#">Young Shop</a>
-    
-                                            <div class="ps-product__content">
-    
-                                                <a class="ps-product__title" href="'.base_url().'product/'.$product->slug.'">
-                                                '.$product->name.'
-                                                </a>
-    
-                                                <div class="ps-product__rating">
-    
-                                                    <select class="ps-rating" data-read-only="true">
-    
-                                                        <option value="1">1</option>
-                                                        <option value="1">2</option>
-                                                        <option value="1">3</option>
-                                                        <option value="1">4</option>
-                                                        <option value="2">5</option>
-                                                    </select>
-    
-                                                    <span>01</span>
-    
-                                                </div>
-    
-                                                <p class="ps-product__price">$'.number_format($product->sale_price).' - $32.99</p>
-    
-                                            </div>
-    
-                                            <div class="ps-product__content hover">
-    
-                                                <a class="ps-product__title" href="'.base_url().'product/'.$product->slug.'">
-                                                '.$product->name.'
-                                                </a>
-    
-                                                <p class="ps-product__price">$'.number_format($product->sale_price).' - $32.99</p>
-    
-                                            </div>
-    
-                                        </div>
-    
-                                    </div><!-- End Product -->';
-                                     }
+                          
                                 
-                                ?>
+                                <div class="ps-block__content">
 
+                                    <div class="owl-slider" id="recommended" data-owl-auto="true" data-owl-loop="true" 
+                                         data-owl-speed="10000" 
+                                         data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" 
+                                         data-owl-item="6" data-owl-item-xs="2" data-owl-item-sm="2" data-owl-item-md="3" 
+                                         data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
 
-                            </div>
+                                        <!--=====================================
+                                        Product
+                                        ======================================--> 
 
-                        </div>
+                                        <?php
+                                            foreach($products as $key => $product){
+                                                
+                                                $uniqueId = $globalCounter++;
+
+                                                echo '<div class="ps-product">
+
+                                                <div class="ps-product__thumbnail">
+
+                                                    <a href="'.base_url().'product/'.$product->slug.'">
+                                                        <img src="'.base_url().$product->image.'" alt='.$product->keywords.'>
+                                                    </a>
+
+                                                    <ul class="ps-product__actions">
+
+                                                        <li>
+                                                            <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Cart">
+                                                                <i class="icon-bag2"></i>
+                                                            </a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a href="#" data-toggle="tooltip" data-placement="top" title="Quick View">
+                                                                <i class="icon-eye"></i>
+                                                            </a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a  id="heart-icon-'.$product->id.$uniqueId.'"
+                                                                onClick="addHeart('.$product->id.','.$uniqueId.');"
+                                                                data-toggle="tooltip" 
+                                                                data-placement="top" 
+                                                                title="Add to Whishlist 2">
+                                                                <i class="icon-heart"></i>
+                                                            </a>
+                                                            
+                                                        </li> 
+                                                        
+                                                        <li id="loading-icon-'.$product->id.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
+                                                            <img src="'.base_url().'assets/img/ajax_clock_small.gif'.'" alt="" style="max-width:100%; max-height:100%;">
+                                                        </li>
+
+                                                    </ul>
+
+                                                </div>
+
+                                                <div class="ps-product__container">
+
+                                                    <a class="ps-product__vendor" href="#">Young Shop</a>
+
+                                                    <div class="ps-product__content">
+
+                                                        <a class="ps-product__title" href="'.base_url().'product/'.$product->slug.'">
+                                                        '.$product->name.'
+                                                        </a>
+
+                                                        <div class="ps-product__rating">
+
+                                                            <select class="ps-rating" data-read-only="true">
+
+                                                                <option value="1">1</option>
+                                                                <option value="1">2</option>
+                                                                <option value="1">3</option>
+                                                                <option value="1">4</option>
+                                                                <option value="2">5</option>
+                                                            </select>
+
+                                                            <span>01</span>
+
+                                                        </div>
+
+                                                        <p class="ps-product__price">$'.number_format($product->sale_price).' - $32.99</p>
+
+                                                    </div>
+
+                                                    <div class="ps-product__content hover">
+
+                                                        <a class="ps-product__title" href="'.base_url().'product/'.$product->slug.'">
+                                                        '.$product->name.'
+                                                        </a>
+
+                                                        <p class="ps-product__price">$'.number_format($product->sale_price).' - $32.99</p>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div><!-- End Product -->';
+                                            }
+                                        
+                                        ?>
+                                    </div>
+                                </div>
+                           
+                        
+    
 
                     </div><!-- End Recommended Items -->
 
@@ -493,7 +546,7 @@ $globalCounter = 0;
     									Product
     									======================================--> 
                                         <?php
-                                            foreach($products as $key => $product){
+                                            foreach($productsCategory as $key => $product){
                                                 
                                                 $uniqueId = $globalCounter++;
 
@@ -526,8 +579,8 @@ $globalCounter = 0;
                                                             </li>
     
                                                             <li>
-                                                               <a  id="heart-icon-'.$product->productoid.$uniqueId.'"
-                                                                    onClick="addHeart('.$product->productoid.','.$uniqueId.');"
+                                                               <a  id="heart-icon-'.$product->id.$uniqueId.'"
+                                                                    onClick="addHeart('.$product->id.','.$uniqueId.');"
                                                                     data-toggle="tooltip" 
                                                                     data-placement="top" 
                                                                     title="Add to Whishlist 3">
@@ -535,7 +588,7 @@ $globalCounter = 0;
                                                                 </a>
                                                             </li>
 
-                                                            <li id="loading-icon-'.$product->productoid.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
+                                                            <li id="loading-icon-'.$product->id.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
                                                                 <img src="'.base_url().'assets/img/ajax_clock_small.gif'.'" alt="" style="max-width:100%; max-height:100%;">
                                                             </li>
     
@@ -607,7 +660,7 @@ $globalCounter = 0;
     								======================================--> 
                                     <?php 
                                     
-                                        foreach($products as $key => $product){
+                                        foreach($productsCategory as $key => $product){
                                             
                                             $uniqueId = $globalCounter++;
 
@@ -619,7 +672,7 @@ $globalCounter = 0;
 
                                             <div class="ps-product__container">
                                                 <div class="ps-product__content"><a class="ps-product__title" href='.base_url().'product/'.$product->slug.'>'.$product->name.'</a>
-                                                    <p class="ps-product__vendor">Sold by:<a href="#">Young Shop</a></p>
+                                                   
                                                     <ul class="ps-product__desc">
                                                         <li> 1 Unrestrained and portable active stereo speaker</li>
                                                         <li> 2 Free from the confines of wires and chords</li>
@@ -633,8 +686,8 @@ $globalCounter = 0;
                                                     <ul class="ps-product__actions">
                                                         <li><a href="'.base_url().'product/'.$product->slug.'"><i class="icon-eye"></i>View</a></li>
                                                         <li>
-                                                              <a    id="heart-icon-'.$product->productoid.$uniqueId.'"
-                                                                    onClick="addHeart('.$product->productoid.', '.$uniqueId.');"
+                                                              <a    id="heart-icon-'.$product->id.$uniqueId.'"
+                                                                    onClick="addHeart('.$product->id.', '.$uniqueId.');"
                                                                     data-toggle="tooltip" 
                                                                     data-placement="top" 
                                                                     title="Add to Whishlist 4">
@@ -642,7 +695,7 @@ $globalCounter = 0;
                                                             </a>
                                                         </li>   
                                                         
-                                                        <li id="loading-icon-'.$product->productoid.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
+                                                        <li id="loading-icon-'.$product->id.$uniqueId.'" class="removeloadingwishCategory d-none" style="width:15px !important; height:15px !important; display:flex; justify-content:center; align-items:center;">
                                                             <img src="'.base_url().'assets/img/ajax_clock_small.gif'.'" alt="" style="max-width:100%; max-height:100%;">
                                                         </li>
                                                     </ul>
@@ -732,4 +785,26 @@ $globalCounter = 0;
 
 <script src="<?php echo base_url().'/assets/js/customers.js';?>"></script>
 <script src="<?php echo base_url().'/assets/js/product.js';?>"></script>
+
+
+<script>
+    function filterBrands() {
+      var input, filter, ul, li, label, i;
+      input = document.getElementById('searchInput');
+      filter = input.value.toUpperCase();
+      ul = document.getElementById('brandList');
+      li = ul.getElementsByTagName('li');
+
+      for (i = 0; i < li.length; i++) {
+        label = li[i].getElementsByTagName("label")[0];
+        if (label) {
+          if (label.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+          } else {
+            li[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
 <?php  echo $this->endSection("content"); ?>

@@ -95,7 +95,42 @@ class SubCategoriesController extends BaseController{
 
     }
 
-    public function showSubcategoriesByCategory($idCategory = null){
+
+    public function showSubcategoriesBySlug($slug = null){
+
+        if($slug){
+
+            $response = $this->CategoriesModel->where("slug", $slug)->get()->getResult();
+
+            if($response){
+
+                $responseSubCategory = $this->showSubCategoryByIdCategory($response[0]->id);
+
+                if($responseSubCategory){
+
+                    return $responseSubCategory;
+                
+                }else{
+
+                    return array();
+
+                }
+            
+            }else{
+
+                return array();
+
+            }
+
+        }else{
+
+            return array();
+
+        }
+
+    }
+
+    public function showSubCategoryByIdCategory($idCategory = null){
 
         if($idCategory != null){
 
@@ -114,4 +149,7 @@ class SubCategoriesController extends BaseController{
         return $response;
 
     }
+
+
+
 }
