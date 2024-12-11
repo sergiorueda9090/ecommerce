@@ -513,9 +513,11 @@ $(document).ready(function(){
 
                 //let urlPageRespon = WEBSITE_URL_CLIENTE+'compra/pageRespuesta/';
                 //let urlPageConfir =`${BASE_URL}payuconfirmation?&payu=true&productos=${dataSendUrl.ids}&`;
-                let urlPageConfirmationPayu = `${BASE_URL}confirmation?&payu=true&productos=${dataSendUrl.ids}`;
+                let urlPageConfirmationPayu = `${BASE_URL}confirmation?&payu=true&productos=${dataSendUrl.ids}`
+                ;
                 console.log("urlPageConfirmationPayu ",urlPageConfirmationPayu);
-                let urlPageresponsePayu     = `${BASE_URL}response?&payu=true&productos=${dataSendUrl.ids}`;
+                
+                let urlPageresponsePayu     = `${BASE_URL}shopping`;
                 
                 let urlPageDelicl = WEBSITE_URL_CLIENTE+'cliente/validar';
                 
