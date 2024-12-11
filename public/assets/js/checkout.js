@@ -495,6 +495,7 @@ $(document).ready(function(){
                 let dataSendUrl = sendUrlPageConfirmar();
                 
                 console.log("dataSendUrl ",dataSendUrl);
+                console.log("dataSendUrl.ids ",dataSendUrl.ids);
 
                 let WEBSITE_URL_CLIENTE = `${BASE_URL}compra/realizar?idProducto`;
 
@@ -513,6 +514,7 @@ $(document).ready(function(){
                 //let urlPageRespon = WEBSITE_URL_CLIENTE+'compra/pageRespuesta/';
                 //let urlPageConfir =`${BASE_URL}payuconfirmation?&payu=true&productos=${dataSendUrl.ids}&`;
                 let urlPageConfirmationPayu = `${BASE_URL}confirmation?&payu=true&productos=${dataSendUrl.ids}`;
+                console.log("urlPageConfirmationPayu ",urlPageConfirmationPayu);
                 let urlPageresponsePayu     = `${BASE_URL}response?&payu=true&productos=${dataSendUrl.ids}`;
                 
                 let urlPageDelicl = WEBSITE_URL_CLIENTE+'cliente/validar';
@@ -538,9 +540,9 @@ $(document).ready(function(){
                 $('.formPayu input[name="currency"]').attr("value", divisa);
             
                 //$('.formPayu input[name="confirmationUrl"]').attr("value", urlPageConfir);    
-                $('.formPayu input[name="confirmationUrl"]').attr("value", urlPageConfirmationPayu);//http://www.test.com/response
+                $('.formPayu input[name="confirmationUrl"]').attr("value", urlPageConfirmationPayu);  //http://www.test.com/confirmation
                 $(".formPayu input[name='responseUrl']").attr("value", urlPageresponsePayu);
-                //$('.formPayu input[name="declinedResponseUrl"]').attr("value", `${BASE_URL}`); //"http://www.test.com/confirmation"
+                //$('.formPayu input[name="declinedResponseUrl"]').attr("value", `${BASE_URL}`);      //"http://www.test.com/response"
                
                 $('.formPayu input[name="displayShippingInformation"]').attr("value", tipoEnvio);
                 $('.formPayu input[name="test"]').attr("value", test);
