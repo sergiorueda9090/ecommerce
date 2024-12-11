@@ -107,7 +107,9 @@ class ProductsController extends BaseController{
                                                       ->getResult();
 
         // Arreglo auxiliar para almacenar los nombres únicos
+
         $uniqueNames = [];
+
         // Arreglo para almacenar los resultados filtrados
         $filteredAttributes = [];
 

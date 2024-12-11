@@ -291,7 +291,7 @@ $session = session();
 									foreach($categories as $key => $category){
 										echo '
 											<li>
-												<a href="#"><i class='.$category->icon.'></i>'.$category->name.'</a>
+												<a href='.base_url().'category/'.$category->slug.'><i class='.$category->icon.'></i>'.$category->name.'</a>
 											</li>
 										';
 									}
@@ -415,10 +415,13 @@ $session = session();
                         <div class="form-group--icon">
                         	<i class="icon-chevron-down"></i>
                             <select class="form-control">
-                                <option value="1">All</option>
-                                <option value="1">Smartphone</option>
-                                <option value="1">Sounds</option>
-                                <option value="1">Technology toys</option>
+								<option value="1">All</option>
+								<?php
+								foreach($categories as $key => $category){
+									echo ' <option value='.$category->slug.'>'.$category->name.'</option>
+									';
+								}
+								?>
                             </select>
                         </div>
                         <input class="form-control" type="text" placeholder="I'm shopping for...">
@@ -966,7 +969,7 @@ $session = session();
             <div class="ps-footer__copyright">
 
                 <p>© 2020 MarketPlace. All Rights Reserved</p>
-
+			
                 <p>
                 	<span>We Using Safe Payment For:</span>
 
@@ -979,16 +982,66 @@ $session = session();
                 	</a>
 
                 	<a href="#">
-                		<img src="<?php echo base_url().'/assets/img/payment-method/3.jpg'?>" alt="">
-                	</a>
-
-                	<a href="#">
                 		<img src="<?php echo base_url().'/assets/img/payment-method/4.jpg'?>" alt="">
                 	</a>
 
                 	<a href="#">
                 		<img src="<?php echo base_url().'/assets/img/payment-method/5.jpg'?>" alt="">
                 	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-addi-v2.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-amex.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-banco-bogota.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-bancolombia.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-codensa.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-daviplata.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-davivienda.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-dinners-club.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-efecty.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-mastercard.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-nequi.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-pse.webp'?>" alt="">
+                	</a>
+
+					<a href="#">
+                		<img src="<?php echo base_url().'/assets/img/payment-method/mp-sured.webp'?>" alt="">
+                	</a>
+
+
 
                 </p>
 

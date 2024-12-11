@@ -172,7 +172,7 @@
                                         <div class="col-lg-6">
                                             
                                             <figure>
-                                                <figcaption><?php echo $product->attribute_name; ?> <strong> Choose an option</strong></figcaption>
+                                                <figcaption class="attributoProduct" title="<?php echo $product->attribute_name; ?>"><?php echo $product->attribute_name; ?> <strong> Choose an option</strong></figcaption>
                                                 
                                                 <?php
                                                     foreach($valueattributes as $key => $value){
@@ -686,13 +686,24 @@
 
                     <aside class="widget widget_product widget_features">
 
-                        <p><i class="icon-network"></i> Shipping worldwide</p>
+                        <P style="color:#0A8800; padding-left:0px; text-align:center; font-size:17px;font-weight:500;">
+                            <img src="https://aimg.kwcdn.com/upload_aimg/goods_details/87c09de6-8255-42f6-bf67-efc20ede0399.png.slim.png?imageView2/2/w/40/q/70/format/webp" alt="">
+                            Seguridad y privacidad
+                        </P>
 
-                        <p><i class="icon-3d-rotate"></i> Free 7-day return if eligible, so easy</p>
 
-                        <p><i class="icon-receipt"></i> Supplier give bills for this product.</p>
+                        <p><i class="icon-network"></i> Envió Gratis en cada pedido</p>
 
-                        <p><i class="icon-credit-card"></i> Pay online or when receiving goods</p>
+                        <p><i class="icon-3d-rotate"></i> Entraga por via maritima: 10 - 31 ene</p>
+
+                        <p><i class="icon-receipt"></i> Empresa de Mensajería. 
+                        <span><img style="height:17px; width:auto; margin-right:5px;" src="https://aimg.kwcdn.com/upload_aimg/br/11478175-a10d-48b0-8050-2f61f42b9aaa.png.slim.png?imageView2/2/w/48/q/70/format/webp" alt=""> Coordinadora</span></p>
+
+                        <p><i class="icon-credit-card"></i> Pagos online </p>
+                            
+                        <p><i class="icon-receipt"></i>Pagos seguros.</p>
+
+                        <p><i class="icon-credit-card"></i> Privacidad segura</p>
 
                     </aside>
 

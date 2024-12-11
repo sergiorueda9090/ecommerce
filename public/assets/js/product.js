@@ -1,5 +1,6 @@
 let id_size;
 let id_color;
+let nameColor;
 let arrayAddCar=[];
 
 $(document).ready(function(){
@@ -139,6 +140,7 @@ function showFailed(message){
 
 function callQuantity(idquantity, color, id_product){
     id_color =  idquantity;
+    nameColor = color;
     $('.loaderQuantity').css('display','block');
     sendRequestQuantity(idquantity, color, id_product);
 }
@@ -163,7 +165,7 @@ function sendRequestQuantity(idquantity, color, id_product){
 
 function showQuantity(data, images){
 
-
+    
     // Verifica si se recibieron nuevas imágenes
     if (images && images.length > 0) {
         // Selecciona los contenedores de la galería y las variantes
@@ -229,8 +231,7 @@ function addCar() {
     let sale        = $(".priceToPay").text();
     let quantity    = $('.quantity').val();
     let nameSize    = $(".shaded .ps-variant__size").text();
-    let nameColor   = $(".shaded .ps-variant__color").text();
-
+       
     let validate = [null, undefined, ''];
     
     if(quantity == '0' || quantity == 0 && validate.includes(id_size) || validate.includes(id_color)){
@@ -259,6 +260,7 @@ function addCar() {
             "nameColor"     : nameColor,
             "id_color"      : id_color,
             "img"           : firstImageSrc,
+            "attributProduc": $(".attributoProduct").attr("title")
         };
 
         arrayAddCar.push(data);

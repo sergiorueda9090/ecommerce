@@ -20,8 +20,8 @@ $(document).ready(function(){
                 $(".viewCheckout").append(`<tr>
                                                 <td>
                                                     <a href="#">${element.nameProduct} ×<strong>${element.quantity}</strong></a>
-                                                    <p style="font-size: 1.4rem;line-height: 1.6em;color: #666; margin:0px;">Color:<strong>${element.id_color}</strong></p>
-                                                    <p style="font-size: 1.4rem;line-height: 1.6em;color: #666; margin:0px;">Talla:<strong>${element.id_size}</strong></p>
+                                                    <p style="font-size: 1.4rem;line-height: 1.6em;color: #666; margin:0px;">Color:<span style="display: inline-block; width: 20px; height: 20px; border-radius: 50%; margin-left: 10px; background-color: ${element.nameColor}; vertical-align: middle;"></span></p>
+                                                    <p style="font-size: 1.4rem;line-height: 1.6em;color: #666; margin:0px;">${element.attributProduc}:<strong>${element.nameSize}</strong></p>
                                                 </td>
                                                 <td class="text-right">${element.sale}</td>
                                             </tr>`
@@ -226,12 +226,16 @@ $(document).ready(function(){
 
         let customer = JSON.parse(data);
         
+        console.log("customer ",customer);
+
         $(".firstName").val(customer.name);
         $(".lastName").val(customer.lastname);
         $(".email").val(customer.email);
         $(".country").val();
         $(".phone").val(customer.phone);
         $(".address").val(customer.address);
+        
+        $("#deparments").val(customer.department);
 
         $(".divValidatePassword").css( {"display":"none"} );
         $(".divValidateEmail").css( {"display"   :"none"});
@@ -239,6 +243,8 @@ $(document).ready(function(){
         $(".createAcount").css( {"display"   :"none"});
         $(".proceedToCheckout").css({"display":"block"});
 
+        selectCity(customer.city);
+     
     }
 
     $(document).on('change','.deparments',function(){
@@ -246,7 +252,7 @@ $(document).ready(function(){
         selectCity();
     });
 
-    function selectCity(){
+    function selectCity(city=""){
         
         $(".city").empty();
 
@@ -267,10 +273,10 @@ $(document).ready(function(){
         })
         .then((res) => res.json())
         .catch((error) => console.error("Error:", error))
-        .then((response) => response.status == 200 ? showCity(response.message, response.data) : showFailed(response.message));
+        .then((response) => response.status == 200 ? showCity(response.message, response.data, city) : showFailed(response.message));
     }
 
-    function showCity(message, data){
+    function showCity(message, data, city=""){
         
         $(".city").empty();
         
@@ -285,8 +291,13 @@ $(document).ready(function(){
                         );
        });
        $(".iconLoagingCities").addClass("d-none");
+       
+       if(city != ""){
+        $(".city").val(city);
+       }
+       
     }
-
+    
 
     $(document).on('click','.createAcount',function(){
         createAcount();

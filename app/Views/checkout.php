@@ -263,7 +263,7 @@
 
                                     <hr class="py-3">
 
-                                    <div class="form-group">
+                                    <!--<div class="form-group">
 
                                         <div class="ps-radio">
 
@@ -273,13 +273,13 @@
 
                                         </div>
 
-                                    </div>
+                                    </div>-->
 
                                     <div class="form-group">
 
                                         <div class="ps-radio">
 
-                                            <input class="form-control" type="radio" id="pay-payu" name="payment-method" value="payu">
+                                            <input class="form-control" type="radio" id="pay-payu" name="payment-method" value="payu" checked>
 
                                             <label for="pay-payu">Pay with payu? <span><img src="<?php echo base_url().'assets/img/payment-method/payu.jpg' ?>" class="w-50"></span></label>
 
@@ -287,7 +287,7 @@
 
                                     </div>
 
-                                    <div class="form-group">
+                                    <!--<div class="form-group">
 
                                         <div class="ps-radio">
 
@@ -297,7 +297,7 @@
 
                                         </div>
 
-                                    </div>
+                                    </div>-->
 
 
                                    
