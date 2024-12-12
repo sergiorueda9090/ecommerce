@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Models\OrdersModel;
+use Dompdf\Dompdf;
 
 class FacturaController extends BaseController{
     
@@ -68,6 +69,37 @@ class FacturaController extends BaseController{
             return [];
         }
 
+    }
+
+    public function pdf($orderId="121211111")
+    { 
+        // Crear el contenido HTML de la factura
+        $html = view('facturaprint');
+        // Crear una instancia de Dompdf y configurarla
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+        $output = $dompdf->output();
+        
+        // Create the directory if it doesn't exist
+        helper('filesystem');
+        if (!is_dir('writable/uploads')) {
+            mkdir('writable/uploads', 777, true);
+        }
+        // Guardar el PDF en el archivo temporal
+        $tempFilePath = WRITEPATH . 'uploads/temp_factura_' . $orderId . '.pdf';
+        file_put_contents($tempFilePath, $output);
+
+        // Forzar la descarga con cabeceras HTTP
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="factura_' . $orderId . '.pdf"');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+        readfile($tempFilePath);
+        exit;
     }
 
 }

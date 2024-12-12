@@ -110,7 +110,7 @@
             transition: background-color 0.3s ease;">Descargar en PDF</a>
         </div>
 
-        <div class="footer" style="    text-align: center;
+        <div class="footer" style="text-align: center;
             margin-top: 30px;
             font-size: 0.9em;
             color: #777;">
