@@ -159,7 +159,7 @@
                                         echo "Descuento aplicado: " . $discount . "%<br>";
                                         echo "Precio final con descuento: " . number_format($discounted_price, 0, ',', '.') . " COP";*/
                                     ?>
-                                <h6 class="ps-product__price sale">$    
+                               <h6 class="ps-product__price sale">$    
 
                                     <?php echo number_format($product->sale_price, 0, ',', '.') . " COP";?>
                                     
@@ -172,6 +172,30 @@
                                     ?>
                                    
                                 </h6>
+
+                                <div class="ps-product__desc">
+                                    <p style="margin:0px;"> 
+                                        <?php echo "Precio de venta sin descuento: "; ?>
+                                        <del class="priceToPay"> 
+                                            <?php echo "$ ". number_format($product->originalPrice, 0, ',', '.') . " COP";?> 
+                                        </del>
+                                    </p>
+
+                                    <p style="margin:0px;"> 
+                                        <?php echo "Descuento aplicado: "; ?>
+                                        <?php
+                                            if($product->discount != NULL && $product->discount != ""){
+                                                echo '<small> (-'.$product->discount.'%)</small>';
+                                            }
+                                        ?>
+                                    </p>
+
+                                    <p style="margin:0px;"> 
+                                        <?php echo "Precio final con descuento: "; ?>
+                                        <?php echo "$ ". number_format($product->sale_price, 0, ',', '.') . " COP";?>
+                                    </p>
+
+                                </div>
 
 
                                 <div class="ps-product__desc">
