@@ -141,9 +141,29 @@
                                     </div>
 
                                 </div>
+                                    <?php
+                                        /*$purchase_price = 10000; // Precio de compra
+                                        $percentage_profit = 300; // Porcentaje de ganancia
+                                        $discount = 50; // Porcentaje de descuento
 
-                                <h4 class="ps-product__price sale">$<?php echo number_format($product->purchase_price); ?>
-                                    <del class="priceToPay"> $<?php echo number_format($product->sale_price); ?></del>
+                                        // Precio de venta sin descuento
+                                        $selling_price = $purchase_price + ($purchase_price * ($percentage_profit / 100));
+
+                                        // Precio con descuento
+                                        $discounted_price = $selling_price - ($selling_price * ($discount / 100));
+
+                                        // Mostrar resultados con formato
+                                        echo "Precio de compra: " . number_format($purchase_price, 0, ',', '.') . " COP<br>";
+                                        echo "Porcentaje de ganancia: " . $percentage_profit . "%<br>";
+                                        echo "Precio de venta sin descuento: " . number_format($selling_price, 0, ',', '.') . " COP<br>";
+                                        echo "Descuento aplicado: " . $discount . "%<br>";
+                                        echo "Precio final con descuento: " . number_format($discounted_price, 0, ',', '.') . " COP";*/
+                                    ?>
+                                <h6 class="ps-product__price sale">$    
+
+                                    <?php echo number_format($product->sale_price, 0, ',', '.') . " COP";?>
+                                    
+                                    <del class="priceToPay"> $  <?php echo number_format($product->originalPrice, 0, ',', '.'). " COP";  ?></del>
                                     
                                     <?php
                                         if($product->discount != NULL && $product->discount != ""){
@@ -151,14 +171,13 @@
                                         }
                                     ?>
                                    
-                                </h4>
+                                </h6>
 
-                                <h4 class="ps-product__price">$<?php echo number_format($product->sale_price); ?></h4>
 
                                 <div class="ps-product__desc">
 
                                     <p> 
-                                    	Status:<a href="shop-default.html"><strong class="ps-tag--in-stock"> In stock</strong></a>
+                                    	Status:<a href="shop-default.html"><strong class="ps-tag--in-stock"> In stock 🏠</strong></a>
                                     </p>
 
                                     <?php echo $product->description; ?>
