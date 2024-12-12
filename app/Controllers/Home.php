@@ -46,10 +46,10 @@ class Home extends BaseController
         INNER JOIN subcategories s on c.id = s.id_categories 
         INNER JOIN subcategoriesimages sci on sci.id_subcategories = s.id
         GROUP BY C.id;
-    */
+    */ 
     public function index(){
- 
-        $sliderAll      = $this->sliderModel->findAll();
+        $feature   = new FeatureController();
+        $sliderAll = $this->sliderModel->findAll();
 
         $categoriesAll  = $this->CategoriesModel->select('categories.*, categoriesimages.image')
                                                 ->join('categoriesimages', 'categories.id = categoriesimages.id_categories', 'inner')
@@ -102,6 +102,7 @@ class Home extends BaseController
                       'categoriesAll'       => $categoriesAll,
                       'subcategoriesAll'    => $subcategoriesAll,
                       'productImages'       => $productImages,
+                      'feature'             => $feature->showFeature(),
                       'pageInfo'            => $this->pageInfo(),
                       'categories'          => $this->listCategories(),
                       'header'              => $this->header(),
@@ -146,6 +147,7 @@ class Home extends BaseController
 
     }
 
+    
     public function footer(){
 
         $subcategoriesAll = $this->CategoriesModel->select('categories.name, categories.slug,
