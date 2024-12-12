@@ -76,7 +76,16 @@
                                 <?php
 
                                     foreach($orders as $key => $value){
+                                        // Fecha y hora de la compra
+                                        $fechaCompra = $value->created_at;
 
+                                        // Crear un objeto DateTime
+                                        $fecha = new DateTime($fechaCompra);
+
+                                        // Formatear la fecha
+                                        $formatoAmigable = $fecha->format('d/m/Y \a \l\a\s h:i A'); // Ejemplo: 23/08/2024 a las 10:14 PM
+
+                                        
                                         echo '        <tr>
 
                                     <td>
@@ -105,10 +114,13 @@
 
                                         <ul class="timeline">
                                             <li class="success">                                             
-                                                <h5>15 March, 2020</h5>
-                                                <p class="text-success">Reviewed <i class="fas fa-check"></i></p>
+                                                <h5> Compra realizada el '.$formatoAmigable.'</h5>
+                                                <p class="text-success">Reviewed 
+                                                    <i class="fas fa-check"></i> 
+                                                    <a href="'.base_url().'factura/'.$value->transactions_id.'" ><i class="icon-receipt" style="color:red" title="Factura"></i></a> 
+                                                </p>
 
-                                                <div class="media border p-3">
+                                                <div class="media border p-3" style="display:none">
                                                   <div class="media-body">
                                                     <h4><small><i>Dispute on march 17, 2020</i></small></h4>
                                                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates hic maxime modi commodi.</p>
@@ -116,7 +128,7 @@
                                                   <img src="img/vendor/store/user/5.jpg" alt="John Doe" class="ml-3 mt-3 rounded-circle" style="width:60px;">
                                                 </div>
 
-                                                <div class="media border p-3">
+                                                <div class="media border p-3" style="display:none">
 
                                                   <img src="img/vendor/vendor-store.jpg" alt="John Doe" class="ml-3 mt-3 rounded-circle" style="width:60px;">
                                                   <div class="media-body text-right">
@@ -127,19 +139,25 @@
                                                 </div>
 
                                             </li>
+
                                             <li  class="success">
-                                                <h5>18 March, 2020</h5>         
-                                                <p class="text-success">Sent <i class="fas fa-check"></i></p>
-                                                <p>Comment: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum quaerat recusandae <br><a href="#" target="_blank">ID TRACK A24S36343DWS4</a></p>
+                                                <h5> ¡Tu compra ha sido confirmada! Nos encontramos preparando tu envío para que llegue lo antes posible ✔️.</h5>
+                                                <h5>'.$formatoAmigable.'</h5>
+                                                <button class="btn btn-primary" disabled>
+                                                  <span class="spinner-border spinner-border-sm"></span>
+                                                  In process
+                                                </button>         
+                                                <p style="display:none" class="text-success">Sent <i class="fas fa-check"></i></p>
+                                                <p style="display:none">Comment: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum quaerat recusandae <br><a href="#" target="_blank">ID TRACK A24S36343DWS4</a></p>
                                             </li>
-                                            <li  class="success">
+                                            <li  class="success" style="display:none">
                                                 <h5>23 March, 2020</h5>  
                                                 <p class="text-success">Delivered <i class="fas fa-check"></i></p>
                                                 <p>Comment: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum quaerat recusandae necessitatibus nesciunt</p>
                                             </li>
                                         </ul>  
 
-                                         <a class="btn btn-warning btn-lg" href="#">Repurchase</a>
+                                         <a class="btn btn-warning btn-lg" href="#"  style="display:none">Repurchase</a>
 
                                     </td> 
 

@@ -74,6 +74,9 @@ $routes->set404Override(static function () {
     return view('404-page', $data);
 });
 
+#FACTURA
+$routes->get("factura/(:num)", "FacturaController::index/$1");
+
 #TOKEN
 $routes->get('client', 'ClientController::index');
 $routes->post('auth',   'AuthController::login');

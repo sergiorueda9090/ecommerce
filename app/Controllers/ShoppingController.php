@@ -51,7 +51,8 @@ class ShoppingController extends BaseController{
 
         if($idUser != ""){
 
-            $result = $this->OrdersModel->select('products.id, products.name, products.slug, orders.quantity, orders.status, orders.image, orders.price')
+            $result = $this->OrdersModel->select('products.id, products.name, products.slug, orders.quantity, orders.status, orders.image, orders.price, 
+                                                 orders.transactions_id, orders.created_at')
                                         ->join('products' , 'products.id = orders.id_product', 'inner')
                                         ->where('orders.id_user', $idUser)
                                         ->get()->getResult();
