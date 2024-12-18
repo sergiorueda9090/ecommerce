@@ -824,7 +824,7 @@ class ProductsController extends ResourceController{
 
             $responseQuery = $this->productModel->select("id, id_subcategories, id_categories, id_user, id_brand, id_gender,name, 
                                                           slug, description, details, specifications, keywords,
-                                                          purchase_price, percentage_profit, sale_price, discount")
+                                                          purchase_price, percentage_profit, sale_price, discount, originalPrice")
                                                 ->where('id', $id)
                                                 ->where('deleted_at', NULL)
                                                 ->get()

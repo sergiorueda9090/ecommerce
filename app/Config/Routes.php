@@ -220,5 +220,28 @@ $routes->get('api/listAllComercio',        'Api\ComercioController::listAll');
 $routes->get('api/showComercio/(:num)',    'Api\ComercioController::show/$1');
 $routes->get('api/activateTrade/(:num)',   'Api\ComercioController::activateTrade/$1');
 
+/* ============================================
+    COMERCIO APIS
+=============================================== */ 
+$routes->get('api/listAllFeature',          'Api\FeatureController::listAll');
+$routes->get('api/showFeature/(:num)',      'Api\FeatureController::show/$1');
+$routes->post('api/createFeature',          'Api\FeatureController::create');
+$routes->post('api/updateFeature/(:num)',   'Api\FeatureController::update/$1');
+$routes->delete('api/deleteFeature/(:num)', 'Api\FeatureController::delete/$1');
 
-$routes->post('api/email',              'Api\EnqueueEmailController::enqueueEmail');
+
+/* ============================================
+    SEND WHATSAPP APIS
+=============================================== */ 
+$routes->post('api/sendwhatsapp',    'Api\WhatsappAPIController::sendMessage');
+
+$routes->get('api/Welcom',           'Api\WhatsappAPIController::Welcom');
+$routes->get('api/verifyToken',      'Api\WhatsappAPIController::VerifyToken');
+$routes->post('api/receivedMessage', 'Api\WhatsappAPIController::ReceivedMessage');
+
+
+
+/* ============================================
+    EMAIL APIS
+=============================================== */ 
+$routes->post('api/email',        'Api\EnqueueEmailController::enqueueEmail');

@@ -14,7 +14,7 @@ class FeatureController extends BaseController{
 
     public function showFeature(){
 
-        $response = $this->featureModel->get()->getResult();
+        $response = $this->featureModel->where('deleted_at',NULL)->get()->getResult();
 
         if($response){
 
