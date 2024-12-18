@@ -234,10 +234,10 @@ $routes->delete('api/deleteFeature/(:num)', 'Api\FeatureController::delete/$1');
     SEND WHATSAPP APIS
 =============================================== */ 
 $routes->group('whatsapp', function ($routes) {
-    $routes->post('api/sendwhatsapp',    'Api\WhatsappAPIController::sendMessage');
-    $routes->get('api/Welcom',           'Api\WhatsappAPIController::Welcom');
-    $routes->get('api/whatsapp',         'Api\WhatsappAPIController::VerifyToken');
-    $routes->post('api/whatsapp',        'Api\WhatsappAPIController::ReceivedMessage');
+    /*$routes->post('api/sendwhatsapp',    'Api\WhatsappAPIController::sendMessage');
+    $routes->get('api/Welcom',           'Api\WhatsappAPIController::Welcom');*/
+    $routes->get('',         'Api\WhatsappAPIController::VerifyToken');
+    $routes->post('',        'Api\WhatsappAPIController::ReceivedMessage');
 });
 
 
