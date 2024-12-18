@@ -25,50 +25,29 @@ class WhatsappAPIController extends ResourceController {
     
             log_message('info', 'VerifyToken method called. Token received: {token}', ['token' => $token]);
     
-            if ($token == null || $token == "" && $challenge == null) {
+            if ($token === null || $token === "" || $challenge === null) {
                 log_message('warning', 'Missing token or challenge in VerifyToken.');
+                return $this->response->setStatusCode(400)->setBody('Error: Missing token or challenge');
+            }
     
-                $response = [
-                    'status' => 400,
-                    'message' => 'Error',
-                    'data' => null
-                ];
-    
-                return $this->respond($response);
-            } else if ($accessToken !== $token) {
+            if ($accessToken !== $token) {
                 log_message('warning', 'Token mismatch in VerifyToken. Expected: {accessToken}, Received: {token}', [
                     'accessToken' => $accessToken,
                     'token' => $token
                 ]);
-    
-                $response = [
-                    'status' => 400,
-                    'message' => 'ErrorToken',
-                    'data' => null
-                ];
-    
-                return $this->respond($response);
-            } else {
-                log_message('info', 'Token verified successfully. Challenge: {challenge}', ['challenge' => $challenge]);
-    
-                $response = [
-                    'status' => 200,
-                    'message' => $challenge,
-                    'data' => null
-                ];
-    
-                return $challenge;
+                return $this->response->setStatusCode(403)->setBody('Error: Invalid token');
             }
+    
+            log_message('info', 'Token verified successfully. Challenge: {challenge}', ['challenge' => $challenge]);
+            
+            // Facebook validation requires plain text response
+            return $this->response
+                        ->setStatusCode(200)
+                        ->setHeader('Content-Type', 'text/plain')
+                        ->setBody($challenge);
         } catch (Exception $e) {
             log_message('error', 'Exception in VerifyToken: {message}', ['message' => $e->getMessage()]);
-    
-            $response = [
-                'status' => 500,
-                'message' => $e->getMessage(),
-                'data' => null
-            ];
-    
-            return $this->respond($response);
+            return $this->response->setStatusCode(500)->setBody('Internal Server Error');
         }
     }
 
