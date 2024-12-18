@@ -51,75 +51,114 @@ class WhatsappAPIController extends ResourceController {
         }
     }
 
-    public function ReceivedMessage(){
-
-        try{
-
-            $data    = $this->request->getJSON();  
-            $message = $data->entry[0]->changes[0]->value->messages[0];
-            $phone   = $data->entry[0]->changes[0]->value->messages[0]->from;
-            
-           
-            //TEXTO
-            $response = $this->GetTextUser($message);
-            
-            if($response["type"] == "text"){
-
-                $sendMsg = $data->entry[0]->changes[0]->value->messages[0]->text->body;
-
-                $responseTXT = $this->TextMessage($sendMsg, $phone);
-
-            }elseif($response["type"] == "format"){
-
-                $responseTXT = $this->TextFormatMessage($phone);
-
-            }elseif($response["type"] == "image"){
-
-                $responseTXT = $this->ImageMessage($phone);
-
-
-            }elseif($response["type"] == "video"){
-
-                $responseTXT = $this->VideoMessage($phone);
-
-            }elseif($response["type"] == "audio"){
-
-                $responseTXT = $this->AudioMessage($phone);
-
-            }elseif($response["type"] == "document"){
-
-                $responseTXT = $this->DocumentMessage($phone);
-
-            }elseif($response["type"] == "location"){
-
-                $responseTXT = $this->LocationMessage($phone);
-
-            }elseif($response["type"] == "button"){
-
-                $responseTXT = $this->ButttonMessage($phone);
-
-            }elseif($response["type"] == "list"){
-
-                $responseTXT = $this->ButttonListMessage($phone);
-
+    public function ReceivedMessage()
+    {
+        try {
+            log_message('info', 'ReceivedMessage: Method called');
+    
+            // Obtiene el cuerpo de la solicitud como JSON
+            $data = $this->request->getJSON();
+    
+            if (!$data) {
+                log_message('error', 'ReceivedMessage: Missing or invalid JSON payload');
+                return $this->respond([
+                    'status' => 400,
+                    'message' => 'Bad Request: Missing or invalid JSON payload',
+                    'data' => null
+                ], 400);
             }
-
-            //SEND WHATSAPP
+    
+            // Extrae el mensaje y el número de teléfono
+            $message = $data->entry[0]->changes[0]->value->messages[0] ?? null;
+            $phone = $data->entry[0]->changes[0]->value->messages[0]->from ?? null;
+    
+            log_message('info', 'ReceivedMessage: Extracted message and phone', ['phone' => $phone]);
+    
+            if (!$message || !$phone) {
+                log_message('error', 'ReceivedMessage: Missing message or phone data');
+                return $this->respond([
+                    'status' => 400,
+                    'message' => 'Bad Request: Missing message or phone data',
+                    'data' => null
+                ], 400);
+            }
+    
+            // Procesa el mensaje según el tipo
+            $response = $this->GetTextUser($message);
+            log_message('info', 'ReceivedMessage: Message type identified as {type}', ['type' => $response['type']]);
+    
+            if ($response["type"] == "text") {
+                $sendMsg = $message->text->body;
+                log_message('info', 'ReceivedMessage: Processing text message: {text}', ['text' => $sendMsg]);
+    
+                $responseTXT = $this->TextMessage($sendMsg, $phone);
+    
+            } elseif ($response["type"] == "format") {
+                log_message('info', 'ReceivedMessage: Processing formatted text message');
+    
+                $responseTXT = $this->TextFormatMessage($phone);
+    
+            } elseif ($response["type"] == "image") {
+                log_message('info', 'ReceivedMessage: Processing image message');
+    
+                $responseTXT = $this->ImageMessage($phone);
+    
+            } elseif ($response["type"] == "video") {
+                log_message('info', 'ReceivedMessage: Processing video message');
+    
+                $responseTXT = $this->VideoMessage($phone);
+    
+            } elseif ($response["type"] == "audio") {
+                log_message('info', 'ReceivedMessage: Processing audio message');
+    
+                $responseTXT = $this->AudioMessage($phone);
+    
+            } elseif ($response["type"] == "document") {
+                log_message('info', 'ReceivedMessage: Processing document message');
+    
+                $responseTXT = $this->DocumentMessage($phone);
+    
+            } elseif ($response["type"] == "location") {
+                log_message('info', 'ReceivedMessage: Processing location message');
+    
+                $responseTXT = $this->LocationMessage($phone);
+    
+            } elseif ($response["type"] == "button") {
+                log_message('info', 'ReceivedMessage: Processing button message');
+    
+                $responseTXT = $this->ButttonMessage($phone);
+    
+            } elseif ($response["type"] == "list") {
+                log_message('info', 'ReceivedMessage: Processing list message');
+    
+                $responseTXT = $this->ButttonListMessage($phone);
+    
+            } else {
+                log_message('warning', 'ReceivedMessage: Unsupported message type: {type}', ['type' => $response['type']]);
+                return $this->respond([
+                    'status' => 400,
+                    'message' => 'Unsupported message type',
+                    'data' => null
+                ], 400);
+            }
+    
+            // Envía la respuesta de WhatsApp
+            log_message('info', 'ReceivedMessage: Sending response to WhatsApp');
             $response = $this->sendMessage($responseTXT);
-
+    
+            log_message('info', 'ReceivedMessage: Response sent successfully');
             return $this->respond($response);
     
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
+            log_message('error', 'ReceivedMessage: Exception occurred: {message}', ['message' => $e->getMessage()]);
             $response = [
                 'status' => 500,
                 'message' => $e->getMessage(),
-                'data' => ""
+                'data' => null
             ];
     
             return $this->respond($response);
         }
-
     }
 
     public function sendMessage($data){
