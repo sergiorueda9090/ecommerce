@@ -2,7 +2,7 @@
 
 namespace App\Controllers\api;
 use CodeIgniter\RESTful\ResourceController;
-use App\Libraries\WhatsappAPI;
+use App\Libraries\WhatsAppAPI;
 
 class WhatsappAPIController extends ResourceController {
 
@@ -10,7 +10,7 @@ class WhatsappAPIController extends ResourceController {
 
     public function __construct(){
         // Instancia de la clase WhatsappAPI
-        $this->whatsapp = new WhatsappAPI();
+        $this->whatsapp = new WhatsAppAPI();
     }
 
 
