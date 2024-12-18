@@ -57,7 +57,7 @@ class WhatsappAPIController extends ResourceController {
                     'data' => null
                 ];
     
-                return $this->respond($response);
+                return $challenge;
             }
         } catch (Exception $e) {
             log_message('error', 'Exception in VerifyToken: {message}', ['message' => $e->getMessage()]);
