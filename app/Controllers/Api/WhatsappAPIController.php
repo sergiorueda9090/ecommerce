@@ -3,6 +3,7 @@
 namespace App\Controllers\api;
 use CodeIgniter\RESTful\ResourceController;
 use App\Libraries\WhatsAppAPI;
+use CodeIgniter\Log\Logger;
 
 class WhatsappAPIController extends ResourceController {
 
@@ -14,16 +15,19 @@ class WhatsappAPIController extends ResourceController {
     }
 
 
-    public function VerifyToken(){
-
-        try{
-            $accessToken = "555566666TTTTTTT"; //getenv('WHATSAPP_API_TOKEN');
-        
-            $token      = $this->request->getGet("hub_verify_token");
-            $challenge  = $this->request->getGet("hub_challenge");
+    public function VerifyToken()
+    {
+        try {
+            $accessToken = "555566666TTTTTTT"; // getenv('WHATSAPP_API_TOKEN');
+            
+            $token = $this->request->getGet("hub_verify_token");
+            $challenge = $this->request->getGet("hub_challenge");
     
-            if($token == null || $token == "" && $challenge == null){
-               
+            log_message('info', 'VerifyToken method called. Token received: {token}', ['token' => $token]);
+    
+            if ($token == null || $token == "" && $challenge == null) {
+                log_message('warning', 'Missing token or challenge in VerifyToken.');
+    
                 $response = [
                     'status' => 400,
                     'message' => 'Error',
@@ -31,18 +35,21 @@ class WhatsappAPIController extends ResourceController {
                 ];
     
                 return $this->respond($response);
-                
-            }else if($accessToken !== $token){
-               
+            } else if ($accessToken !== $token) {
+                log_message('warning', 'Token mismatch in VerifyToken. Expected: {accessToken}, Received: {token}', [
+                    'accessToken' => $accessToken,
+                    'token' => $token
+                ]);
+    
                 $response = [
                     'status' => 400,
-                    'message' => 'ErrorToken ',
+                    'message' => 'ErrorToken',
                     'data' => null
                 ];
     
                 return $this->respond($response);
-    
-            }else{
+            } else {
+                log_message('info', 'Token verified successfully. Challenge: {challenge}', ['challenge' => $challenge]);
     
                 $response = [
                     'status' => 200,
@@ -51,21 +58,18 @@ class WhatsappAPIController extends ResourceController {
                 ];
     
                 return $this->respond($response);
-    
             }
-
-        }catch(Exception $e){
-
+        } catch (Exception $e) {
+            log_message('error', 'Exception in VerifyToken: {message}', ['message' => $e->getMessage()]);
+    
             $response = [
                 'status' => 500,
                 'message' => $e->getMessage(),
                 'data' => null
             ];
-
+    
             return $this->respond($response);
-
         }
-
     }
 
     public function ReceivedMessage(){
