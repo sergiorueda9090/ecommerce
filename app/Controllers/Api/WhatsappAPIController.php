@@ -86,49 +86,61 @@ class WhatsappAPIController extends ResourceController {
             // Procesa el mensaje según el tipo
             $response = $this->GetTextUser($message);
             log_message('info', 'ReceivedMessage: Message type identified as {type}', ['type' => $response['type']]);
-    
-            if ($message->text->body == "text") {
-                $sendMsg = $message->text->body;
+            
+            $bodyMsg = strtolower($message->text->body);
+
+            if ($bodyMsg == "text") {
+
+                $sendMsg = $bodyMsg;
+                
                 log_message('info', 'ReceivedMessage: Processing text message: {text}', ['text' => $sendMsg]);
     
                 $responseTXT = $this->TextMessage($sendMsg, $phone);
     
-            } elseif ($message->text->body == "format") {
+            } elseif ($bodyMsg == "format") {
+
                 log_message('info', 'ReceivedMessage: Processing formatted text message');
     
                 $responseTXT = $this->TextFormatMessage($phone);
     
-            } elseif ($message->text->body == "image") {
+            } elseif ($bodyMsg == "image") {
+                
                 log_message('info', 'ReceivedMessage: Processing image message');
     
                 $responseTXT = $this->ImageMessage($phone);
     
-            } elseif ($message->text->body == "video") {
+            } elseif ($bodyMsg == "video") {
+
                 log_message('info', 'ReceivedMessage: Processing video message');
     
                 $responseTXT = $this->VideoMessage($phone);
     
-            } elseif ($message->text->body == "audio") {
+            } elseif ($bodyMsg == "audio") {
+
                 log_message('info', 'ReceivedMessage: Processing audio message');
     
                 $responseTXT = $this->AudioMessage($phone);
     
-            } elseif ($message->text->body == "document") {
+            } elseif ($bodyMsg == "document") {
+
                 log_message('info', 'ReceivedMessage: Processing document message');
     
                 $responseTXT = $this->DocumentMessage($phone);
     
-            } elseif ($message->text->body == "location") {
+            } elseif ($bodyMsg == "location") {
+
                 log_message('info', 'ReceivedMessage: Processing location message');
     
                 $responseTXT = $this->LocationMessage($phone);
     
-            } elseif ($message->text->body == "button") {
+            } elseif ($bodyMsg == "button") {
+
                 log_message('info', 'ReceivedMessage: Processing button message');
     
                 $responseTXT = $this->ButttonMessage($phone);
     
-            } elseif ($message->text->body == "list") {
+            } elseif ($bodyMsg == "list") {
+
                 log_message('info', 'ReceivedMessage: Processing list message');
     
                 $responseTXT = $this->ButttonListMessage($phone);
