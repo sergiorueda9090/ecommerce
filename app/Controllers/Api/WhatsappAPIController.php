@@ -16,12 +16,11 @@ class WhatsappAPIController extends ResourceController {
 
     public function VerifyToken(){
 
-        try{
-            
-            $accessToken = getenv('WHATSAPP_API_TOKEN');
+       
+            $accessToken = "555566666TTTTTTT"; //getenv('WHATSAPP_API_TOKEN');
         
-            $token      = $this->request->getGet("verify");
-            $challenge  = $this->request->getGet("challenge");
+            $token      = $this->request->getGet("hub_verify_token");
+            $challenge  = $this->request->getGet("hub_challenge");
     
             if($token == null || $token == "" && $challenge == null){
                
@@ -55,17 +54,7 @@ class WhatsappAPIController extends ResourceController {
     
             }
 
-        }catch(Exception $e){
 
-            $response = [
-                'status' => 500,
-                'message' => $e->getMessage(),
-                'data' => null
-            ];
-
-            return $this->respond($response);
-
-        }
 
     }
 
