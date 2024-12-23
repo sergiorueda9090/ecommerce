@@ -76,7 +76,17 @@ $routes->set404Override(static function () {
 
 #FACTURA
 $routes->get("factura/(:num)", "FacturaController::index/$1");
-$routes->get("/factura/pdf","FacturaController::pdf");
+$routes->get("/factura/pdf",   "FacturaController::pdf");
+
+
+/* ============================================
+    START MERCADOPAGO
+=============================================== */
+$routes->get("mercadopago", "MercadoPagoController::index");
+
+/* ============================================
+    END MERCADOPAGO
+=============================================== */
 
 #TOKEN
 $routes->get('client', 'ClientController::index');
@@ -159,6 +169,7 @@ $routes->get('api/showQuantity/(:num)',      'Api\ProductsController::showQuanti
 $routes->delete('api/deletesizeproduct/(:num)/(:num)/(:num)',   'Api\ProductsController::deleteSize/$1/$2/$3');
 $routes->delete('api/deleteimageproduct/(:num)',                'Api\ProductsController::deleteImage/$1');
 $routes->delete('api/deleteproduct/(:num)',                     'Api\ProductsController::deleteProduct/$1');
+
 
 
 /* ============================================
