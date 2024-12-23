@@ -62,34 +62,29 @@ class ProductsController extends ResourceController{
         // Validar si es una imagen y si fue subida correctamente
         if ($image->isValid() && !$image->hasMoved()) {
             // Validar el tipo de archivo
-            
-            /*$validated = $this->validate([
-                'image' => [
-                    'uploaded[image]',
-                    'mime_in[image,image/jpg,image/jpeg,image/gif,image/png]',
-                    'max_size[image,2048]', // Tamaño máximo de 2MB
-                ],
-            ]);*/
-
-            $validated = true;
-
+            $validated = true; // Ajustar según sea necesario.
+    
             if ($validated) {
-            
                 // Generar un nombre único para la imagen
                 $originalName = pathinfo($image->getName(), PATHINFO_FILENAME);
-                $newName = $originalName . '_' . $image->getRandomName();
-
-               // Mover la imagen a la carpeta 'asset/image' con el nuevo nombre
-                $image->move(ROOTPATH . 'public/assets/img/products/' . $name_category, $newName);
-
+                
+                // Limpiar el nombre original y la categoría para que sean seguros en la URL
+                $safeName     = $this->sanitizeString($originalName);
+                $safeCategory = $this->sanitizeString($name_category);
+    
+                $newName = $safeName . '_' . $image->getRandomName();
+    
+                // Mover la imagen a la carpeta 'asset/image' con el nuevo nombre
+                $image->move(ROOTPATH . 'public/assets/img/products/' . $safeCategory, $newName);
+    
                 // Preparar los datos para guardar en la base de datos
                 $dataImage = [
                     'id_product' => $id,
                     'id_color' => $newIdColor,
-                    'image' => '/assets/img/products/' . $name_category . '/' . $newName,
+                    'image' => '/assets/img/products/' . $safeCategory . '/' . $newName,
                     'keywords' => $keywords
                 ];
-
+    
                 // Insertar en la base de datos
                 $queryResponse = $this->productImageModel->insert($dataImage);
                 if ($queryResponse) {
@@ -97,23 +92,34 @@ class ProductsController extends ResourceController{
                 } else {
                     return "Error saving image to the database.";
                 }
-
-                
-                return array("status" => true, "message" => "successfull", "data" => $dataImage);
-
             } else {
-                
                 // Manejar la validación fallida
                 $errors = $this->validator->getErrors();
-
                 return array("status" => false, "message" => "Error", "data" => "Validation failed: " . implode(', ', $errors));
-
             }
         } else {
             return "Invalid image file or no file uploaded.";
         }
     }
 
+    /**
+     * Sanitiza una cadena para que sea segura en URLs o nombres de archivo.
+     *
+     * @param string $string
+     * @return string
+     */
+    private function sanitizeString($string) {
+        // Convertir a minúsculas
+        $string = strtolower($string);
+        // Reemplazar espacios por guiones
+        $string = str_replace(' ', '-', $string);
+        // Eliminar caracteres no permitidos
+        $string = preg_replace('/[^a-z0-9\-]/', '', $string);
+        // Eliminar guiones consecutivos
+        $string = preg_replace('/\-+/', '-', $string);
+        // Retornar el nombre limpio
+        return trim($string, '-');
+    }
 
     /* ======================================
                 CREATE PRODUCT
@@ -216,6 +222,7 @@ class ProductsController extends ResourceController{
         $name_subcategory  = $this->request->getPost("name_subcategory");
         $percentage_profit = $this->request->getPost("percentage_profit");
         $purchase_price    = $this->request->getPost("purchase_price");
+        $originalPrice     = $this->request->getPost("originalPrice");
 
         $sale_price     = $this->request->getPost("sale_price");
         $slug           = $this->request->getPost("slug");
@@ -244,6 +251,7 @@ class ProductsController extends ResourceController{
                         "purchase_price"    => $purchase_price,
                         "percentage_profit" => $percentage_profit,
                         "sale_price"        => $sale_price,
+                        "originalPrice"     => $originalPrice,
                         "discount"          => $discount);
 
         $responseValidate = $this->validateInfo($data);
@@ -415,6 +423,7 @@ class ProductsController extends ResourceController{
                         "purchase_price"    => $this->request->getPost("purchase_price"),
                         "percentage_profit" => $this->request->getPost("percentage_profit"),
                         "sale_price"        => $this->request->getPost("sale_price"),
+                        "originalPrice"     => $this->request->getPost("originalPrice"),
                         "discount"          => $this->request->getPost("discount"));
 
         $responseValidate = $this->validateInfo($data);
@@ -510,6 +519,7 @@ class ProductsController extends ResourceController{
         $percentage_profit  = $this->request->getPost("percentage_profit");
         $sale_price         = $this->request->getPost("sale_price");
         $discount           = $this->request->getPost("discount");
+        $originalPrice      = $this->request->getPost("originalPrice");
     
         if (is_null($keywords)) {
             return $this->respond([
@@ -529,7 +539,8 @@ class ProductsController extends ResourceController{
                         "purchase_price"    => $purchase_price,
                         "percentage_profit" => $percentage_profit,
                         "sale_price"        => $sale_price,
-                        "discount"          => $discount);
+                        "discount"          => $discount,
+                        "originalPrice"     => $originalPrice);
 
         $responseValidate = $this->validateInfo($data);
 

@@ -21,9 +21,9 @@ $(document).ready(function(){
                                                 <td>
                                                     <a href="#">${element.nameProduct} ×<strong>${element.quantity}</strong></a>
                                                     <p style="font-size: 1.4rem;line-height: 1.6em;color: #666; margin:0px;">Color:<span style="display: inline-block; width: 20px; height: 20px; border-radius: 50%; margin-left: 10px; background-color: ${element.nameColor}; vertical-align: middle;"></span></p>
-                                                    <p style="font-size: 1.4rem;line-height: 1.6em;color: #666; margin:0px;">${element.attributProduc}:<strong>${element.nameSize}</strong></p>
+                                                    <p style="font-size: 1.4rem;line-height: 1.6em;color: #666; margin:0px;">${element.attributProduc} : <strong>${element.nameSize}</strong></p>
                                                 </td>
-                                                <td class="text-right">${element.sale}</td>
+                                                <td class="text-right">${element.sale.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
                                             </tr>`
                                         );
            });

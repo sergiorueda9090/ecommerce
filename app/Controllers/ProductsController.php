@@ -214,7 +214,7 @@ class ProductsController extends BaseController{
 
     if($idCategory != null){
 
-        $response = $this->ProductsModel->select("id, name, slug, keywords, purchase_price, percentage_profit, sale_price, discount, description")
+        $response = $this->ProductsModel->select("id, name, slug, keywords, purchase_price, percentage_profit, sale_price, originalPrice ,discount, description")
                                         ->where("id_categories", $idCategory)
                                         ->where("deleted_at", NULL)
                                         ->get()

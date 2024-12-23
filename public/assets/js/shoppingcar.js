@@ -39,7 +39,7 @@ $(document).ready(function(){
 
                                                 </td>
 
-                                                <td class="price">${element.sale}</td>
+                                                <td class="price">${element.sale.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
 
                                                 <td class="text-center">${element.quantity}</td>
 

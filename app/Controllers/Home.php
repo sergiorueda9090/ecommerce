@@ -12,180 +12,130 @@ use App\Models\SocialNetworkModel;
 use App\Models\DepartamentosModel;
 use App\Models\WishesModel;
 
-
 class Home extends BaseController
 {   
-
     private $bannerModel;
     private $sliderModel;
-    private $categoriesModel;
+    private $categoriesDataModel;
     private $pageInfoModel;
-    private $ProductsModel;
-    private $SubCategoriesModel;
-    private $SocialNetworkModel;
-    private $WishesModel;
- 
+    private $productsModel;
+    private $subCategoriesModel;
+    private $socialNetworkModel;
+    private $wishesModel;
 
-    public function __construct(){
-        $this->bannerModel      = new BannerModel();
-        $this->sliderModel      = new SliderModel();
-        $this->CategoriesModel  = new CategoriesModel();
-        $this->pageInfoModel    = new PageInfoModel();
-        $this->ProductsModel    = new ProductsModel();
-        $this->SubCategoriesModel = new SubCategoriesModel();
-        $this->SocialNetworkModel = new SocialNetworkModel();
-        $this->WishesModel      = new WishesModel();
+    public function __construct() {
+        // Inicialización de modelos
+        $this->bannerModel = new BannerModel();
+        $this->sliderModel = new SliderModel();
+        $this->categoriesDataModel = new CategoriesModel();
+        $this->pageInfoModel = new PageInfoModel();
+        $this->productsModel = new ProductsModel();
+        $this->subCategoriesModel = new SubCategoriesModel();
+        $this->socialNetworkModel = new SocialNetworkModel();
+        $this->wishesModel = new WishesModel();
     }
 
+    public function index() {
+        // Controlador de características (asegúrate de que exista)
+        $feature = new FeatureController();
 
-    /*
-        SELECT c.name,
-        GROUP_CONCAT(s.name SEPARATOR ",") as subcategories,
-        GROUP_CONCAT(sci.image SEPARATOR ",") as imgsubcategories
-        FROM categories c
-        INNER JOIN subcategories s on c.id = s.id_categories 
-        INNER JOIN subcategoriesimages sci on sci.id_subcategories = s.id
-        GROUP BY C.id;
-    */ 
-    public function index(){
-        $feature   = new FeatureController();
+        // Obtiene todos los sliders
         $sliderAll = $this->sliderModel->findAll();
 
-        $categoriesAll  = $this->CategoriesModel->select('categories.*, categoriesimages.image')
-                                                ->join('categoriesimages', 'categories.id = categoriesimages.id_categories', 'inner')
-                                                ->where('categories.deleted_at',NULL)
-                                                ->get()
-                                                ->getResult();
+        // Obtiene todas las categorías
+        $categoriesAll = $this->categoriesDataModel->select('categories.id, categories.id_user, categories.name, categories.slug, 
+                                                            categories.description, categories.keywords, categories.icon,categoriesimages.image')
+                                                   ->join('categoriesimages', 'categories.id = categoriesimages.id_categories')
+                                                   ->where('categories.deleted_at', NULL)
+                                                   ->get()
+                                                   ->getResult();
 
-        /*$subcategoriesAll = $this->CategoriesModel->select('categories.id,categories.name,
-                                                            GROUP_CONCAT(s.slug     SEPARATOR ",")      as subcategory_slugs,
-                                                            GROUP_CONCAT(s.name     SEPARATOR ",")      as subcategories,
-                                                            GROUP_CONCAT(sci.image  SEPARATOR ",")      as imgsubcategories')
-                                                           ->join('subcategories s'         , 'categories.id        = s.id_categories', 'inner')
-                                                           ->join('subcategoriesimages sci' , 'sci.id_subcategories = s.id',            'inner')
-                                                           ->groupBy('categories.id')
-                                                           ->where('categories.deleted_at',NULL)
-                                                           ->where('s.deleted_at',NULL)
-                                                           ->get()
-                                                           ->getResult();*/
+        // Obtiene todas las subcategorías
+        $subcategoriesAll = $this->subCategoriesModel->select('subcategories.id, subcategories.id_categories, subcategories.name, subcategories.slug, subcategoriesimages.image')
+                                                     ->join('subcategoriesimages', 'subcategories.id = subcategoriesimages.id_subcategories', 'inner')
+                                                     ->where('subcategories.deleted_at', NULL)
+                                                     ->get()
+                                                     ->getResult();
 
-            $subcategoriesAll = $this->SubCategoriesModel->select('subcategories.id, subcategories.id_categories, subcategories.name, subcategories.slug, 
-                                                                  subcategoriesimages.image')
-                                                         ->join('subcategoriesimages', 'subcategories.id = subcategoriesimages.id_subcategories', 'inner')
-                                                         ->where('subcategories.deleted_at',NULL)
-                                                         ->get()
-                                                         ->getResult();
-
-        /*$productImages = $this->CategoriesModel->select('categories.id, 
-                                                         p.name,
-                                                         p.slug,
-                                                         p.keywords,
-                                                         p.sale_price,
-                                                         p.description,
-                                                         pi.image')
-                                               ->join('subcategories s' , 's.id_categories      = categories.id', 'inner')
-                                               ->join('products      p' , 'p.id_subcategories   = s.id', 'inner')
-                                               ->join('productimages pi', 'pi.id_product        = p.id', 'inner')
-                                               ->groupBy('s.id')
-                                               ->where('categories.deleted_at',NULL)
-                                               ->get()
-                                               ->getResult();*/
-
-
-        $productImages = $this->ProductsModel->join('productimages' , 'productimages.id_product = products.id', 'inner')
-                                                 //->groupBy('products.id_subcategories')
-                                                 ->where('products.deleted_at',NULL)
-                                                 ->get()
-                                                 ->getResult();
+        // Obtiene imágenes de productos
+        $productImages = $this->productsModel->join('productimages', 'productimages.id_product = products.id', 'inner')
+                                             ->where('products.deleted_at', NULL)
+                                             ->get()
+                                             ->getResult();
         
-        $data = array('sliderAll'           => $sliderAll,
-                      'categoriesAll'       => $categoriesAll,
-                      'subcategoriesAll'    => $subcategoriesAll,
-                      'productImages'       => $productImages,
-                      'feature'             => $feature->showFeature(),
-                      'pageInfo'            => $this->pageInfo(),
-                      'categories'          => $this->listCategories(),
-                      'header'              => $this->header(),
-                      'footer'              => $this->footer());
+        // Estructura de datos para la vista
+        $data = [
+            'sliderAll'        => $sliderAll,
+            'categoriesAll'    => $categoriesAll,
+            'subcategoriesAll' => $subcategoriesAll,
+            'productImages'    => $productImages,
+            'feature'          => $feature->showFeature(),
+            'pageInfo'         => $this->pageInfo(),
+            'categories'       => $this->listCategories(),
+            'header'           => $this->header(),
+            'footer'           => $this->footer()
+        ];
         
         return view('ecommerce', $data);
     }
 
-    public function listCategories(){
-
-        $categories = $this->CategoriesModel->select('*')->get()->getResult();
-        
-        return $categories;
-
+    public function listCategories() {
+        // Devuelve todas las categorías
+        return $this->categoriesDataModel->select('*')->get()->getResult();
     }
 
-    public function header(){
-
-        $session = \Config\Services::session();
-
+    public function header() {
+        // Manejo de sesión
         $session = session();
 
-        if($session->idUser){
+        $socialNetworkResponse = $this->socialNetworkModel->get()->getResult();
+        $resultwished = 0;
 
-           $resultwished = $this->WishesModel->select('count(*) as total')->where("id_customer", $session->idUser)->where('wishes.deleted_at', NULL)->get()->getResult();
-           
-           $total =  $resultwished[0]->total;
+        if ($session->idUser) {
+            // Cuenta los deseos del usuario
+            $resultwishedData = $this->wishesModel->select('COUNT(*) as total')
+                                                  ->where('id_customer', $session->idUser)
+                                                  ->where('wishes.deleted_at', NULL)
+                                                  ->get()
+                                                  ->getResult();
 
-           $socialNetworkResponse = $this->SocialNetworkModel->get()->getResult();
-
-           return array("resultwished" => $total, "socialNetworkResponse" => $socialNetworkResponse);
-
-        }else{
-          
-            $socialNetworkResponse = $this->SocialNetworkModel->get()->getResult();
-
-            return array("resultwished" => 0, "socialNetworkResponse" => $socialNetworkResponse);
-        
+            if (!empty($resultwishedData)) {
+                $resultwished = $resultwishedData[0]->total;
+            }
         }
 
-
-
+        return [
+            'resultwished' => $resultwished,
+            'socialNetworkResponse' => $socialNetworkResponse
+        ];
     }
 
-    
-    public function footer(){
-
-        $subcategoriesAll = $this->CategoriesModel->select('categories.name, categories.slug,
-                                                            GROUP_CONCAT(s.name     SEPARATOR ",")      as subcategories')
-                                                ->join('subcategories s'         , 'categories.id        = s.id_categories', 'inner')
-                                                ->groupBy('categories.id')
-                                                ->get()
-                                                ->getResult();
-        return $subcategoriesAll;
+    public function footer() {
+        // Agrupación de subcategorías en el footer
+        return $this->categoriesDataModel->select('categories.name, categories.slug, GROUP_CONCAT(s.name SEPARATOR ",") as subcategories')
+                                         ->join('subcategories s', 'categories.id = s.id_categories', 'inner')
+                                         ->groupBy('categories.id')
+                                         ->get()
+                                         ->getResult();
     }
 
-    public function pageInfo(){
-        $pageInfo = $this->pageInfoModel->select('*')->first();
-        return $pageInfo;
+    public function pageInfo() {
+        // Información de la página
+        return $this->pageInfoModel->select('*')->first();
     }
 
-    public function pageRegisterCustomer(){
-
-        $homeController = new Home();
+    public function pageRegisterCustomer() {
+        // Controladores necesarios
         $departamentosCheckoutController = new CheckoutController();
-        $pageInfo       = $homeController->pageInfo();
-        $categories     = $homeController->listCategories();
-        $footer         = $homeController->footer();
-        $header         = $homeController->header();
-        $deparments     = $departamentosCheckoutController->departamentos();
-        
+
         $data = [
-           'pageInfo'      => $pageInfo,
-           'categories'    => $categories,
-           'header'        => $header,
-           'footer'        => $footer,
-           'deparments'    => $deparments,
-       ];
+            'pageInfo'   => $this->pageInfo(),
+            'categories' => $this->listCategories(),
+            'header'     => $this->header(),
+            'footer'     => $this->footer(),
+            'deparments' => $departamentosCheckoutController->departamentos()
+        ];
 
-        return view('register',$data);
-
+        return view('register', $data);
     }
-
-
-
 }

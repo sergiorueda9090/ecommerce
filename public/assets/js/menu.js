@@ -13,10 +13,12 @@ $(document).ready(function(){
             let addCartShow = JSON.parse(addCartStorage); 
                     // Usar reduce para sumar los valores de "count"
             let suma = addCartShow.reduce((total, objeto) => {
+
                 // Eliminar caracteres no numéricos y convertir a número
                 let countNum = parseFloat(objeto.sale.replace(/[^0-9.-]+/g,""));
-                    // Sumar al total
+                // Sumar al total
                 return total + (countNum * objeto.quantity);
+
             }, 0);
             $(".ps-cart__footer h3 strong").html('$ '+suma.toLocaleString());
         }else{
@@ -48,7 +50,7 @@ $(document).ready(function(){
                                                 <div class="ps-product__content">
                                                     <a class="ps-product__remove" posicionElement=${index + 1} href="#"> <i class="icon-cross"></i></a>
                                                     <a href="product-default.html">${element.nameProduct}</a><p></p>
-                                                    <small>${element.quantity} x ${element.sale}</small>
+                                                    <small>${element.quantity} x ${element.sale.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</small>
                                                 </div>
     
                                             </div>`);

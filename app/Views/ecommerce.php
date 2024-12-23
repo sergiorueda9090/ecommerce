@@ -63,7 +63,7 @@
     	Home Promotions
     	======================================-->  
 
-        <div class="ps-promotions">
+         <!-- <div class="ps-promotions">
 
             <div class="container">
 
@@ -85,7 +85,9 @@
 
             </div>
 
-        </div><!-- End Home Promotions-->
+        </div>-->
+        
+        <!-- End Home Promotions-->
 
         <!--=====================================
     	Home Deal Hot Today
@@ -746,12 +748,12 @@
                     <?php
                         foreach($categoriesAll as $key => $categories){
                             echo ' <div class="col-xl-2 col-lg-3 col-sm-4 col-6 ">
-                            <div class="ps-block--category">
-                                <a class="ps-block__overlay" href="' . base_url() .'category/'. $categories->slug. '"></a>
-                                <img src="' . base_url() . $categories->image. '" alt='.$categories->keywords.'>
-                                <p>'.$categories->name.'</p>
-                            </div>
-                        </div>';
+                                        <div class="ps-block--category">
+                                            <a class="ps-block__overlay" href="' . base_url() .'category/'. $categories->slug. '"></a>
+                                            <img src="' . base_url() . $categories->image. '" alt='.$categories->keywords.'>
+                                            <p>'.$categories->name.'</p>
+                                        </div>
+                                    </div>';
                         }
                     ?>
                 </div>
@@ -804,23 +806,23 @@
 				Vertical Slider Category
 				======================================-->  
 
-                <div class="ps-block__slider">
+                    <div class="ps-block__slider">
 
-                    <div class="ps-carousel--product-box owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="7000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="500" data-owl-mousedrag="off">
-                        ';
-                        
-                        foreach($subcategoriesAll as $key => $subcategories){
-                                
-                            if($categories->id == $subcategories->id_categories){
-                               echo '<a href="#"><img src='. base_url().$subcategories->image.' alt=""></a>';
-                             
+                        <div class="ps-carousel--product-box owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="7000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="500" data-owl-mousedrag="off">';
+
+                            foreach($subcategoriesAll as $key => $subcategories){
+                                    if($categories->id == $subcategories->id_categories){
+                                    echo '<a href="#">
+                                                <img src='. base_url().$subcategories->image.' alt="">
+                                            </a>';
+                                    }
                             }
-                        }
-                    	echo '
+
+                            echo '<a href="#"> <img src="http://ecommerce/assets/img/slider/vertical/technology-1.jpg" alt=""> </a>
+
+                        </div>
 
                     </div>
-
-                </div>
                         
                 <!--=====================================
 				Block Product Box
@@ -882,7 +884,7 @@
     
                                     </div>
     
-                                    <p class="ps-product__price sale">$'.number_format($productImage->purchase_price).' <del>$'.number_format($productImage->sale_price).' </del></p>
+                                    <p class="ps-product__price sale">$'.number_format($productImage->sale_price).' <del>$'.number_format($productImage->originalPrice).' </del></p>
     
                                 </div>
     

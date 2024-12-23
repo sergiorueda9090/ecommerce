@@ -14,6 +14,58 @@
 }
 
 </style>
+
+<style>
+        .envio-gratis {
+            font-size: 12px;
+            font-weight: bold;
+            /*color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            position: relative;
+            display: inline-block;
+            animation: onda 2s infinite;
+            border-radius: 10px;
+            border-color:#fcb800;*/
+        }
+
+        /*.envio-gratis::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fcb80054;
+            border-radius: 20px;
+            transform: scale(1.2);
+            animation: ondas 2s infinite;
+        }*/
+
+        @keyframes onda {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes ondas {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
     <!--=====================================
     Breadcrumb
     ======================================-->  
@@ -161,9 +213,9 @@
                                     ?>
                                <h6 class="ps-product__price sale">$    
 
-                                    <?php echo number_format($product->sale_price, 0, ',', '.') . " COP";?>
+                                    <span class="ps-product__price sale priceToPay"><?php echo number_format($product->sale_price, 0, ',', '.') . " COP";?></span>
                                     
-                                    <del class="priceToPay"> $  <?php echo number_format($product->originalPrice, 0, ',', '.'). " COP";  ?></del>
+                                    <del class="priceToOriginal"> $  <?php echo number_format($product->originalPrice, 0, ',', '.'). " COP";  ?></del>
                                     
                                     <?php
                                         if($product->discount != NULL && $product->discount != ""){
@@ -176,7 +228,7 @@
                                 <div class="ps-product__desc">
                                     <p style="margin:0px;"> 
                                         <?php echo "Precio de venta sin descuento: "; ?>
-                                        <del class="priceToPay"> 
+                                        <del class="priceToOriginal"> 
                                             <?php echo "$ ". number_format($product->originalPrice, 0, ',', '.') . " COP";?> 
                                         </del>
                                     </p>
@@ -194,6 +246,8 @@
                                         <?php echo "Precio final con descuento: "; ?>
                                         <?php echo "$ ". number_format($product->sale_price, 0, ',', '.') . " COP";?>
                                     </p>
+
+                                    <p class="envio-gratis">Envío Gratis</p>
 
                                 </div>
 

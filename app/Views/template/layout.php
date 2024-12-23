@@ -465,7 +465,7 @@ $session = session();
 
                                 <div class="ps-cart__footer">
 
-                                    <h3>Sub Total:<strong>$59.99</strong></h3>
+                                    <h3>Sub Total two :<strong>$0</strong></h3>
                                     <figure>
                                     	<a class="ps-btn" href="<?php echo base_url().'shoppingcart';?>">View Cart</a>
                                     	<a class="ps-btn" href="<?php echo base_url()."checkout"; ?>">Checkout</a>
@@ -781,7 +781,7 @@ $session = session();
 
                             <div class="ps-cart__footer">
 
-                                <h3>Sub Total:<strong>$59.99</strong></h3>
+                                <h3>Sub Total:<strong>$0</strong></h3>
 
                                 <figure>
                                 	<a class="ps-btn" href="shopping-cart.html">View Cart</a>

@@ -15,8 +15,7 @@ class WhatsappAPIController extends ResourceController {
     }
 
 
-    public function VerifyToken()
-    {
+    public function VerifyToken(){
         try {
             $accessToken = "555566666TTTTTTT"; // getenv('WHATSAPP_API_TOKEN');
             
@@ -51,8 +50,7 @@ class WhatsappAPIController extends ResourceController {
         }
     }
 
-    public function ReceivedMessage()
-    {
+    public function ReceivedMessage(){
         try {
             log_message('info', 'ReceivedMessage: Method called');
     
@@ -95,7 +93,7 @@ class WhatsappAPIController extends ResourceController {
                 
                 log_message('info', 'ReceivedMessage: Processing text message: {text}', ['text' => $sendMsg]);
     
-                $responseTXT = $this->TextMessage($sendMsg, $phone);
+                $responseTXT = $this->ProcessMessage($sendMsg, $phone); //$this->TextMessage($sendMsg, $phone);
     
             } elseif ($bodyMsg == "format") {
 
@@ -233,6 +231,36 @@ class WhatsappAPIController extends ResourceController {
         }
 
 
+
+    }
+
+    public function ProcessMessage($text, $number){
+
+        $text = strtolower($text);
+        
+        $listaData = [];
+
+        if($text == "hi" || $text == "hola" || $text == "hello" || $text == "option"){
+
+            $responseTXT = $this->TextMessage("Hello can how help you? ", $number);
+            
+            $dataOption  = $this->ButttonListMessage($number);
+            
+            array_push($listaData, $responseTXT, $dataOption);
+
+        }elseif($text == "thank" || $text == "gracias"){
+
+            $responseTXT = $this->TextMessage("Thank you for contacting me. ", $number);
+
+        }else{
+
+            $responseTXT = $this->TextMessage("I'm Sorry, I can't understand you. ", $number);
+
+        }
+
+        $response = $this->sendMessage($responseTXT);
+        
+        return $this->respond($response);
 
     }
 

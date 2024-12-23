@@ -228,7 +228,7 @@ function addCar() {
     
     let nameProduct = $(".nameProduct").text();
     let idProduct   = $(".idProduct").text();
-    let sale        = $(".priceToPay").text();
+    let sale        = $(".priceToPay").text().replace(/[.,]/g, "");
     let quantity    = $('.quantity').val();
     let nameSize    = $(".shaded .ps-variant__size").text();
        

@@ -92,6 +92,7 @@ class CategoriesController extends BaseController{
                                                             p.slug,
                                                             p.keywords,
                                                             p.sale_price,
+                                                            p.originalPrice,
                                                             p.description,
                                                             p.discount,
                                                             pi.image')

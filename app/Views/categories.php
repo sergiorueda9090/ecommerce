@@ -280,7 +280,7 @@ $globalCounter = 0;
     
                                                 </div>
     
-                                                <p class="ps-product__price">$'.number_format($product->sale_price).' - $32.99</p>
+                                                <p class="ps-product__price">$'.number_format($product->sale_price).' - <del>$'.number_format($product->originalPrice).'</del>
     
                                             </div>
     
@@ -288,8 +288,7 @@ $globalCounter = 0;
     
                                                 <a class="ps-product__title" href='.base_url().'product/'.$product->slug.'>'.$product->name.'</a>
     
-                                                <p class="ps-product__price">$'.number_format($product->sale_price).' - $32.99</p>
-    
+                                                <p class="ps-product__price">$'.number_format($product->sale_price).' - <del>$'.number_format($product->originalPrice).'</del>
                                             </div>
     
                                         </div>
@@ -446,7 +445,7 @@ $globalCounter = 0;
 
                                                         </div>
 
-                                                        <p class="ps-product__price">$'.number_format($product->sale_price).' - $32.99</p>
+                                                        <p class="ps-product__price">$'.number_format($product->sale_price).' - <del>$'.number_format($product->originalPrice).'</del>
 
                                                     </div>
 
@@ -456,7 +455,7 @@ $globalCounter = 0;
                                                         '.$product->name.'
                                                         </a>
 
-                                                        <p class="ps-product__price">$'.number_format($product->sale_price).' - $32.99</p>
+                                                        <p class="ps-product__price">$'.number_format($product->sale_price).' - <del>$'.number_format($product->originalPrice).'</del>
 
                                                     </div>
 
@@ -606,7 +605,7 @@ $globalCounter = 0;
                                                             '.$product->name.'
                                                             </a>
     
-                                                            <p class="ps-product__price">$'.number_format($product->sale_price).'</p>
+                                                             <p class="ps-product__price">$'.number_format($product->sale_price).' - <del>$'.number_format($product->originalPrice).'</del>
     
                                                         </div>
     
