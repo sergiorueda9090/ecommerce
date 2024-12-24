@@ -1,141 +1,98 @@
+<html>
+       <!--
+           //publi key TEST-0b53f700-820c-43bc-9370-818900e922ee
+           //access token TEST-1717554301495497-120714-c979930e4e81371cb8ce72dbe2baccee-269393460
+-->
+<head>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+<body>
+  <div id="paymentBrick_container"></div>
+  <script>
+    const mp = new MercadoPago('TEST-0b53f700-820c-43bc-9370-818900e922ee', {
+      locale: 'es'
+    });
+    const bricksBuilder = mp.bricks();
 
-<?php  echo $this->extend('template/layout'); ?>
-<?php  echo $this->section("content"); ?>
-<style>
+    const renderPaymentBrick = async (bricksBuilder) => {
+      const settings = {
+        initialization: {
+          amount: 10000, // Monto total de la compra
+          preferenceId: "200000", // Asegúrate de configurar correctamente el Preference ID
+          payer: {
+            firstName: "Sergio",
+            lastName: "Rueda",
+            email: "sergiorueda90@hotmail.com",
+          },
+        },
+        customization: {
+          visual: {
+            style: {
+              theme: "default",
+            },
+          },
+          paymentMethods: {
+            creditCard: "all",
+            debitCard: "all",
+            bankTransfer: "all",
+            atm: "all",
+            onboarding_credits: "all",
+            maxInstallments: 1,
+          },
+        },
+        callbacks: {
+          onReady: () => {
+            // Callback para cuando el Brick está listo
+          },
+          onSubmit: ({ selectedPaymentMethod, formData }) => {
+            return new Promise((resolve, reject) => {
+              // Agregar información del producto
+              const productData = {
+                productId: "12345", // ID único del producto
+                productName: "Camiseta Deportiva", // Nombre del producto
+                quantity: 2, // Cantidad comprada
+                price: 5000, // Precio unitario
+                total: 10000, // Total por el producto
+              };
 
-.products th, .products td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-    font-weight: 500;
-}
-.products th {
-    background-color: #fcb800;
-    color: #000;
-}
-</style>
-<!--=====================================
-    Breadcrumb
-    ======================================-->  
-	
-	<div class="ps-breadcrumb">
+              // Combinar información del pago con datos del producto
+              const requestData = {
+                ...formData,
+                product: productData,
+              };
 
-        <div class="container">
+              fetch("mercadopago/process_payment", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestData),
+              })
+                .then((response) => response.json())
+                .then((response) => {
+                  console.log("Respuesta del servidor:", response);
+                  resolve();
+                })
+                .catch((error) => {
+                  console.error("Error procesando el pago:", error);
+                  reject();
+                });
+            });
+          },
+          onError: (error) => {
+            console.error("Error en el Brick:", error);
+          },
+        },
+      };
 
-            <ul class="breadcrumb">
+      window.paymentBrickController = await bricksBuilder.create(
+        "payment",
+        "paymentBrick_container",
+        settings
+      );
+    };
 
-                <li><a href="<?php base_url() ?>">Home</a></li>
-
-                <li>Factura de Compra</li>
-
-            </ul>
-
-        </div>
-
-    </div>
-
-    <!--=====================================
-    FACTURA Content
-    ======================================-->
-    <div class="container" style="width: 80%;margin: 20px auto;background: #fff;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);border-radius: 8px;padding: 20px;">
-        <div class="header" style="text-align: center;
-                                    border-bottom: 2px solid #fcb800;
-                                    padding-bottom: 15px;
-                                    margin-bottom: 20px;">
-            <h1 style="margin: 0; color: #000;">Factura de Compra</h1>
-            <p style="margin: 5px 0;">Gracias por tu compra en [Nombre del Comercio]</p>
-
-
-        <div class="details" style="margin-bottom: 20px;">
-            <h2 style="margin-bottom: 10px;font-size: 1.2em;color: #555;">Mercado Pago</h2>
-
-        </div>
-
-        <table class="products" style="  width: 100%;
-                                        border-collapse: collapse;
-                                        margin-bottom: 20px;">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio Unitario</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-            
-
-            </tbody>
-        </table>
-
-        <div class="total" style="  text-align: right;
-            font-size: 1.2em;
-            margin-top: 20px;">
-            <p><strong>Total a Pagar:</strong> $190.00</p>
-        </div>
-
-        <div class="download-button" style=" text-align: center;
-            margin-top: 20px;">
-            <a href="/factura/pdf" target="_blank" style="            display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #000;
-            font-weight: 600;
-            background-color: #fcb800;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;">Descargar en PDF</a>
-        </div>
-
-        <div class="footer" style="text-align: center;
-            margin-top: 30px;
-            font-size: 0.9em;
-            color: #777;">
-            <p>Si tienes alguna pregunta sobre tu compra, contáctanos en soporte@comercio.com</p>
-            <p>¡Gracias por elegirnos!</p>
-        </div>
-    </div>
-  
-    <!--=====================================
-	Newletter
-	======================================-->  
-
-    <div class="ps-newsletter">
-
-        <div class="container">
-
-            <form class="ps-form--newsletter" action="do_action" method="post">
-
-                <div class="row">
-
-                    <div class="col-xl-5 col-12 ">
-                        <div class="ps-form__left">
-                            <h3>Newsletter</h3>
-                            <p>Subcribe to get information about products and coupons</p>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-7 col-12 ">
-
-                        <div class="ps-form__right">
-
-                            <div class="form-group--nest">
-
-                                <input class="form-control" type="email" placeholder="Email address">
-                                <button class="ps-btn">Subscribe</button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-<?php  echo $this->endSection("content"); ?>
+    renderPaymentBrick(bricksBuilder);
+  </script>
+</body>
+</html>

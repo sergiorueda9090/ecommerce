@@ -82,7 +82,13 @@ $routes->get("/factura/pdf",   "FacturaController::pdf");
 /* ============================================
     START MERCADOPAGO
 =============================================== */
-$routes->get("mercadopago", "MercadoPagoController::index");
+$routes->get('mercadopago',                 'MercadoPagoController::index');
+$routes->post('mercadopago/process_payment', 'MercadoPagoController::process_payment');
+
+$routes->get('mercadopago/crear',   'MercadoPagoController::createPaymentPreference');
+$routes->get('mercadopago/success', 'MercadoPagoController::success');
+$routes->get('mercadopago/failure', 'MercadoPagoController::failure');
+$routes->get('mercadopago/pending', 'MercadoPagoController::pending');
 
 /* ============================================
     END MERCADOPAGO
