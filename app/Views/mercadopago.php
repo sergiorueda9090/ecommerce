@@ -19,10 +19,13 @@ var_dump($preference->id);
 
 <script>
   mp.bricks().create("wallet", "wallet_container", {
-  initialization: {
-    preferenceId: '<?php echo $preference->id ?>',
-  },
-});
+    initialization: {
+      preferenceId: '<?php echo $preference->id ?>',
+    },
+    settings: {
+      locale: 'es-CO', // Configuración del idioma colombiano
+    },
+  });
 
 </script>
 <!--<script src="https://sdk.mercadopago.com/js/v2"></script>

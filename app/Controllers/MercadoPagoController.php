@@ -30,44 +30,23 @@ class MercadoPagoController extends BaseController{
         //$request_options = new RequestOptions();
         //$request_options->setCustomHeaders(["X-Idempotency-Key: <SOME_UNIQUE_VALUE>"]);
         
-        $createRequest = [
-            "transaction_amount" => 5000, // Monto de la transacción
-            "description" => "Camiseta de prueba", // Descripción del producto
-            "payment_method_id" => "pse", // Método de pago (simulación PSE)
-            "callback_url" => "http://www.tu-sitio.com/callback", // URL de callback (modificar según tus pruebas)
-            "notification_url" => "http://www.tu-sitio.com/notification", // URL de notificación
-            "additional_info" => [
-                "ip_address" => "127.0.0.1" // Dirección IP simulada
+        $preference = $client->create([
+            "items" => [
+                [
+                    "id" => "DEP-0001",
+                    "title" => "Balon de Futbol",
+                    "quantity" => 1,
+                    "unit_price" => 550
+                ]
             ],
-            "transaction_details" => [
-                "financial_institution" => "1006" // Banco de prueba
-            ],
-            "payer" => [
-                "email" => "test_user@example.com", // Correo de prueba
-                "entity_type" => "individual", // Tipo de entidad
-                "first_name" => "Juan", // Nombre de prueba
-                "last_name" => "Pérez", // Apellido de prueba
-                "identification" => [
-                    "type" => "CC", // Tipo de identificación (Cédula de Ciudadanía en Colombia)
-                    "number" => "1234567890" // Número de identificación de prueba
-                ],
-                "address" => [
-                    "zip_code" => "110111", // Código postal de prueba
-                    "street_name" => "Calle Falsa", // Nombre de calle de prueba
-                    "street_number" => "123", // Número de calle de prueba
-                    "neighborhood" => "Barrio Central", // Barrio de prueba
-                    "city" => "Bogotá", // Ciudad de prueba
-                    "federal_unit" => "Cundinamarca" // Departamento de prueba
-                ],
-                "phone" => [
-                    "area_code" => "57", // Código de área (Colombia)
-                    "number" => "3001234567" // Número de teléfono de prueba
-                ],
-            ],
-        ];
-        $payment = $client->create($createRequest/*, $request_options*/);
-        $s = "s";
-        return view("mercadopago", array("preference" =>  $payment));
+        
+            // Descripción que aparecerá en el extracto de la tarjeta del comprador
+            "statement_descriptor" => "MI TIENDA",
+        
+            // Referencia externa para identificar la transacción en el sistema del vendedor
+            "external_reference" => "CDP001",
+        ]);
+        return view("mercadopago", array("preference" =>  $preference));
     }
 
     public function process_payment() {
