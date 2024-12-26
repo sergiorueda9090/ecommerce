@@ -1,8 +1,36 @@
 <html>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+
+
+<div id="wallet_container"></div>
+
+<?php 
+    var_dump($preference);
+?>
+<script>
+
+    const mp = new MercadoPago('TEST-0b53f700-820c-43bc-9370-818900e922ee',{
+        locale:'es-COL'
+    });
+
+    //const bricksBuilder = mp.bricks();
+
+    mp.bricks().create("wallet", "wallet_container", {
+        initialization: {
+            preferenceId: '<?php echo $preference->id; ?>',
+        },
+        customization: {
+            texts: {
+            valueProp: 'smart_option',
+            },
+        },
+    });
+</script>
        <!--
            //publi key TEST-0b53f700-820c-43bc-9370-818900e922ee
            //access token TEST-1717554301495497-120714-c979930e4e81371cb8ce72dbe2baccee-269393460
 -->
+           <!--
 <head>
   <script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
@@ -94,5 +122,5 @@
 
     renderPaymentBrick(bricksBuilder);
   </script>
-</body>
+</body>-->
 </html>
