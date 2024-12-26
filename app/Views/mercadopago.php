@@ -1,5 +1,31 @@
 <html>
-<script src="https://sdk.mercadopago.com/js/v2"></script>
+
+<?php
+
+var_dump($preference->id);
+?>
+
+<body>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+</body>
+
+          
+<script>
+  const mp = new MercadoPago("TEST-0b53f700-820c-43bc-9370-818900e922ee");
+</script>
+
+
+<div id="wallet_container"></div>
+
+<script>
+  mp.bricks().create("wallet", "wallet_container", {
+  initialization: {
+    preferenceId: '<?php echo $preference->id ?>',
+  },
+});
+
+</script>
+<!--<script src="https://sdk.mercadopago.com/js/v2"></script>
 
 
 <div id="wallet_container"></div>
@@ -74,10 +100,10 @@
       </div>
     </div>
   </form>
-</div>
+</div>-->
 
 <script>
-
+/*
 document.getElementById('form-checkout__personType').addEventListener('change', e => {
 	const personTypesElement = document.getElementById('form-checkout__personType');
 	updateSelectOptions(personTypesElement.value);
@@ -169,7 +195,7 @@ function setPse() {
     }catch(e) {
         return console.error('Error getting identificationTypes: ', e);
     }
- })();
+ })();*/
 
 </script>
 
