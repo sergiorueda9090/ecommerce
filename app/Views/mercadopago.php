@@ -6,28 +6,89 @@ var_dump($preference->id);
 ?>
 
 <body>
-  <script src="https://sdk.mercadopago.com/js/v2"></script>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 </body>
 
-          
-<script>
-  const mp = new MercadoPago("TEST-0b53f700-820c-43bc-9370-818900e922ee");
-</script>
+        
 
 
-<div id="wallet_container"></div>
+<div id="paymentBrick_container">
+</div>
 
 <script>
-  mp.bricks().create("wallet", "wallet_container", {
-    initialization: {
-      preferenceId: '<?php echo $preference->id ?>',
-    },
-    settings: {
-      locale: 'es-CO', // Configuración del idioma colombiano
-    },
+  const mp = new MercadoPago('TEST-0b53f700-820c-43bc-9370-818900e922ee', {
+    locale: 'es'
   });
-
-</script>
+  const bricksBuilder = mp.bricks();
+    const renderPaymentBrick = async (bricksBuilder) => {
+      const settings = {
+        initialization: {
+          /*
+            "amount" es el monto total a pagar por todos los medios de pago con excepción de la Cuenta de Mercado Pago y Cuotas sin tarjeta de crédito, las cuales tienen su valor de procesamiento determinado en el backend a través del "preferenceId"
+          */
+          amount: 50000,
+          preferenceId: '<?php echo $preference->id; ?>',
+          payer: {
+            firstName: "",
+            lastName: "",
+            email: "",
+          },
+        },
+        customization: {
+          visual: {
+            style: {
+              theme: "default",
+            },
+          },
+          paymentMethods: {
+            atm: "all",
+										onboarding_credits: "all",
+										wallet_purchase: "all",
+            maxInstallments: 1
+          },
+        },
+        callbacks: {
+          onReady: () => {
+            /*
+             Callback llamado cuando el Brick está listo.
+             Aquí puede ocultar cargamentos de su sitio, por ejemplo.
+            */
+          },
+          onSubmit: ({ selectedPaymentMethod, formData }) => {
+            // callback llamado al hacer clic en el botón de envío de datos
+            return new Promise((resolve, reject) => {
+              fetch("/process_payment", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+              })
+                .then((response) => response.json())
+                .then((response) => {
+                  // recibir el resultado del pago
+                  resolve();
+                })
+                .catch((error) => {
+                  // manejar la respuesta de error al intentar crear el pago
+                  reject();
+                });
+            });
+          },
+          onError: (error) => {
+            // callback llamado para todos los casos de error de Brick
+            console.error(error);
+          },
+        },
+      };
+      window.paymentBrickController = await bricksBuilder.create(
+        "payment",
+        "paymentBrick_container",
+        settings
+      );
+    };
+    renderPaymentBrick(bricksBuilder);
+  </script>
 <!--<script src="https://sdk.mercadopago.com/js/v2"></script>
 
 
