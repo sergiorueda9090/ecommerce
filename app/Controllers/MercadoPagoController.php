@@ -65,7 +65,7 @@ class MercadoPagoController extends BaseController{
                 ],
             ],
         ];
-        $payment = $client->create($createRequest/*, $request_options*/);
+        $payment = "";
         $s = "s";
         $s = "s";
         $s = "s";

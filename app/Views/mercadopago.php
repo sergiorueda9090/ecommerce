@@ -1,126 +1,163 @@
 <html>
-<script src="https://sdk.mercadopago.com/js/v2"></script>
+  <body>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    
+    <script>
+      const mp = new MercadoPago("TEST-0b53f700-820c-43bc-9370-818900e922ee");
+        /*
+        <div id="wallet_container"></div>
+        const mp = new MercadoPago('TEST-0b53f700-820c-43bc-9370-818900e922ee',{
+            locale:'es-COL'
+        });
 
+        //const bricksBuilder = mp.bricks();
 
-<div id="wallet_container"></div>
-
-<?php 
-    var_dump($preference);
-?>
-<script>
-
-    const mp = new MercadoPago('TEST-0b53f700-820c-43bc-9370-818900e922ee',{
-        locale:'es-COL'
-    });
-
-    //const bricksBuilder = mp.bricks();
-
-    mp.bricks().create("wallet", "wallet_container", {
-        initialization: {
-            preferenceId: '<?php echo $preference->id; ?>',
-        },
-        customization: {
-            texts: {
-            valueProp: 'smart_option',
+        mp.bricks().create("wallet", "wallet_container", {
+            initialization: {
+                preferenceId: '',
             },
-        },
-    });
-</script>
-       <!--
-           //publi key TEST-0b53f700-820c-43bc-9370-818900e922ee
-           //access token TEST-1717554301495497-120714-c979930e4e81371cb8ce72dbe2baccee-269393460
--->
-           <!--
-<head>
-  <script src="https://sdk.mercadopago.com/js/v2"></script>
-</head>
-<body>
-  <div id="paymentBrick_container"></div>
-  <script>
-    const mp = new MercadoPago('TEST-0b53f700-820c-43bc-9370-818900e922ee', {
-      locale: 'es'
-    });
-    const bricksBuilder = mp.bricks();
-
-    const renderPaymentBrick = async (bricksBuilder) => {
-      const settings = {
-        initialization: {
-          amount: 10000, // Monto total de la compra
-          preferenceId: "200000", // Asegúrate de configurar correctamente el Preference ID
-          payer: {
-            firstName: "Sergio",
-            lastName: "Rueda",
-            email: "sergiorueda90@hotmail.com",
-          },
-        },
-        customization: {
-          visual: {
-            style: {
-              theme: "default",
-            },
-          },
-          paymentMethods: {
-            creditCard: "all",
-            debitCard: "all",
-            bankTransfer: "all",
-            atm: "all",
-            onboarding_credits: "all",
-            maxInstallments: 1,
-          },
-        },
-        callbacks: {
-          onReady: () => {
-            // Callback para cuando el Brick está listo
-          },
-          onSubmit: ({ selectedPaymentMethod, formData }) => {
-            return new Promise((resolve, reject) => {
-              // Agregar información del producto
-              const productData = {
-                productId: "12345", // ID único del producto
-                productName: "Camiseta Deportiva", // Nombre del producto
-                quantity: 2, // Cantidad comprada
-                price: 5000, // Precio unitario
-                total: 10000, // Total por el producto
-              };
-
-              // Combinar información del pago con datos del producto
-              const requestData = {
-                ...formData,
-                product: productData,
-              };
-
-              fetch("mercadopago/process_payment", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
+            customization: {
+                texts: {
+                action: 'buy',
+                valueProp:'security_safety'
                 },
-                body: JSON.stringify(requestData),
-              })
-                .then((response) => response.json())
-                .then((response) => {
-                  console.log("Respuesta del servidor:", response);
-                  resolve();
-                })
-                .catch((error) => {
-                  console.error("Error procesando el pago:", error);
-                  reject();
-                });
-            });
-          },
-          onError: (error) => {
-            console.error("Error en el Brick:", error);
-          },
-        },
-      };
+            },
+        });*/
+   
+        //publi key TEST-0b53f700-820c-43bc-9370-818900e922ee
+        //access token TEST-1717554301495497-120714-c979930e4e81371cb8ce72dbe2baccee-269393460
 
-      window.paymentBrickController = await bricksBuilder.create(
-        "payment",
-        "paymentBrick_container",
-        settings
-      );
-    };
 
-    renderPaymentBrick(bricksBuilder);
-  </script>
-</body>-->
+    </script>
+  
+
+           
+  <style>
+    #form-checkout {
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+    }
+
+    .container {
+      height: 18px;
+      display: inline-block;
+      border: 1px solid rgb(118, 118, 118);
+      border-radius: 2px;
+      padding: 1px 2px;
+    }
+  </style>
+  <form id="form-checkout">
+    <div id="form-checkout__cardNumber" class="container"></div>
+    <div id="form-checkout__expirationDate" class="container"></div>
+    <div id="form-checkout__securityCode" class="container"></div>
+    <input type="text" id="form-checkout__cardholderName" />
+    <select id="form-checkout__issuer"></select>
+    <select id="form-checkout__installments"></select>
+    <select id="form-checkout__identificationType"></select>
+    <input type="text" id="form-checkout__identificationNumber" />
+    <input type="email" id="form-checkout__cardholderEmail" />
+
+    <button type="submit" id="form-checkout__submit">Pay</button>
+    <progress value="0" class="progress-bar">Loading...</progress>
+  </form>
+<script>
+          const cardForm = mp.cardForm({
+amount: "100.5",
+iframe: true,
+form: {
+id: "form-checkout",
+cardNumber: {
+id: "form-checkout__cardNumber",
+placeholder: "Card Number",
+},
+expirationDate: {
+id: "form-checkout__expirationDate",
+placeholder: "MM/YY",
+},
+securityCode: {
+id: "form-checkout__securityCode",
+placeholder: "Security Code",
+},
+cardholderName: {
+id: "form-checkout__cardholderName",
+placeholder: "Cardholder",
+},
+issuer: {
+id: "form-checkout__issuer",
+placeholder: "Issuing bank",
+},
+installments: {
+id: "form-checkout__installments",
+placeholder: "Installments",
+},
+identificationType: {
+id: "form-checkout__identificationType",
+placeholder: "Document type",
+},
+identificationNumber: {
+id: "form-checkout__identificationNumber",
+placeholder: "Document number",
+},
+cardholderEmail: {
+id: "form-checkout__cardholderEmail",
+placeholder: "Email",
+},
+},
+callbacks: {
+onFormMounted: error => {
+if (error) return console.warn("Form Mounted handling error: ", error);
+console.log("Form mounted");
+},
+onSubmit: event => {
+event.preventDefault();
+
+const {
+paymentMethodId: payment_method_id,
+issuerId: issuer_id,
+cardholderEmail: email,
+amount,
+token,
+installments,
+identificationNumber,
+identificationType,
+} = cardForm.getCardFormData();
+
+fetch("/process_payment", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify({
+token,
+issuer_id,
+payment_method_id,
+transaction_amount: Number(amount),
+installments: Number(installments),
+description: "Product Description",
+payer: {
+email,
+identification: {
+type: identificationType,
+number: identificationNumber,
+},
+},
+}),
+});
+},
+onFetching: (resource) => {
+console.log("Fetching resource: ", resource);
+
+// Animate progress bar
+const progressBar = document.querySelector(".progress-bar");
+progressBar.removeAttribute("value");
+
+return() => {
+progressBar.setAttribute("value", "0");
+};
+}
+},
+});
+</script>
+</body>
 </html>
