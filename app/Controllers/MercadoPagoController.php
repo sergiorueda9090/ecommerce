@@ -28,109 +28,58 @@ class MercadoPagoController extends BaseController{
 
     public function index(){
         
-       $client = new PreferenceClient();
+        $client = new PreferenceClient();
+
+        $client->back_urls = array(
+            "success" => base_url()."mercadopago/success",
+            "failure" => base_url()."mercadopago/success",
+            "pending" => base_url()."mercadopago/success"
+        );
+
+        $client->auto_return = "approved";
+        $client->binary_mode = true;
 
         $preference = $client->create([
-            "items" => [
-                [
-                    "id" => "item-ID-1234",
-                    "title" => "Title of what you are paying for. It will be displayed in the payment process.",
-                    "currency_id" => "COP",
-                    "picture_url" => "https://www.mercadopago.com/org-img/MP3/home/logomp3.gif",
-                    "description" => "Item description",
-                    "category_id" => "art", // Available categories at https://api.mercadopago.com/item_categories
-                    "quantity" => 1,
-                    "unit_price" => 20000
-                ]
-            ],
-            "payer" => [
-                "name" => "user-name",
-                "surname" => "user-surname",
-                "email" => "user@email.com",
-                "date_created" => "2015-06-02T12:58:41.425-04:00",
-                "phone" => [
-                    "area_code" => "11",
-                    "number" => "4444-4444"
-                ],
-                /*"identification" => [
-                    "type" => "RUT", // Available ID types at https://api.mercadopago.com/v1/identification_types
-                    "number" => "12345678"
-                ],*/
-                "address" => [
-                    "street_name" => "Street",
-                    "street_number" => 123,
-                    "zip_code" => "5700"
-                ]
-            ],
-            "back_urls" => [
-                "success" => base_url()."mercadopago/success",
-                "failure" => base_url()."mercadopago/success",
-                "pending" => base_url()."mercadopago/success"
-            ],
-            "auto_return" => "approved",
-            "payment_methods" => [
-                "excluded_payment_methods" => [
-                    [
-                        "id" => "master"
-                    ]
-                ],
-                "excluded_payment_types" => [
-                    [
-                        "id" => "ticket"
-                    ]
-                ],
-                "installments" => 12,
-                "default_payment_method_id" => null,
-                "default_installments" => null
-            ],
-            "shipments" => [
-                "receiver_address" => [
-                    "zip_code" => "5700",
-                    "street_number" => 123,
-                    "street_name" => "Street",
-                    "floor" => 4,
-                    "apartment" => "C"
-                ]
-            ],
-            "notification_url" => base_url()."mercadopago/notification",
-            "statement_descriptor" => "MINEGOCIO",
-            "external_reference" => "Reference_1234",
-            "expires" => true,
-            "expiration_date_from" => "2016-02-01T12:00:00.000-04:00",
-            "expiration_date_to" => "2016-02-28T12:00:00.000-04:00",
-            "taxes" => [
-                [
-                    "type" => "IVA",
-                    "value" => 16
-                ]
-            ]
-        ]);
-
-        
+                            "items"=> array(
+                                array(
+                                "title" => "Mi producto",
+                                "quantity" => 1,
+                                "unit_price" => 20000
+                                )
+                                ),
+                            "notification_url" => base_url()."mercadopago/notification",
+                    ]);
     
         return view("mercadopago", array("preference"=>$preference));
     
     }
 
     public function notification(){
-        // Obtener los datos de la solicitud
-        $input = $this->request->getJSON(true); // Lee el cuerpo como JSON y lo convierte a un array asociativo
+              // Detectar el método HTTP
+              $method = $this->request->getMethod(true); // Retorna el método HTTP en mayúsculas (GET, POST, etc.)
 
-        // Ruta del archivo de logs personalizado
-        $logFile = WRITEPATH . 'logs/mercadopago_notification.log';
-
-        // Escribir los datos en un archivo de log
-        file_put_contents(
-            $logFile,
-            "[" . date('Y-m-d H:i:s') . "] " . json_encode($input, JSON_PRETTY_PRINT) . PHP_EOL,
-            FILE_APPEND
-        );
-
-        // Registrar en los logs del sistema de CodeIgniter
-        log_message('info', 'MercadoPago Notification: ' . json_encode($input));
-
-        // Responder a MercadoPago con código 200
-        return $this->response->setJSON(['status' => 'success'])->setStatusCode(200);
+              // Obtener los datos enviados en la solicitud
+              $input = [];
+              if ($method === 'POST' || $method === 'PUT') {
+                  $input = $this->request->getJSON(true) ?? $this->request->getPost();
+              } elseif ($method === 'GET') {
+                  $input = $this->request->getGet();
+              }
+      
+              // Registrar el método y los datos en un archivo de log
+              $logFile = WRITEPATH . 'logs/mercadopago_notification.log';
+              file_put_contents(
+                  $logFile,
+                  "[" . date('Y-m-d H:i:s') . "] Method: $method, Data: " . json_encode($input, JSON_PRETTY_PRINT) . PHP_EOL,
+                  FILE_APPEND
+              );
+      
+              // Registrar en los logs del sistema
+              log_message('info', 'MercadoPago Notification - Method: ' . $method . ' Data: ' . json_encode($input));
+      
+              // Responder con un código 200 OK
+              return $this->response->setJSON(['status' => 'success', 'method' => $method])->setStatusCode(200);
+          
     }
 
     public function success(){
