@@ -1,7 +1,7 @@
 <?php  echo $this->extend('template/layout'); ?>
 
 <?php  echo $this->section("content"); ?>
-
+<?php //echo phpinfo(); ?>
     <!--=====================================
     Home Content
     ======================================-->  
