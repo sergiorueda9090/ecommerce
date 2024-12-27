@@ -25,7 +25,7 @@ class MercadoPagoController extends BaseController{
                                 "unit_price" => 20000
                                 )
                             ),
-            "back_urls " => array(
+           /* "back_urls " => array(
                                     "success" => base_url()."mercadopago/success",
                                     "failure" => base_url()."mercadopago/success",
                                     "pending" => base_url()."mercadopago/success"
@@ -53,7 +53,7 @@ class MercadoPagoController extends BaseController{
             "statement_descriptor" => "PIDELIBRE.COM",
             "external_reference" => "Reference_1234",
             "expires" => true,
-            "binary_mode" => true
+            "binary_mode" => true*/
         ]);
     
         return view("mercadopago", array("preference"=>$preference));
