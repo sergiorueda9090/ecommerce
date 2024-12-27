@@ -7,12 +7,14 @@ use Dompdf\Dompdf;
 
 // SDK de Mercado Pago
 use MercadoPago\MercadoPagoConfig;
-use MercadoPago\Preference;
-
 use MercadoPago\Client\Preference\PreferenceClient;
+
+
+use MercadoPago\Preference;
 use MercadoPago\Client\Payment\PaymentClient;
 use MercadoPago\Exceptions\MPApiException;
 use MercadoPago\Client\Common\RequestOptions;
+
 
 class MercadoPagoController extends BaseController{
     
@@ -26,158 +28,123 @@ class MercadoPagoController extends BaseController{
 
     public function index(){
         
-        $client = new PreferenceClient();
+       $client = new PreferenceClient();
+
         $preference = $client->create([
-                            "items"=> array(
-                                array(
-                                "title" => "Mi producto",
-                                "quantity" => 1,
-                                "unit_price" => 20000
-                                )
-                            )
-                    ]);
-        return view("mercadopago", array("preference"=>$preference));
-    }
-
-    public function process_payment() {
-        // Capturar todos los datos enviados en la solicitud POST
-        $params = $this->request->getJSON();
-        
-        
-        MercadoPagoConfig::setAccessToken(getenv('MERCADO_PAGO_ACCESS_TOKEN'));
-        $preference = new Preference();
-
-
-        $client = new PaymentClient();
-        $request_options = new RequestOptions();
-        $request_options->setCustomHeaders(["X-Idempotency-Key: <SOME_UNIQUE_VALUE>"]);
-        
-        $createRequest = [
-            "transaction_amount" => 5000, // Monto de la transacción
-            "description" => "Camiseta de prueba", // Descripción del producto
-            "payment_method_id" => "pse", // Método de pago (simulación PSE)
-            "callback_url" => "http://www.tu-sitio.com/callback", // URL de callback (modificar según tus pruebas)
-            "notification_url" => "http://www.tu-sitio.com/notification", // URL de notificación
-            "additional_info" => [
-                "ip_address" => "127.0.0.1" // Dirección IP simulada
-            ],
-            "transaction_details" => [
-                "financial_institution" => "1006" // Banco de prueba
+            "items" => [
+                [
+                    "id" => "item-ID-1234",
+                    "title" => "Title of what you are paying for. It will be displayed in the payment process.",
+                    "currency_id" => "COP",
+                    "picture_url" => "https://www.mercadopago.com/org-img/MP3/home/logomp3.gif",
+                    "description" => "Item description",
+                    "category_id" => "art", // Available categories at https://api.mercadopago.com/item_categories
+                    "quantity" => 1,
+                    "unit_price" => 20000
+                ]
             ],
             "payer" => [
-                "email" => "test_user@example.com", // Correo de prueba
-                "entity_type" => "individual", // Tipo de entidad
-                "first_name" => "Juan", // Nombre de prueba
-                "last_name" => "Pérez", // Apellido de prueba
-                "identification" => [
-                    "type" => "CC", // Tipo de identificación (Cédula de Ciudadanía en Colombia)
-                    "number" => "1234567890" // Número de identificación de prueba
-                ],
-                "address" => [
-                    "zip_code" => "110111", // Código postal de prueba
-                    "street_name" => "Calle Falsa", // Nombre de calle de prueba
-                    "street_number" => "123", // Número de calle de prueba
-                    "neighborhood" => "Barrio Central", // Barrio de prueba
-                    "city" => "Bogotá", // Ciudad de prueba
-                    "federal_unit" => "Cundinamarca" // Departamento de prueba
-                ],
+                "name" => "user-name",
+                "surname" => "user-surname",
+                "email" => "user@email.com",
+                "date_created" => "2015-06-02T12:58:41.425-04:00",
                 "phone" => [
-                    "area_code" => "57", // Código de área (Colombia)
-                    "number" => "3001234567" // Número de teléfono de prueba
+                    "area_code" => "11",
+                    "number" => "4444-4444"
                 ],
+                /*"identification" => [
+                    "type" => "RUT", // Available ID types at https://api.mercadopago.com/v1/identification_types
+                    "number" => "12345678"
+                ],*/
+                "address" => [
+                    "street_name" => "Street",
+                    "street_number" => 123,
+                    "zip_code" => "5700"
+                ]
             ],
-        ];
-        $payment = $client->create($createRequest, $request_options);
-        print_r($payment);
-    }
+            "back_urls" => [
+                "success" => base_url()."mercadopago/success",
+                "failure" => base_url()."mercadopago/success",
+                "pending" => base_url()."mercadopago/success"
+            ],
+            "auto_return" => "approved",
+            "payment_methods" => [
+                "excluded_payment_methods" => [
+                    [
+                        "id" => "master"
+                    ]
+                ],
+                "excluded_payment_types" => [
+                    [
+                        "id" => "ticket"
+                    ]
+                ],
+                "installments" => 12,
+                "default_payment_method_id" => null,
+                "default_installments" => null
+            ],
+            "shipments" => [
+                "receiver_address" => [
+                    "zip_code" => "5700",
+                    "street_number" => 123,
+                    "street_name" => "Street",
+                    "floor" => 4,
+                    "apartment" => "C"
+                ]
+            ],
+            "notification_url" => base_url()."mercadopago/notification",
+            "statement_descriptor" => "MINEGOCIO",
+            "external_reference" => "Reference_1234",
+            "expires" => true,
+            "expiration_date_from" => "2016-02-01T12:00:00.000-04:00",
+            "expiration_date_to" => "2016-02-28T12:00:00.000-04:00",
+            "taxes" => [
+                [
+                    "type" => "IVA",
+                    "value" => 16
+                ]
+            ]
+        ]);
 
-    protected function authenticate(){
-        // Getting the access token from .env file (create your own function)
-        $mpAccessToken = getenv('MERCADO_PAGO_ACCESS_TOKEN');
-        // Set the token the SDK's config
-        MercadoPagoConfig::setAccessToken($mpAccessToken);
-        // (Optional) Set the runtime enviroment to LOCAL if you want to test on localhost
-        // Default value is set to SERVER
-        MercadoPagoConfig::setRuntimeEnviroment(MercadoPagoConfig::LOCAL);
-    }
-
-    // Function that will return a request object to be sent to Mercado Pago API
-    function createPreferenceRequest($items, $payer): array{
         
-        $paymentMethods = [
-            "excluded_payment_methods" => [],
-            "installments" => 12,
-            "default_installments" => 1
-        ];
-
-        $backUrls = array(
-            'success' => 'mercadopago/success',
-            'failure' => 'mercadopago/failure'
-        );
-
-        $request = [
-            "items" => $items,
-            "payer" => $payer,
-            "payment_methods" => $paymentMethods,
-            "back_urls" => $backUrls,
-            "statement_descriptor" => "NAME_DISPLAYED_IN_USER_BILLING",
-            "external_reference" => "1234567890",
-            "expires" => false,
-            "auto_return" => 'approved',
-        ];
-
-        return $request;
+    
+        return view("mercadopago", array("preference"=>$preference));
+    
     }
 
-    public function createPaymentPreference(): ?Preference{
-        // Fill the data about the product(s) being pruchased
-        $product1 = array(
-            "id" => "1234567890",
-            "title" => "Product 1 Title",
-            "description" => "Product 1 Description",
-            "currency_id" => "BRL",
-            "quantity" => 12,
-            "unit_price" => 9.90
+    public function notification(){
+        // Obtener los datos de la solicitud
+        $input = $this->request->getJSON(true); // Lee el cuerpo como JSON y lo convierte a un array asociativo
+
+        // Ruta del archivo de logs personalizado
+        $logFile = WRITEPATH . 'logs/mercadopago_notification.log';
+
+        // Escribir los datos en un archivo de log
+        file_put_contents(
+            $logFile,
+            "[" . date('Y-m-d H:i:s') . "] " . json_encode($input, JSON_PRETTY_PRINT) . PHP_EOL,
+            FILE_APPEND
         );
 
-        $product2 = array(
-            "id" => "9012345678",
-            "title" => "Product 2 Title",
-            "description" => "Product 2 Description",
-            "currency_id" => "BRL",
-            "quantity" => 5,
-            "unit_price" => 19.90
-        );
+        // Registrar en los logs del sistema de CodeIgniter
+        log_message('info', 'MercadoPago Notification: ' . json_encode($input));
 
-        // Mount the array of products that will integrate the purchase amount
-        $items = array($product1, $product2);
+        // Responder a MercadoPago con código 200
+        return $this->response->setJSON(['status' => 'success'])->setStatusCode(200);
+    }
 
-        // Retrieve information about the user (use your own function)
+    public function success(){
        
+        $respuesta = array(
+            'Payment' => $_GET['payment_id'],
+            'Status' => $_GET['status'],
+            'MerchantOrder' => $_GET['merchant_order_id']        
+        ); 
 
-        $payer = array(
-            "name" => 'Sergio',
-            "surname" =>'Rueda',
-            "email" => 'Sergio@hotmail.com',
-        );
+        echo json_encode($respuesta);
 
-        // Create the request object to be sent to the API when the preference is created
-        $request = $this->createPreferenceRequest($items, $payer);
+        return view("mercadopagosuccess", array("respuesta"=>$respuesta));
 
-        // Instantiate a new Preference Client
-        $client = new PreferenceClient();
-
-        try {
-            // Send the request that will create the new preference for user's checkout flow
-            $preference = $client->create($request);
-
-            // Useful props you could use from this object is 'init_point' (URL to Checkout Pro) or the 'id'
-            return $preference;
-        } catch (MPApiException $error) {
-            // Here you might return whatever your app needs.
-            // We are returning null here as an example.
-            return null;
-        }
     }
 
 }

@@ -6,5 +6,9 @@
 </head>
 <body>
     <h1>¡Pago realizado con éxito!</h1>
+    <?php
+    
+        var_dump($respuesta);
+    ?>
 </body>
 </html>

@@ -16,7 +16,7 @@ var_dump($preference->id);
 
 <script>
 
-  const mp = new MercadoPago('TEST-0b53f700-820c-43bc-9370-818900e922ee', {locale: 'es'});
+  const mp = new MercadoPago('APP_USR-6115ca56-ebe4-43d8-8703-70ce2f72da00', {locale: 'es-CO'});
 
   const bricksBuilder = mp.bricks();
 
