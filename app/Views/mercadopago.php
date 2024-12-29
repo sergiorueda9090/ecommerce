@@ -1,10 +1,14 @@
 <html>
 <!--
+
   los usuarios creados de pruebas debe crear una aplicacion en este caso
   yo tengo un usuario de prueba llamado vendeder1 y en el tengo una aplicacion ya creada
   llamada testpidelibre.
+
   Public Key APP_USR-6115ca56-ebe4-43d8-8703-70ce2f72da00
-  Access Token APP_USR-3527423441598344-122618-e7a971122ba78128c93e230b3236524a-2180719338 
+  
+  Access Token APP_USR-3527423441598344-122618-e7a971122ba78128c93e230b3236524a-2180719338
+
 -->
 
   <?php
