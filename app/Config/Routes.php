@@ -88,12 +88,45 @@ $routes->get('mercadopago/success',      'MercadoPagoController::success');
 $routes->get('mercadopago/success',      'MercadoPagoController::success');
 $routes->get('mercadopago/success',      'MercadoPagoController::success');
 
+$routes->post("mercadopago/procesarpago", 'MercadoPagoController::success');
 #217279ae0bf65ff8ca3dd8e6be4fc4ebab22bdb1fcc77d2243e55ec1ab487334
 
 $routes->post('mercadopago/notification', 'MercadoPagoController::notification');
 /* ============================================
     END MERCADOPAGO
 =============================================== */
+
+/* ============================================
+    START EPAYCO
+=============================================== */
+$routes->get('epayco',                  'EpaycoController::index');
+$routes->get('epayco/response',         'EpaycoController::response');
+$routes->post('epayco/confirmation',    'EpaycoController::confirmation');
+/* ============================================
+    END EPAYCO
+=============================================== */
+
+
+/* ============================================
+    START WOMPI
+=============================================== */
+$routes->get('wompi',                  'WompiController::index');
+$routes->get('wompi/response',         'WompiController::response');
+$routes->post('wompi/confirmation',    'WompiController::confirmation');
+/* ============================================
+    END WOMPI
+=============================================== */
+
+/* ============================================
+    START WOMPI
+=============================================== */
+$routes->get('paypal',                  'PaypalController::index');
+$routes->get('paypal/response',         'PaypalController::response');
+$routes->post('paypal/confirmation',    'PaypalController::confirmation');
+/* ============================================
+    END WOMPI
+=============================================== */
+
 
 #TOKEN
 $routes->get('client', 'ClientController::index');

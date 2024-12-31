@@ -26,14 +26,14 @@ class MercadoPagoController extends BaseController{
                                 )
                             ),
             "back_urls " => array(
-                                    "success" => base_url()."mercadopago/success",
+                                    "success" => base_url() ."mercadopago/success",
                                     "failure" => base_url()."mercadopago/success",
                                     "pending" => base_url()."mercadopago/success"
                                 ),
             "payer" => [
-                            "name" => "user-name",
-                            "surname" => "user-surname",
-                            "email" => "user@email.com",
+                            "name" => "sergio",
+                            "surname" => "mauricio",
+                            "email" => "sergioruedaweb@gmail.com",
                             "date_created" => "2015-06-02T12:58:41.425-04:00",
                             "phone" => [
                                 "area_code" => "11",
@@ -49,16 +49,19 @@ class MercadoPagoController extends BaseController{
                                 "zip_code" => "5700"
                             ]
                         ],
-            "notification_url" => "http://ecommerce/mercadopago/notification",
-            "statement_descriptor" => "PIDELIBRE.COM",
-            "external_reference" => "Reference_1234",
-            "expires" => true,
-            "binary_mode" => true
+            "notification_url"      => "https://www.pidelibre.com/mercadopago/notification",
+            "statement_descriptor"  => "pidelibre.COM",
+            "external_reference"    => "Reference_1234",
         ]);
     
         return view("mercadopago", array("preference"=>$preference));
     
     }
+
+    public function procesarpago(){
+
+    }
+
 
     public function notification(){
         // Ruta del archivo de log
