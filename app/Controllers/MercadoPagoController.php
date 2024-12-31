@@ -49,7 +49,7 @@ class MercadoPagoController extends BaseController{
                                 "zip_code" => "5700"
                             ]
                         ],
-            "notification_url"      => "https://www.pidelibre.com/mercadopago/notification",
+            "notification_url"      => "https://pidelibre.com/mercadopago/notification",
             "statement_descriptor"  => "pidelibre.COM",
             "external_reference"    => "Reference_1234",
         ]);
