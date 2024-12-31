@@ -7,6 +7,7 @@ namespace App\Controllers;
 use MercadoPago\MercadoPagoConfig;
 use MercadoPago\Client\Preference\PreferenceClient;
 
+
 class MercadoPagoController extends BaseController{
     
     public function __construct(){
@@ -63,27 +64,33 @@ class MercadoPagoController extends BaseController{
     }
 
 
-    public function notification(){
+    public function notification()
+    {
         // Ruta del archivo de log
         $logFile = WRITEPATH . 'logs/mercadopago_log.log';
-
-        // Mensajes de log
-        $messages = [
-            '[' . date('Y-m-d H:i:s') . '] INFO: El método notification() fue llamado.',
-            '[' . date('Y-m-d H:i:s') . '] DEBUG: Procesando notificación de MercadoPago.',
-            '[' . date('Y-m-d H:i:s') . '] WARNING: Este es un mensaje de advertencia.',
-            '[' . date('Y-m-d H:i:s') . '] ERROR: Se produjo un error en el método notification.',
-        ];
-
-        // Escribir cada mensaje en el archivo de log
-        foreach ($messages as $message) {
-            file_put_contents($logFile, $message . PHP_EOL, FILE_APPEND);
-        }
-
-        // Respuesta para el usuario
+    
+        // Obtener los datos enviados por el webhook
+        $inputData = file_get_contents('php://input'); // Captura el cuerpo de la solicitud
+        $headers = $this->request->getHeaders(); // Captura los headers de la solicitud
+        $queryParams = $this->request->getGet(); // Captura los parámetros GET, si los hay
+    
+        // Preparar contenido del log
+        $logContent = "[" . date('Y-m-d H:i:s') . "] INFO: Notificación recibida de MercadoPago.\n";
+        $logContent .= "Headers:\n" . print_r($headers, true) . "\n";
+        $logContent .= "Query Params:\n" . print_r($queryParams, true) . "\n";
+        $logContent .= "Body:\n" . $inputData . "\n";
+    
+        // Escribir en el archivo de log
+        file_put_contents($logFile, $logContent . PHP_EOL, FILE_APPEND);
+    
+        // Opcional: Guardar los datos en un archivo separado (TXT)
+        $txtFile = WRITEPATH . 'mercadopago_notification.txt';
+        file_put_contents($txtFile, $logContent . PHP_EOL, FILE_APPEND);
+    
+        // Responder al webhook (MercadoPago requiere un código 200)
         return $this->response->setJSON([
-            'message' => 'Notificación registrada en mercadopago_log.log.',
-        ]);
+            'message' => 'Notificación registrada correctamente.',
+        ])->setStatusCode(200);
     }
 
 }
